@@ -20,7 +20,7 @@ namespace MVCENG2.Services
             _standRepository = standRepository;
             _statisticRepository = statisticRepository;
             _testReportRepository = testReportRepository;
-            Parsing_XML_files();
+            //Parsing_XML_files();
 
         }
 
