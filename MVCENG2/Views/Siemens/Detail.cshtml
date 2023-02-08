@@ -1,0 +1,102 @@
+﻿@model IEnumerable<Statistic>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+<div class="table-responsive">
+    @*<table class="table table-striped table-sm">*@
+    @{string filter_by = "Test_End";}
+    <table class="table table-centered table-nowrap table-hover mb-0">
+        <thead>
+            <tr>
+                <td onClick="@filter_by="ProductionNumber" filter">ProductionNumber</td>
+                <td>VIN</td>
+                <td>TestStart</td>
+                <td>TestEnd</td>
+                <td>TotalDuration</td>
+                <td>Result</td>
+                <td>NotOks</td>
+                <td>Client</td>
+                <td>TestType</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                string page_name = Url.Action().Split("/").Last();
+                  @if (page_name.Contains("_"))
+                    @foreach (var stat in Model.Where(p => p.Client == page_name))
+                    {
+                        if (stat.Result=="Ok")
+                        {
+                            <tr onClick="document.location='/Siemens/TestReport/@stat.VIN'" style="background-color:rgba(0,255,20,0.35)">
+                                <td>@stat.ProductionNumber</td>
+                                <td>@stat.VIN</td>
+                                <td>@stat.TestStart</td>
+                                <td>@stat.TestEnd</td>
+                                <td>@stat.TotalDuration</td>
+                                <td>@stat.Result</td>
+                                <td>@stat.NotOks</td>
+                                <td>@stat.Client</td>
+                                <td>@stat.TestType</td>
+                            </tr>
+                        }
+                        else
+                        {
+                                    <tr onClick="document.location='/Siemens/TestReport/@stat.VIN'" style="background-color:rgba(255,0,0,0.35)">
+                                        <td>@stat.ProductionNumber</td>
+                                        <td>@stat.VIN</td>
+                                        <td>@stat.TestStart</td>
+                                        <td>@stat.TestEnd</td>
+                                        <td>@stat.TotalDuration</td>
+                                        <td>@stat.Result</td>
+                                        <td>@stat.NotOks</td>
+                                        <td>@stat.Client</td>
+                                        <td>@stat.TestType</td>
+                                    </tr>
+                        }
+                    }
+                            
+                else
+                            @foreach (var stat in Model.Where(p => p.TestType == page_name))
+                    {
+                        if (stat.Result == "Ok")
+                        {
+                                    <tr onClick="document.location='/Siemens/TestReport/@stat.VIN'" style="background-color:rgba(0,255,20,0.35)">
+                                        <td>@stat.ProductionNumber</td>
+                                        <td>@stat.VIN</td>
+                                        <td>@stat.TestStart</td>
+                                        <td>@stat.TestEnd</td>
+                                        <td>@stat.TotalDuration</td>
+                                        <td>@stat.Result</td>
+                                        <td>@stat.NotOks</td>
+                                        <td>@stat.Client</td>
+                                        <td>@stat.TestType</td>
+                                    </tr>
+                        }
+                        else
+                        {
+                                    <tr onClick="document.location='/Siemens/TestReport/@stat.VIN'" style="background-color:rgba(255,0,0,0.35)">
+                                        <td>@stat.ProductionNumber</td>
+                                        <td>@stat.VIN</td>
+                                        <td>@stat.TestStart</td>
+                                        <td>@stat.TestEnd</td>
+                                        <td>@stat.TotalDuration</td>
+                                        <td>@stat.Result</td>
+                                        <td>@stat.NotOks</td>
+                                        <td>@stat.Client</td>
+                                        <td>@stat.TestType</td>
+                                    </tr>
+                        }
+                    }
+
+            }
+
+            
+                 
+        </tbody>
+    </table>
+</div>

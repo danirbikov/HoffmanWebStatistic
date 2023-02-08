@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Stand>
+
+    @*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+<div class="content">
+    <!-- Start Content-->
+    <div class="container-fluid">
+        <div class="row">
+            @{
+                int Tests_count_last_month = 0;
+
+                    @foreach (var stand_type in Model.Where(p => p.Project == "Siemens").GroupBy(p => p.Stand_type))
+                {
+                        <div class="row">
+                            <h4 class="page-title" onClick="document.location='/Siemens/Detail/@stand_type.Key'">@stand_type.Key</h4>
+                            @foreach (var stand_object in Model)
+                        {
+                            
+                                @if (stand_object.Stand_type == stand_type.Key)
+                            {
+                                    <div class="col-xl-5 col-lg-6">
+                                        <div class="card widget-flat div-hover">
+                                            @*<a asp-controller="Siemens" asp-action="Detail" asp-route-id=@stand_object.Id/>*@
+                                            <div class="card-body" onClick="document.location='/Siemens/Detail/@stand_object.Stand_name'">
+                                                @if (stand_object.Connection_status=="OK")
+                                                {
+                                                    <div class="float-end">
+                                                        <i class="mdi mdi-account-multiple widget-icon" style="background-color:rgba(0,255,20,0.52)"></i>
+                                                    </div>
+                                                    <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Online</h5>
+                                                }
+                                                else
+                                                {
+                                                    <div class="float-end">
+                                                        <i class="mdi mdi-account-multiple widget-icon" style="background-color:rgba(255,0,20,0.52)"></i>
+                                                    </div>
+                                                    <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Offline</h5>
+                                                }
+                                                <h3 class="mt-3 mb-3">@stand_object.Stand_name</h3>
+                                                <p class="mb-0 text-muted">
+                                                    @{
+
+                                                    
+
+
+                                                //    Html.
+                                                //   ((MVCENG2.ComfortModules.DateFunctions) TempData["DateFunctions"]).GetValuesTimeInterval();
+
+                                                    
+                                                    }
+                                                    <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> @Tests_count_last_month</span>
+                                                    <span class="text-nowrap">Tests last month</span>
+                                                </p>
+                                            </div> <!-- end card-body-->
+                                        </div> <!-- end card-->
+                                    </div>
+                            }
+                        }
+
+                        </div>
+                } 
+            }
+            
+        </div>
+
+    </div>
+    <!-- container -->
+
+</div>
