@@ -10,13 +10,13 @@ using MVCENG2.Services;
 
 namespace MVCENG2.Controllers
 {
-    public class SiemensController : Controller
+    public class StandsController : Controller
     {
         
         private readonly IStandRepository _standRepository;
         private readonly IStandsStatisticRepository _statisticRepository;
         private readonly ITestReportRepository _testReportRepository;
-        public SiemensController(IStandRepository standRepository, IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
+        public StandsController(IStandRepository standRepository, IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
         {
             _standRepository = standRepository;
             _statisticRepository = statisticRepository;

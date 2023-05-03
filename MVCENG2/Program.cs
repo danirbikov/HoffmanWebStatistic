@@ -12,12 +12,16 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IStandRepository, StandRepository>();
 builder.Services.AddScoped<IStandsStatisticRepository, StandsStatisticRepository>();
 builder.Services.AddScoped<ITestReportRepository, TestReportRepository>();
+builder.Services.AddScoped<ITestJsonRepository, TestJsonRepository>();
 builder.Services.AddScoped<DateFunctions>();
+//builder.Services.AddTransient<ParserJSON>();
 builder.Services.AddTransient<Parser>();
 builder.Services.AddScoped<Pinger>();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
+    
+    
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 

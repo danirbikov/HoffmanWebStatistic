@@ -14,26 +14,29 @@ namespace MVCENG2.Controllers
         private readonly IStandRepository _standRepository;
         private readonly IStandsStatisticRepository _statisticRepository;
         private readonly ITestReportRepository _testReportRepository;
-        public HomeController(ILogger<HomeController> logger, IStandRepository standRepository, IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
+        private readonly ITestJsonRepository _testJsonRepository;
+        private readonly Pinger _pinger;
+        public HomeController(Pinger pinger, ILogger<HomeController> logger, IStandRepository standRepository, IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository, ITestJsonRepository testJsonRepository)
         {
             _standRepository = standRepository;
             _statisticRepository = statisticRepository;
             _testReportRepository = testReportRepository;
             _logger = logger;
+            _pinger = pinger;
+            _testJsonRepository = testJsonRepository;   
             
         }
 
-        public IActionResult Index()
-        {
-
-
-            //Task.Run(() => { Services(); });
+        public async Task<IActionResult> Index()
+        { 
+            //ParserJSON parserJSON = new ParserJSON(_testJsonRepository);
+            //parserJSON.TestParsingJsonFile();
+            //await Services(); 
             return View();
         }
         public async Task Services()
         {
-            Pinger pinger = new Pinger(_standRepository);
-            await pinger.PingAllStands();
+            await _pinger.PingAllStands();
         }
 
 

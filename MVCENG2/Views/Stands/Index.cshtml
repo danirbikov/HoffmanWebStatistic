@@ -13,20 +13,24 @@
             @{
                 int Tests_count_last_month = 0;
 
-                    @foreach (var stand_type in Model.Where(p => p.Project == "Siemens").GroupBy(p => p.Stand_type))
+                @foreach (var standProject in Model.Select(g => g.Project).Distinct())
                 {
+                    <div class="row">
+                        <h1 class="page-title" onClick="document.location='/Stands/Detail/@standProject'">@standProject</h1>
+                    @foreach (var stand_type in Model.Where(p => p.Project==standProject).GroupBy(p => p.Stand_type))
+                    {
                         <div class="row">
-                            <h4 class="page-title" onClick="document.location='/Siemens/Detail/@stand_type.Key'">@stand_type.Key</h4>
+                            <h4 class="page-title" onClick="document.location='/Stands/Detail/@stand_type.Key'">@stand_type.Key</h4>
                             @foreach (var stand_object in Model)
-                        {
-                            
-                                @if (stand_object.Stand_type == stand_type.Key)
                             {
+
+                                @if (stand_object.Stand_type == stand_type.Key)
+                                {
                                     <div class="col-xl-5 col-lg-6">
                                         <div class="card widget-flat div-hover">
                                             @*<a asp-controller="Siemens" asp-action="Detail" asp-route-id=@stand_object.Id/>*@
-                                            <div class="card-body" onClick="document.location='/Siemens/Detail/@stand_object.Stand_name'">
-                                                @if (stand_object.Connection_status=="OK")
+                                            <div class="card-body" onClick="document.location='/Stands/Detail/@stand_object.Stand_name'">
+                                                @if (stand_object.Connection_status == "OK")
                                                 {
                                                     <div class="float-end">
                                                         <i class="mdi mdi-account-multiple widget-icon" style="background-color:rgba(0,255,20,0.52)"></i>
@@ -44,13 +48,9 @@
                                                 <p class="mb-0 text-muted">
                                                     @{
 
-                                                    
 
-
-                                                //    Html.
-                                                //   ((MVCENG2.ComfortModules.DateFunctions) TempData["DateFunctions"]).GetValuesTimeInterval();
-
-                                                    
+                                        //    Html.
+                                                        //   ((MVCENG2.ComfortModules.DateFunctions) TempData["DateFunctions"]).GetValuesTimeInterval();   
                                                     }
                                                     <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> @Tests_count_last_month</span>
                                                     <span class="text-nowrap">Tests last month</span>
@@ -58,11 +58,13 @@
                                             </div> <!-- end card-body-->
                                         </div> <!-- end card-->
                                     </div>
+                                }
                             }
-                        }
 
                         </div>
-                } 
+                    }
+                    </div>
+                }
             }
             
         </div>
