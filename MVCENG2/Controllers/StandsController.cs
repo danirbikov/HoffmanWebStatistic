@@ -31,10 +31,13 @@ namespace MVCENG2.Controllers
         }
 
        
-        public async Task<IActionResult> Detail(Statistic statistic, string sortOrder, string currentFilter, string searchString ,int? pageNumber)
+        public async Task<IActionResult> Detail(string standsIdentidier, string sortOrder, string currentFilter, string searchString ,int? pageNumber)
         {            
-            IEnumerable<Statistic> statistics_val = await _statisticRepository.GetAllElementsThatStand(statistic.ProductionNumber);
+            IEnumerable<Statistic> statistics_val = await _statisticRepository.GetAllElementsThatStand(standsIdentidier);
 
+            #region Initialize paginated list (BoilerPlate code) 
+
+            int pageSize = 14;
             ViewData["CurrentSort"] = sortOrder;
             ViewData["CurrentFilter"] = searchString;
             ViewData["ProdNumSortParm"] = sortOrder == "ProdNum" ? "ProdNum_desc" : "ProdNum";
@@ -131,22 +134,11 @@ namespace MVCENG2.Controllers
                     break;
 
             }
+            #endregion
 
-            int pageSize = 14;
+
+            
             return View(PaginatedList<Statistic>.CreatePage(statistics_val, pageNumber ?? 1, pageSize));
-            //return View(statistics_val);
-
-
-
-
-            //MVCENG2.ComfortModules.DateFunctions dateFunctions = new MVCENG2.ComfortModules.DateFunctions(_standRepository,_statisticRepository);
-            //List<IEnumerable<Statistic>> statistics = new();
-            //for (int i = 0; i < stands_statistic.Count(); i++)
-            //{
-            //    statistics.Add(dateFunctions.GetValuesTimeInterval());
-            //}
-            //TempData["Statistics"] = statistics;
-           // return View(stands_statistic);
         }
 
         public async Task<IActionResult> TestReport(string sortOrder)

@@ -8,9 +8,12 @@ namespace MVCENG2.Repository
     public class StandsStatisticRepository : IStandsStatisticRepository
     {
         private readonly ApplicationDbContext _context;
-        public StandsStatisticRepository (ApplicationDbContext context)
+        private readonly IStandRepository _standsRepository;
+
+        public StandsStatisticRepository (ApplicationDbContext context, IStandRepository standRepository)
         {
             _context = context;
+            _standsRepository = standRepository;
         }
         public Task<bool> Add(Statistic stat)
         {
@@ -25,8 +28,26 @@ namespace MVCENG2.Repository
             return Save();
         }
 
-        public async Task<IEnumerable<Statistic>> GetAllElementsThatStand(string stand_name)
+        public IEnumerable<Statistic> GetAllElementsThatStand(string standsIdentifier)
         {
+            IEnumerable<Tand>
+            if (_standsRepository.GetAll().Select(k => k.Project).ToList().Contains(standsIdentifier))
+            {
+                _standsRepository.GetByProjectNameAsync(standsIdentifier).Wait();
+            }
+            else if (_standsRepository.GetAll().Select(k=>k.Stand_type).ToList().Contains(standsIdentifier))
+            {
+                _standsRepository.GetByStandTypeAsync(standsIdentifier).Wait();
+            }
+            else if (_standsRepository.GetAll().Select(k => k.Stand_name).ToList().Contains(standsIdentifier))
+            {
+                _standsRepository.GetByStandNameAsync(standsIdentifier).Wait();
+            }
+
+
+
+
+
             return await _context.Statistic.ToListAsync();
             
         }

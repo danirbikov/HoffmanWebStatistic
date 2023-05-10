@@ -26,15 +26,23 @@ namespace MVCENG2.Repository
         }
 
 
-        public async Task<IEnumerable<Stand>> GetAll()
+        public IEnumerable<Stand> GetAll()
         {
-            return await _context.Stand.ToListAsync();
+            return _context.Stand.ToList();
             
         }
 
-        public async Task<Stand> GetByIdAsync(int id)
+        public async Task<Stand> GetByStandNameAsync(string standName)
         {
-            return await _context.Stand.FirstOrDefaultAsync(i => i.Id==id); 
+            return await _context.Stand.FirstOrDefaultAsync(i => i.Stand_name==standName); 
+        }
+        public async Task<Stand> GetByStandTypeAsync(string standType)
+        {
+            return await _context.Stand.FirstOrDefaultAsync(i => i.Stand_type == standType);
+        }
+        public async Task<Stand> GetByProjectNameAsync(string projectName)
+        {
+            return await _context.Stand.FirstOrDefaultAsync(i => i.Project == projectName);
         }
 
         public bool Save()
