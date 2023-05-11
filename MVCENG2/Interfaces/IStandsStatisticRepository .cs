@@ -4,7 +4,7 @@ namespace MVCENG2.Interfaces
 {
     public interface IStandsStatisticRepository
     {
-        Task<IEnumerable<Statistic>> GetAllElementsThatStand(string stands);
+        IEnumerable<Statistic> GetAllElementsThatStand(string standsIdentifier);
         Task<Statistic> GetByStandNameAsync(string statistic);
         Task<bool> Add(Statistic stand);
         Task<bool> Update(Statistic stand);

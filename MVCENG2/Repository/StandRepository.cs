@@ -31,10 +31,10 @@ namespace MVCENG2.Repository
             return _context.Stand.ToList();
             
         }
-
-        public async Task<Stand> GetByStandNameAsync(string standName)
+        /*
+        public Stand GetByStandNameAsync(string standName)
         {
-            return await _context.Stand.FirstOrDefaultAsync(i => i.Stand_name==standName); 
+            return _context.Stand.Where(g => g.Stand_name == standName);
         }
         public async Task<Stand> GetByStandTypeAsync(string standType)
         {
@@ -44,7 +44,7 @@ namespace MVCENG2.Repository
         {
             return await _context.Stand.FirstOrDefaultAsync(i => i.Project == projectName);
         }
-
+        */
         public bool Save()
         {
             var saved = _context.SaveChanges();

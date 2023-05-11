@@ -3,8 +3,7 @@ using MVCENG2.Interfaces;
 using MVCENG2.Models;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace MVCENG2.ComfortModules
-{
+namespace lol { 
     public class DateFunctions 
     {
         private readonly IStandRepository _standRepository;

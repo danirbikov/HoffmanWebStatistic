@@ -78,7 +78,7 @@ namespace MVCENG2.Services
         public async Task<List<string>> GetURLsFromStands()
         {
             List<string> stands_URL = new List<string>();
-            IEnumerable<Stand> stands = await _standRepository.GetAll();
+            IEnumerable<Stand> stands = _standRepository.GetAll();
             foreach (Stand stand in stands)
             {
                 stands_URL.Add(stand.File_location);

@@ -10,25 +10,21 @@ using MVCENG2.Services;
 
 namespace MVCENG2.Controllers
 {
-    public class HoffmanController : Controller
+    public class SiemensController : Controller
     {
-
-
+      
         private readonly IStandsStatisticRepository _statisticRepository;
         private readonly ITestReportRepository _testReportRepository;
-        public HoffmanController(IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
+        public SiemensController(IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
         {
-
             _statisticRepository = statisticRepository;
             _testReportRepository = testReportRepository;
         }
-
-
-
-        public async Task<IActionResult> Detail(string standsIdentidier, string sortOrder, string currentFilter, string searchString, int? pageNumber)
-        {
+       
+        public async Task<IActionResult> Detail(string standsIdentidier, string sortOrder, string currentFilter, string searchString ,int? pageNumber)
+        {            
             IEnumerable<Statistic> statistics_val = _statisticRepository.GetAllElementsThatStand(standsIdentidier);
-
+            
             #region Initialize paginated list (BoilerPlate code) 
 
             int pageSize = 14;
@@ -46,19 +42,19 @@ namespace MVCENG2.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                statistics_val = statistics_val.Where(s =>
-                                           s.ProductionNumber == searchString
-                                        || s.VIN == searchString
-                                        || s.TestStart == searchString
-                                        || s.TestEnd == searchString
-                                        || s.TotalDuration == searchString
-                                        || s.Result == searchString
-                                        || s.NotOks == searchString
-                                        || s.Client == searchString
-                                        || s.TestType == searchString
+                statistics_val = statistics_val.Where(s => 
+                                           s.ProductionNumber==searchString
+                                        || s.VIN== searchString
+                                        || s.TestStart== searchString
+                                        || s.TestEnd== searchString
+                                        || s.TotalDuration== searchString
+                                        || s.Result== searchString
+                                        || s.NotOks== searchString
+                                        || s.Client== searchString
+                                        || s.TestType== searchString
                                        );
             }
-            if (searchString != null)
+            if (searchString!=null)
             {
                 pageNumber = 1;
             }
@@ -130,6 +126,8 @@ namespace MVCENG2.Controllers
             }
             #endregion
 
+            
+
 
             return View(PaginatedList<Statistic>.CreatePage(statistics_val, pageNumber ?? 1, pageSize));
         }
@@ -138,7 +136,8 @@ namespace MVCENG2.Controllers
         {
             IEnumerable<TestReport> test_report = await _testReportRepository.GetAll();
 
-
+            var a = ViewData["CurrentSort"];
+            
             return View(test_report);
         }
 

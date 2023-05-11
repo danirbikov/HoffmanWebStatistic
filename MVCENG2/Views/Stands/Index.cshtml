@@ -4,6 +4,9 @@
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
+    string color;
+    string onlineCondition;
+    int Tests_count_last_month = 0;
 }
 
 <div class="content">
@@ -11,71 +14,64 @@
     <div class="container-fluid">
         <div class="row">
             @{
-                int Tests_count_last_month = 0;
-
                 @* Group by project name *@
                 @foreach (var standProject in Model.Select(g => g.Project).Distinct())
                 {
                     <div class="row">
-                        <a asp-controller="Stands" asp-action="Detail" asp-route-standsIdentidier=@standProject>
+                        <a asp-controller=@standProject asp-action="Detail" asp-route-standsIdentidier=@standProject>
                             <h1 class="page-title">@standProject</h1>
                         </a>
 
-                        @* Group by stand type *@
-                        @foreach (var standType in Model.Where(p => p.Project==standProject).GroupBy(p => p.Stand_type))
-                        {
-                            <a asp-controller="Stands" asp-action="Detail" asp-route-standsIdentidier=@standType.Key>
-                            <div class="row">
+                            @* Group by stand type *@
+                            @foreach (var standType in Model.Where(p => p.Project==standProject).GroupBy(p => p.Stand_type))
+                            {
+                                <a asp-controller=@standType.FirstOrDefault().Project asp-action="Detail" asp-route-standsIdentidier=@standType.Key>
+                                <div class="row">
 
-                                <h4 class="page-title">@standType.Key</h4>
-                                @foreach (var standObject in Model)
-                                {
-                                    @if (standObject.Stand_type == standType.Key)
+                                    <h4 class="page-title">@standType.Key</h4>
+                                    @foreach (var standObject in Model)
                                     {
-                                        <div class="col-xl-5 col-lg-6">
-                                            <div class="card widget-flat div-hover">
-                                                @*<a asp-controller="Siemens" asp-action="Detail" asp-route-id=@stand_object.Id/>*@
+                                        @if (standObject.Stand_type == standType.Key)
+                                        {
+                                            <div class="col-xl-5 col-lg-6">
+                                                <div class="card widget-flat div-hover">
+                                                    <a asp-controller=@standObject.Project asp-action="Detail" asp-route-standsIdentidier=@standObject.Stand_name>
+                                                        <div class="card-body">
+                                                            
+                                                            @if (standObject.Connection_status == "OK")
+                                                            {
+                                                                color = "background-color:rgba(0,255,20,0.52)";
+                                                                onlineCondition = "Online";
+                                                            }
+                                                            else
+                                                            {
+                                                                color = "background-color:rgba(255,0,20,0.52)";
+                                                                onlineCondition = "Offline";
+                                                            }
 
-                                                    <a asp-controller="Stands" asp-action="Detail" asp-route-standsIdentidier=@standObject.Stand_name>
+                                                            <div class="float-end">
+                                                                <i class="mdi mdi-account-multiple widget-icon" style=@color></i>
+                                                            </div>
+                                                            <h5 class="text-muted fw-normal mt-0" title="Number of Customers">@onlineCondition</h5>
 
-                                                    <div class="card-body">
-                                                    @if (standObject.Connection_status == "OK")
-                                                    {
-                                                        <div class="float-end">
-                                                            <i class="mdi mdi-account-multiple widget-icon" style="background-color:rgba(0,255,20,0.52)"></i>
+                                                            <h3 class="mt-3 mb-3">@standObject.Stand_name</h3>
+                                                            <p class="mb-0 text-muted">
+                                                                <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> @Tests_count_last_month</span>
+                                                                <span class="text-nowrap">Tests last month</span>
+                                                            </p>
+
                                                         </div>
-                                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Online</h5>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="float-end">
-                                                            <i class="mdi mdi-account-multiple widget-icon" style="background-color:rgba(255,0,20,0.52)"></i>
-                                                        </div>
-                                                        <h5 class="text-muted fw-normal mt-0" title="Number of Customers">Offline</h5>
-                                                    }
-                                                    <h3 class="mt-3 mb-3">@standObject.Stand_name</h3>
-                                                    <p class="mb-0 text-muted">
-                                                        <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> @Tests_count_last_month</span>
-                                                        <span class="text-nowrap">Tests last month</span>
-                                                    </p>
-                                                    </div>
-                                                </a>
-                                            </div> <!-- end card-->
-                                        </div>
-                                    }
-                                }
-                                
-                            </div>
-                            </a>
-                            
+                                                    </a>
+                                                </div> 
+                                            </div>
+                                        }
+                                    }                               
+                                </div>
+                            </a>  
                     }
                     </div>
                 }
-            }
-            
+            }   
         </div>
-
     </div>
-    <!-- container -->
-
 </div>

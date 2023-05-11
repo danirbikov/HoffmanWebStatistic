@@ -30,25 +30,22 @@ namespace MVCENG2.Repository
 
         public IEnumerable<Statistic> GetAllElementsThatStand(string standsIdentifier)
         {
-            IEnumerable<Tand>
+            List<string> listStands = null;
+
             if (_standsRepository.GetAll().Select(k => k.Project).ToList().Contains(standsIdentifier))
             {
-                _standsRepository.GetByProjectNameAsync(standsIdentifier).Wait();
+                listStands = _standsRepository.GetAll().Where(k => k.Project == standsIdentifier).Select(k=>k.Stand_name).ToList();
             }
             else if (_standsRepository.GetAll().Select(k=>k.Stand_type).ToList().Contains(standsIdentifier))
             {
-                _standsRepository.GetByStandTypeAsync(standsIdentifier).Wait();
+                listStands = _standsRepository.GetAll().Where(k => k.Stand_type == standsIdentifier).Select(k => k.Stand_name).ToList();
             }
             else if (_standsRepository.GetAll().Select(k => k.Stand_name).ToList().Contains(standsIdentifier))
             {
-                _standsRepository.GetByStandNameAsync(standsIdentifier).Wait();
+                listStands = _standsRepository.GetAll().Where(k => k.Stand_name == standsIdentifier).Select(k => k.Stand_name).ToList();
             }
 
-
-
-
-
-            return await _context.Statistic.ToListAsync();
+            return _context.Statistic.Where(k =>listStands.Contains(k.Client)) ;
             
         }
 

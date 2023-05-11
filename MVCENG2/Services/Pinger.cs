@@ -18,7 +18,7 @@ namespace MVCENG2.Services
         }
         public async Task PingAllStands()
         {
-            IEnumerable<Stand> stands = await _standRepository.GetAll();
+            IEnumerable<Stand> stands = _standRepository.GetAll();
             foreach (Stand stand in stands)
             {
                 bool connection_status = PingOneStand(stand);
