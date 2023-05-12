@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVCENG2.Data;
 using MVCENG2.Interfaces;
-using MVCENG2.Models;
+using MVCENG2.Models.Siemens;
 
 namespace MVCENG2.Repository
 {

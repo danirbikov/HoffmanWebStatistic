@@ -1,4 +1,4 @@
-﻿using MVCENG2.Models;
+﻿using MVCENG2.Models.General;
 
 namespace MVCENG2.Interfaces
 {

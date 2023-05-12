@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCENG2.Interfaces;
-using MVCENG2.Models;
+using MVCENG2.Models.General;
+using MVCENG2.Models.SerializerModels;
+using MVCENG2.Models.Siemens;
 using MVCENG2.Repository;
 using System.IO;
 using System.Xml.Serialization;

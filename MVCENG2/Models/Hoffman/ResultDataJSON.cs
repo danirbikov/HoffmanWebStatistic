@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MVCENG2.Models
+namespace MVCENG2.Models.Hoffman
 {
-    public class TestJSON
+    public class ResultDataJSON
     {
         [Key]
         public long id { get; set; }

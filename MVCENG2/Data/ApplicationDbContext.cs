@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MVCENG2.Models;
+using MVCENG2.Models.General;
+using MVCENG2.Models.Hoffman;
+using MVCENG2.Models.Siemens;
 
 namespace MVCENG2.Data
 {
@@ -38,7 +40,7 @@ namespace MVCENG2.Data
         public DbSet<Statistic> Statistic { get; set; }
 
         public DbSet<TestReport> TestReport { get; set; }
-        public DbSet<TestJSON> TestJson { get; set; }
+        public DbSet<ResultDataJSON> TestJson { get; set; }
 
     }
 }

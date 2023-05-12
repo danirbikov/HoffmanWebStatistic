@@ -3,10 +3,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MVCENG2.Data;
 using MVCENG2.Interfaces;
-using MVCENG2.Models;
 using PagedList;
 using MVCENG2.Services;
-
+using MVCENG2.Models.General;
 
 namespace MVCENG2.Controllers
 {

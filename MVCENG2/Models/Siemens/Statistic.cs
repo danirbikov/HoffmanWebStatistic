@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace MVCENG2.Models
+namespace MVCENG2.Models.Siemens
 {
-    
+
     public class Statistic
     {
 

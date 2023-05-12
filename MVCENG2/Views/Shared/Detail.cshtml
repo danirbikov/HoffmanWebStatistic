@@ -1,10 +1,12 @@
-﻿@model MVCENG2.Services.PaginatedList<MVCENG2.Models.Statistic>
+﻿@model MVCENG2.Services.PaginatedList<Statistic>
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ;
+    string statisticElementColor;
+    string controllerName = @ViewContext.RouteData.Values["controller"].ToString();
+
 }
 
 
@@ -14,16 +16,12 @@
     <table class="table table-centered table-nowrap table-hover mb-0">
         <thead>
             <tr>
-
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["ProdNumSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">ProductionNumber</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["VINSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">VIN</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["TestStartSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">TestStart</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["TestEndSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">TestEnd</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["TotalDurationSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">TotalDuration</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["ResultSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Result</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["NotOksSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">NotOks</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["ClientSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Client</a></td>
-                <td><a asp-action="Detail" asp-route-sortOrder="@ViewData["TestTypeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">TestType</a></td>
+                @{   
+                    foreach (string columnName in ViewBag.ColumnNames)
+                    {
+                        <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentidier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@ViewData[columnName+"SortParam"] asp-route-currentFilter=@ViewData["CurrentFilter"]>@columnName</a></td>
+                    }
+                }
             </tr>
         </thead>
         <tbody>
@@ -33,25 +31,35 @@
                 {
                     if (statisticObject.Result == "Ok")
                     {
-                       <a asp-action="TestReport"> 
-                       <tr onClick="document.location='/Siemens/TestReport/statisticObject.VIN'" style="background-color:rgba(0,255,20,0.35)">
-                                <td>@statisticObject.ProductionNumber</td>
-                                <td>@statisticObject.VIN</td>
-                                <td>@statisticObject.TestStart</td>
-                                <td>@statisticObject.TestEnd</td>
-                                <td>@statisticObject.TotalDuration</td>
-                                <td>@statisticObject.Result</td>
-                                <td>@statisticObject.NotOks</td>
-                                <td>@statisticObject.Client</td>
-                                <td>@statisticObject.TestType</td>
-                            </tr>
-                        </a>
+                        statisticElementColor = "background - color:rgba(0, 255, 20, 0.35)";
                     }
-                }
-            }
+                    else
+                    {
+                        statisticElementColor = "background-color:rgba(255,0,20,0.52)";
+                    }
 
-            
-                 
+                    <tr onClick="document.location='@Url.Action("TestReport", @controllerName, new {}, null)'" style=@statisticElementColor>
+                            @switch (controllerName)
+                            {
+                                case ("Siemens"):
+                                    <td>@statisticObject.ProductionNumber</td>
+                                    <td>@statisticObject.VIN</td>
+                                    <td>@statisticObject.TestStart</td>
+                                    <td>@statisticObject.TestEnd</td>
+                                    <td>@statisticObject.TotalDuration</td>
+                                    <td>@statisticObject.Result</td>
+                                    <td>@statisticObject.NotOks</td>
+                                    <td>@statisticObject.Client</td>
+                                    <td>@statisticObject.TestType</td>
+                                break;
+
+                                case ("Hoffman"):
+                                    <td>@statisticObject.VIN</td>
+                                break;
+                            }
+                        </tr>      
+                }
+            }     
         </tbody>
     </table>
 
@@ -60,17 +68,19 @@
         var nextDisabled = !Model.HasNextPage ? "disabled" : "";
     }
 
-    <a asp-action="Detail"
+    <a asp-controller=@controllerName
+       asp-action="Detail"
        asp-route-sortOrder="@ViewData["CurrentSort"]"
        asp-route-pageNumber="@(Model.PageIndex - 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-standsIdentidier=@ViewData["StandsIdentifier"]
        class="btn btn-default @prevDisabled">
         Previous
     </a>
-    <a asp-action="Detail"
+    <a asp-controller=@controllerName
+       asp-action="Detail"
        asp-route-sortOrder="@ViewData["CurrentSort"]"
        asp-route-pageNumber="@(Model.PageIndex + 1)"
-       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       asp-route-standsIdentidier=@ViewData["StandsIdentifier"]
        class="btn btn-default @nextDisabled">
         Next
     </a>

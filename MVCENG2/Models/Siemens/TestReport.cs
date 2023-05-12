@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace MVCENG2.Models
+namespace MVCENG2.Models.Siemens
 {
 
 
@@ -17,7 +17,7 @@ namespace MVCENG2.Models
         public string? Unit { get; set; }
         public string? ResultValue { get; set; }
         public string? VIN { get; set; }
-      
+
 
     }
 }

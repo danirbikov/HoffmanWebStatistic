@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
 using MVCENG2.Interfaces;
-using MVCENG2.Models;
+using MVCENG2.Models.Hoffman;
 using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Serialization;
-using static MVCENG2.Models.JSONSerializeModel;
+using static MVCENG2.Models.SerializerModels.JSONSerializeModel;
 
 namespace MVCENG2.Services
 {
@@ -37,7 +37,7 @@ namespace MVCENG2.Services
                 {
                     if (file.Contains(".json"))
                     {
-                        TestJSON testJSON = new TestJSON();
+                        ResultDataJSON testJSON = new ResultDataJSON();
                         try
                         {
                             using (FileStream fs = new FileStream(file, FileMode.Open))

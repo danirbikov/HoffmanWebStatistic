@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCENG2.Interfaces;
-using MVCENG2.Models;
+using MVCENG2.Models.General;
 
 namespace MVCENG2.Controllers
 {

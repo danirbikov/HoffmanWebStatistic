@@ -1,4 +1,4 @@
-﻿namespace MVCENG2.Models
+﻿namespace MVCENG2.Models.General
 {
     public class Stand
     {

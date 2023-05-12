@@ -3,10 +3,9 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using MVCENG2.Data;
 using MVCENG2.Interfaces;
-using MVCENG2.Models;
 using PagedList;
 using MVCENG2.Services;
-
+using MVCENG2.Models.Siemens;
 
 namespace MVCENG2.Controllers
 {
@@ -21,54 +20,32 @@ namespace MVCENG2.Controllers
             _testReportRepository = testReportRepository;
         }
        
-        public async Task<IActionResult> Detail(string standsIdentidier, string sortOrder, string currentFilter, string searchString ,int? pageNumber)
-        {            
+        public async Task<IActionResult> Detail(string standsIdentidier, string sortOrder, string currentFilter ,int? pageNumber)
+        {
+            ViewData["StandsIdentifier"] = standsIdentidier;
+
             IEnumerable<Statistic> statistics_val = _statisticRepository.GetAllElementsThatStand(standsIdentidier);
-            
+
             #region Initialize paginated list (BoilerPlate code) 
 
-            int pageSize = 14;
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["CurrentFilter"] = searchString;
-            ViewData["ProdNumSortParm"] = sortOrder == "ProdNum" ? "ProdNum_desc" : "ProdNum";
-            ViewData["VINSortParm"] = sortOrder == "VIN" ? "VIN_desc" : "VIN";
-            ViewData["TestStartSortParm"] = sortOrder == "TestStart" ? "TestStart_desc" : "TestStart";
-            ViewData["TestEndSortParm"] = sortOrder == "TestEnd" ? "TestEnd_desc" : "TestEnd";
-            ViewData["TotalDurationSortParm"] = sortOrder == "TotalDuration" ? "TotalDuration_desc" : "TotalDuration";
-            ViewData["ResultSortParm"] = sortOrder == "Result" ? "Result_desc" : "Result";
-            ViewData["NotOksSortParm"] = sortOrder == "NotOks" ? "NotOks_desc" : "NotOks";
-            ViewData["ClientSortParm"] = sortOrder == "Client" ? "Client_desc" : "Client";
-            ViewData["TestTypeSortParm"] = sortOrder == "TestType" ? "TestType_desc" : "TestType";
 
-            if (!String.IsNullOrEmpty(searchString))
+            ViewBag.ColumnNames = new List<string>() { "ProductionNumber", "VIN", "TestStart", "TestEnd", "TotalDuration", "Results", "NotOks", "Client", "TestType" }; ;
+
+            ViewData["CurrentSort"] = sortOrder;
+
+            foreach (string columnName in ViewBag.ColumnNames)
             {
-                statistics_val = statistics_val.Where(s => 
-                                           s.ProductionNumber==searchString
-                                        || s.VIN== searchString
-                                        || s.TestStart== searchString
-                                        || s.TestEnd== searchString
-                                        || s.TotalDuration== searchString
-                                        || s.Result== searchString
-                                        || s.NotOks== searchString
-                                        || s.Client== searchString
-                                        || s.TestType== searchString
-                                       );
+                ViewData[columnName+"SortParam"] = sortOrder == columnName ? columnName+"_desc" : columnName; 
             }
-            if (searchString!=null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
+            int pageSize = 14;
 
             switch (sortOrder)
             {
-                case "ProdNum":
+
+                case "ProductionNumber":
                     statistics_val = statistics_val.OrderBy(s => s.ProductionNumber);
                     break;
-                case "ProdNum_desc":
+                case "ProductionNumber_desc":
                     statistics_val = statistics_val.OrderByDescending(s => s.ProductionNumber);
                     break;
                 case "VIN":
@@ -95,10 +72,10 @@ namespace MVCENG2.Controllers
                 case "TotalDuration_desc":
                     statistics_val = statistics_val.OrderByDescending(s => s.TotalDuration);
                     break;
-                case "Result":
+                case "Results":
                     statistics_val = statistics_val.OrderBy(s => s.Result);
                     break;
-                case "Result_desc":
+                case "Results_desc":
                     statistics_val = statistics_val.OrderByDescending(s => s.Result);
                     break;
                 case "NotOks":
@@ -124,19 +101,22 @@ namespace MVCENG2.Controllers
                     break;
 
             }
+
+            //ViewData["ProdNumSortParm"] = sortOrder == "ProdNum" ? "ProdNum_desc" : "ProdNum";
+
             #endregion
 
-            
 
+           
+            
 
             return View(PaginatedList<Statistic>.CreatePage(statistics_val, pageNumber ?? 1, pageSize));
         }
 
-        public async Task<IActionResult> TestReport(string sortOrder)
+        public async Task<IActionResult> TestReport()
         {
             IEnumerable<TestReport> test_report = await _testReportRepository.GetAll();
 
-            var a = ViewData["CurrentSort"];
             
             return View(test_report);
         }

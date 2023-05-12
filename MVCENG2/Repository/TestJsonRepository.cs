@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVCENG2.Data;
 using MVCENG2.Interfaces;
-using MVCENG2.Models;
+using MVCENG2.Models.Hoffman;
 
 namespace MVCENG2.Repository
 {
@@ -13,14 +13,14 @@ namespace MVCENG2.Repository
             
             _context = context;
         }
-        public bool Add(TestJSON testJson)
+        public bool Add(ResultDataJSON testJson)
         {
             _context.TestJson.Add(testJson);
             return Save();
 
         }
 
-        public bool Delete(TestJSON testJson)
+        public bool Delete(ResultDataJSON testJson)
         {
             
             _context.Remove(testJson);
@@ -35,7 +35,7 @@ namespace MVCENG2.Repository
             return true;
         }
 
-        public bool Update(TestJSON testJson)
+        public bool Update(ResultDataJSON testJson)
         {
             _context.Update(testJson);
             return Save();

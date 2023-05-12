@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVCENG2.Models
+namespace MVCENG2.Models.SerializerModels
 {
 
     // Примечание. Для запуска созданного кода может потребоваться NET Framework версии 4.5 или более поздней версии и .NET Core или Standard версии 2.0 или более поздней.
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
-    [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
+    [System.Xml.Serialization.XmlRoot(Namespace = "", IsNullable = false)]
     public class Dashboard
     {
 
@@ -23,19 +23,19 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.testReportField;
+                return testReportField;
             }
             set
             {
-                this.testReportField = value;
+                testReportField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReport
     {
 
@@ -52,25 +52,25 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.testHeaderField;
+                return testHeaderField;
             }
             set
             {
-                this.testHeaderField = value;
+                testHeaderField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Result")]
+        [System.Xml.Serialization.XmlElement("Result")]
         public DashboardTestReportResult[] Result
         {
             get
             {
-                return this.resultField;
+                return resultField;
             }
             set
             {
-                this.resultField = value;
+                resultField = value;
             }
         }
 
@@ -79,33 +79,33 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.testEndField;
+                return testEndField;
             }
             set
             {
-                this.testEndField = value;
+                testEndField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute()]
+        [System.Xml.Serialization.XmlAttribute()]
         public ulong productionNumber
         {
             get
             {
-                return this.productionNumberField;
+                return productionNumberField;
             }
             set
             {
-                this.productionNumberField = value;
+                productionNumberField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportTestHeader
     {
 
@@ -117,7 +117,7 @@ namespace MVCENG2.Models
 
         private string startOfTestField;
 
-        private System.DateTime timeStampField;
+        private DateTime timeStampField;
 
         private DashboardTestReportTestHeaderResultTags resultTagsField;
 
@@ -126,11 +126,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.productionNumberField;
+                return productionNumberField;
             }
             set
             {
-                this.productionNumberField = value;
+                productionNumberField = value;
             }
         }
 
@@ -139,11 +139,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.vehicleIdentificationNumberField;
+                return vehicleIdentificationNumberField;
             }
             set
             {
-                this.vehicleIdentificationNumberField = value;
+                vehicleIdentificationNumberField = value;
             }
         }
 
@@ -152,11 +152,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.testunitNameField;
+                return testunitNameField;
             }
             set
             {
-                this.testunitNameField = value;
+                testunitNameField = value;
             }
         }
 
@@ -165,24 +165,24 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.startOfTestField;
+                return startOfTestField;
             }
             set
             {
-                this.startOfTestField = value;
+                startOfTestField = value;
             }
         }
 
         /// <remarks/>
-        public System.DateTime TimeStamp
+        public DateTime TimeStamp
         {
             get
             {
-                return this.timeStampField;
+                return timeStampField;
             }
             set
             {
-                this.timeStampField = value;
+                timeStampField = value;
             }
         }
 
@@ -191,19 +191,19 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.resultTagsField;
+                return resultTagsField;
             }
             set
             {
-                this.resultTagsField = value;
+                resultTagsField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportTestHeaderResultTags
     {
 
@@ -228,150 +228,150 @@ namespace MVCENG2.Models
         private string sHOP_FLOOR_DATALINE_DESCRField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExecutionResultAdditionalData.VechicleDesignNumber")]
+        [System.Xml.Serialization.XmlElement("ExecutionResultAdditionalData.VechicleDesignNumber")]
         public ulong ExecutionResultAdditionalDataVechicleDesignNumber
         {
             get
             {
-                return this.executionResultAdditionalDataVechicleDesignNumberField;
+                return executionResultAdditionalDataVechicleDesignNumberField;
             }
             set
             {
-                this.executionResultAdditionalDataVechicleDesignNumberField = value;
+                executionResultAdditionalDataVechicleDesignNumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ExecutionResultAdditionalData.SAP_Code")]
+        [System.Xml.Serialization.XmlElement("ExecutionResultAdditionalData.SAP_Code")]
         public ulong ExecutionResultAdditionalDataSAP_Code
         {
             get
             {
-                return this.executionResultAdditionalDataSAP_CodeField;
+                return executionResultAdditionalDataSAP_CodeField;
             }
             set
             {
-                this.executionResultAdditionalDataSAP_CodeField = value;
+                executionResultAdditionalDataSAP_CodeField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("TestUnit_Configuration.PrimaryLanguage")]
+        [System.Xml.Serialization.XmlElement("TestUnit_Configuration.PrimaryLanguage")]
         public string TestUnit_ConfigurationPrimaryLanguage
         {
             get
             {
-                return this.testUnit_ConfigurationPrimaryLanguageField;
+                return testUnit_ConfigurationPrimaryLanguageField;
             }
             set
             {
-                this.testUnit_ConfigurationPrimaryLanguageField = value;
+                testUnit_ConfigurationPrimaryLanguageField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MDA_Information.MDA_Number")]
+        [System.Xml.Serialization.XmlElement("MDA_Information.MDA_Number")]
         public byte MDA_InformationMDA_Number
         {
             get
             {
-                return this.mDA_InformationMDA_NumberField;
+                return mDA_InformationMDA_NumberField;
             }
             set
             {
-                this.mDA_InformationMDA_NumberField = value;
+                mDA_InformationMDA_NumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("MDA_Information.MDA_Firmware_Version")]
+        [System.Xml.Serialization.XmlElement("MDA_Information.MDA_Firmware_Version")]
         public string MDA_InformationMDA_Firmware_Version
         {
             get
             {
-                return this.mDA_InformationMDA_Firmware_VersionField;
+                return mDA_InformationMDA_Firmware_VersionField;
             }
             set
             {
-                this.mDA_InformationMDA_Firmware_VersionField = value;
+                mDA_InformationMDA_Firmware_VersionField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SHOP_FLOOR_DATA.SAPCODE")]
+        [System.Xml.Serialization.XmlElement("SHOP_FLOOR_DATA.SAPCODE")]
         public ulong SHOP_FLOOR_DATASAPCODE
         {
             get
             {
-                return this.sHOP_FLOOR_DATASAPCODEField;
+                return sHOP_FLOOR_DATASAPCODEField;
             }
             set
             {
-                this.sHOP_FLOOR_DATASAPCODEField = value;
+                sHOP_FLOOR_DATASAPCODEField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SHOP_FLOOR_DATA.ORDERTYPE")]
+        [System.Xml.Serialization.XmlElement("SHOP_FLOOR_DATA.ORDERTYPE")]
         public string SHOP_FLOOR_DATAORDERTYPE
         {
             get
             {
-                return this.sHOP_FLOOR_DATAORDERTYPEField;
+                return sHOP_FLOOR_DATAORDERTYPEField;
             }
             set
             {
-                this.sHOP_FLOOR_DATAORDERTYPEField = value;
+                sHOP_FLOOR_DATAORDERTYPEField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SHOP_FLOOR_DATA.MODCOD")]
+        [System.Xml.Serialization.XmlElement("SHOP_FLOOR_DATA.MODCOD")]
         public object SHOP_FLOOR_DATAMODCOD
         {
             get
             {
-                return this.sHOP_FLOOR_DATAMODCODField;
+                return sHOP_FLOOR_DATAMODCODField;
             }
             set
             {
-                this.sHOP_FLOOR_DATAMODCODField = value;
+                sHOP_FLOOR_DATAMODCODField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SHOP_FLOOR_DATA.SAPSEQ")]
+        [System.Xml.Serialization.XmlElement("SHOP_FLOOR_DATA.SAPSEQ")]
         public ulong SHOP_FLOOR_DATASAPSEQ
         {
             get
             {
-                return this.sHOP_FLOOR_DATASAPSEQField;
+                return sHOP_FLOOR_DATASAPSEQField;
             }
             set
             {
-                this.sHOP_FLOOR_DATASAPSEQField = value;
+                sHOP_FLOOR_DATASAPSEQField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("SHOP_FLOOR_DATA.LINE_DESCR")]
+        [System.Xml.Serialization.XmlElement("SHOP_FLOOR_DATA.LINE_DESCR")]
         public string SHOP_FLOOR_DATALINE_DESCR
         {
             get
             {
-                return this.sHOP_FLOOR_DATALINE_DESCRField;
+                return sHOP_FLOOR_DATALINE_DESCRField;
             }
             set
             {
-                this.sHOP_FLOOR_DATALINE_DESCRField = value;
+                sHOP_FLOOR_DATALINE_DESCRField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResult
     {
 
@@ -404,25 +404,25 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.componentField;
+                return componentField;
             }
             set
             {
-                this.componentField = value;
+                componentField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ComponentText")]
+        [System.Xml.Serialization.XmlElement("ComponentText")]
         public DashboardTestReportResultComponentText[] ComponentText
         {
             get
             {
-                return this.componentTextField;
+                return componentTextField;
             }
             set
             {
-                this.componentTextField = value;
+                componentTextField = value;
             }
         }
 
@@ -431,25 +431,25 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.itemField;
+                return itemField;
             }
             set
             {
-                this.itemField = value;
+                itemField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ItemText")]
+        [System.Xml.Serialization.XmlElement("ItemText")]
         public DashboardTestReportResultItemText[] ItemText
         {
             get
             {
-                return this.itemTextField;
+                return itemTextField;
             }
             set
             {
-                this.itemTextField = value;
+                itemTextField = value;
             }
         }
 
@@ -458,39 +458,39 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.resultTypeField;
+                return resultTypeField;
             }
             set
             {
-                this.resultTypeField = value;
+                resultTypeField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ResultText")]
+        [System.Xml.Serialization.XmlElement("ResultText")]
         public DashboardTestReportResultResultText[] ResultText
         {
             get
             {
-                return this.resultTextField;
+                return resultTextField;
             }
             set
             {
-                this.resultTextField = value;
+                resultTextField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("Error")]
+        [System.Xml.Serialization.XmlElement("Error")]
         public DashboardTestReportResultError[] Error
         {
             get
             {
-                return this.errorField;
+                return errorField;
             }
             set
             {
-                this.errorField = value;
+                errorField = value;
             }
         }
 
@@ -499,11 +499,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.resultStateField;
+                return resultStateField;
             }
             set
             {
-                this.resultStateField = value;
+                resultStateField = value;
             }
         }
 
@@ -512,11 +512,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.type_ToleranceField;
+                return type_ToleranceField;
             }
             set
             {
-                this.type_ToleranceField = value;
+                type_ToleranceField = value;
             }
         }
 
@@ -525,11 +525,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.type_ExecutionField;
+                return type_ExecutionField;
             }
             set
             {
-                this.type_ExecutionField = value;
+                type_ExecutionField = value;
             }
         }
 
@@ -538,11 +538,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.type_StateField;
+                return type_StateField;
             }
             set
             {
-                this.type_StateField = value;
+                type_StateField = value;
             }
         }
 
@@ -551,19 +551,19 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.detailTagsField;
+                return detailTagsField;
             }
             set
             {
-                this.detailTagsField = value;
+                detailTagsField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResultComponentText
     {
 
@@ -572,38 +572,38 @@ namespace MVCENG2.Models
         private string valueField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
+        [System.Xml.Serialization.XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
         public string lang
         {
             get
             {
-                return this.langField;
+                return langField;
             }
             set
             {
-                this.langField = value;
+                langField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [System.Xml.Serialization.XmlText()]
         public string Value
         {
             get
             {
-                return this.valueField;
+                return valueField;
             }
             set
             {
-                this.valueField = value;
+                valueField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResultItemText
     {
 
@@ -612,38 +612,38 @@ namespace MVCENG2.Models
         private string valueField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
+        [System.Xml.Serialization.XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
         public string lang
         {
             get
             {
-                return this.langField;
+                return langField;
             }
             set
             {
-                this.langField = value;
+                langField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [System.Xml.Serialization.XmlText()]
         public string Value
         {
             get
             {
-                return this.valueField;
+                return valueField;
             }
             set
             {
-                this.valueField = value;
+                valueField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResultResultText
     {
 
@@ -652,38 +652,38 @@ namespace MVCENG2.Models
         private string valueField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
+        [System.Xml.Serialization.XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
         public string lang
         {
             get
             {
-                return this.langField;
+                return langField;
             }
             set
             {
-                this.langField = value;
+                langField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [System.Xml.Serialization.XmlText()]
         public string Value
         {
             get
             {
-                return this.valueField;
+                return valueField;
             }
             set
             {
-                this.valueField = value;
+                valueField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResultError
     {
 
@@ -692,38 +692,38 @@ namespace MVCENG2.Models
         private string valueField;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlAttributeAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
+        [System.Xml.Serialization.XmlAttribute(Form = System.Xml.Schema.XmlSchemaForm.Qualified, Namespace = "http://www.w3.org/XML/1998/namespace")]
         public string lang
         {
             get
             {
-                return this.langField;
+                return langField;
             }
             set
             {
-                this.langField = value;
+                langField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlTextAttribute()]
+        [System.Xml.Serialization.XmlText()]
         public string Value
         {
             get
             {
-                return this.valueField;
+                return valueField;
             }
             set
             {
-                this.valueField = value;
+                valueField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResultType_Tolerance
     {
 
@@ -740,11 +740,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.lowerLimitField;
+                return lowerLimitField;
             }
             set
             {
-                this.lowerLimitField = value;
+                lowerLimitField = value;
             }
         }
 
@@ -753,11 +753,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.upperLimitField;
+                return upperLimitField;
             }
             set
             {
-                this.upperLimitField = value;
+                upperLimitField = value;
             }
         }
 
@@ -766,11 +766,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.actualValueField;
+                return actualValueField;
             }
             set
             {
-                this.actualValueField = value;
+                actualValueField = value;
             }
         }
 
@@ -779,19 +779,19 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.physicalUnitField;
+                return physicalUnitField;
             }
             set
             {
-                this.physicalUnitField = value;
+                physicalUnitField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResultType_State
     {
 
@@ -804,11 +804,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.actualStringField;
+                return actualStringField;
             }
             set
             {
-                this.actualStringField = value;
+                actualStringField = value;
             }
         }
 
@@ -817,19 +817,19 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.referenceStringField;
+                return referenceStringField;
             }
             set
             {
-                this.referenceStringField = value;
+                referenceStringField = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportResultDetailTags
     {
 
@@ -863,285 +863,285 @@ namespace MVCENG2.Models
 
         private bool eLT_SECTIONOPERATORFieldSpecified;
 
-        private System.DateTime eLT_SECTIONOPSTARTDATEField;
+        private DateTime eLT_SECTIONOPSTARTDATEField;
 
         private bool eLT_SECTIONOPSTARTDATEFieldSpecified;
 
-        private System.DateTime eLT_SECTIONOPDATEField;
+        private DateTime eLT_SECTIONOPDATEField;
 
         private bool eLT_SECTIONOPDATEFieldSpecified;
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("TestInfo.PrintOnlyOnFull")]
+        [System.Xml.Serialization.XmlElement("TestInfo.PrintOnlyOnFull")]
         public bool TestInfoPrintOnlyOnFull
         {
             get
             {
-                return this.testInfoPrintOnlyOnFullField;
+                return testInfoPrintOnlyOnFullField;
             }
             set
             {
-                this.testInfoPrintOnlyOnFullField = value;
+                testInfoPrintOnlyOnFullField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore()]
         public bool TestInfoPrintOnlyOnFullSpecified
         {
             get
             {
-                return this.testInfoPrintOnlyOnFullFieldSpecified;
+                return testInfoPrintOnlyOnFullFieldSpecified;
             }
             set
             {
-                this.testInfoPrintOnlyOnFullFieldSpecified = value;
+                testInfoPrintOnlyOnFullFieldSpecified = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReadInformation.SSHWNumber")]
+        [System.Xml.Serialization.XmlElement("ReadInformation.SSHWNumber")]
         public string ReadInformationSSHWNumber
         {
             get
             {
-                return this.readInformationSSHWNumberField;
+                return readInformationSSHWNumberField;
             }
             set
             {
-                this.readInformationSSHWNumberField = value;
+                readInformationSSHWNumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReadInformation.SSHWVersionNumber")]
+        [System.Xml.Serialization.XmlElement("ReadInformation.SSHWVersionNumber")]
         public string ReadInformationSSHWVersionNumber
         {
             get
             {
-                return this.readInformationSSHWVersionNumberField;
+                return readInformationSSHWVersionNumberField;
             }
             set
             {
-                this.readInformationSSHWVersionNumberField = value;
+                readInformationSSHWVersionNumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReadInformation.SSSWNumber")]
+        [System.Xml.Serialization.XmlElement("ReadInformation.SSSWNumber")]
         public string ReadInformationSSSWNumber
         {
             get
             {
-                return this.readInformationSSSWNumberField;
+                return readInformationSSSWNumberField;
             }
             set
             {
-                this.readInformationSSSWNumberField = value;
+                readInformationSSSWNumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReadInformation.SSSWVersionNumber")]
+        [System.Xml.Serialization.XmlElement("ReadInformation.SSSWVersionNumber")]
         public uint ReadInformationSSSWVersionNumber
         {
             get
             {
-                return this.readInformationSSSWVersionNumberField;
+                return readInformationSSSWVersionNumberField;
             }
             set
             {
-                this.readInformationSSSWVersionNumberField = value;
+                readInformationSSSWVersionNumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore()]
         public bool ReadInformationSSSWVersionNumberSpecified
         {
             get
             {
-                return this.readInformationSSSWVersionNumberFieldSpecified;
+                return readInformationSSSWVersionNumberFieldSpecified;
             }
             set
             {
-                this.readInformationSSSWVersionNumberFieldSpecified = value;
+                readInformationSSSWVersionNumberFieldSpecified = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReadInformation.VMSWNumber")]
+        [System.Xml.Serialization.XmlElement("ReadInformation.VMSWNumber")]
         public string ReadInformationVMSWNumber
         {
             get
             {
-                return this.readInformationVMSWNumberField;
+                return readInformationVMSWNumberField;
             }
             set
             {
-                this.readInformationVMSWNumberField = value;
+                readInformationVMSWNumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ReadInformation.VMSWVersionNumber")]
+        [System.Xml.Serialization.XmlElement("ReadInformation.VMSWVersionNumber")]
         public string ReadInformationVMSWVersionNumber
         {
             get
             {
-                return this.readInformationVMSWVersionNumberField;
+                return readInformationVMSWVersionNumberField;
             }
             set
             {
-                this.readInformationVMSWVersionNumberField = value;
+                readInformationVMSWVersionNumberField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("TestInfo.StartTime")]
+        [System.Xml.Serialization.XmlElement("TestInfo.StartTime")]
         public string TestInfoStartTime
         {
             get
             {
-                return this.testInfoStartTimeField;
+                return testInfoStartTimeField;
             }
             set
             {
-                this.testInfoStartTimeField = value;
+                testInfoStartTimeField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("TestInfo.EndTime")]
+        [System.Xml.Serialization.XmlElement("TestInfo.EndTime")]
         public string TestInfoEndTime
         {
             get
             {
-                return this.testInfoEndTimeField;
+                return testInfoEndTimeField;
             }
             set
             {
-                this.testInfoEndTimeField = value;
+                testInfoEndTimeField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ELT_SECTION.OPCODE")]
+        [System.Xml.Serialization.XmlElement("ELT_SECTION.OPCODE")]
         public string ELT_SECTIONOPCODE
         {
             get
             {
-                return this.eLT_SECTIONOPCODEField;
+                return eLT_SECTIONOPCODEField;
             }
             set
             {
-                this.eLT_SECTIONOPCODEField = value;
+                eLT_SECTIONOPCODEField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ELT_SECTION.WORKPLACE")]
+        [System.Xml.Serialization.XmlElement("ELT_SECTION.WORKPLACE")]
         public string ELT_SECTIONWORKPLACE
         {
             get
             {
-                return this.eLT_SECTIONWORKPLACEField;
+                return eLT_SECTIONWORKPLACEField;
             }
             set
             {
-                this.eLT_SECTIONWORKPLACEField = value;
+                eLT_SECTIONWORKPLACEField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ELT_SECTION.OPERATOR")]
+        [System.Xml.Serialization.XmlElement("ELT_SECTION.OPERATOR")]
         public uint ELT_SECTIONOPERATOR
         {
             get
             {
-                return this.eLT_SECTIONOPERATORField;
+                return eLT_SECTIONOPERATORField;
             }
             set
             {
-                this.eLT_SECTIONOPERATORField = value;
+                eLT_SECTIONOPERATORField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore()]
         public bool ELT_SECTIONOPERATORSpecified
         {
             get
             {
-                return this.eLT_SECTIONOPERATORFieldSpecified;
+                return eLT_SECTIONOPERATORFieldSpecified;
             }
             set
             {
-                this.eLT_SECTIONOPERATORFieldSpecified = value;
+                eLT_SECTIONOPERATORFieldSpecified = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ELT_SECTION.OPSTARTDATE")]
-        public System.DateTime ELT_SECTIONOPSTARTDATE
+        [System.Xml.Serialization.XmlElement("ELT_SECTION.OPSTARTDATE")]
+        public DateTime ELT_SECTIONOPSTARTDATE
         {
             get
             {
-                return this.eLT_SECTIONOPSTARTDATEField;
+                return eLT_SECTIONOPSTARTDATEField;
             }
             set
             {
-                this.eLT_SECTIONOPSTARTDATEField = value;
+                eLT_SECTIONOPSTARTDATEField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore()]
         public bool ELT_SECTIONOPSTARTDATESpecified
         {
             get
             {
-                return this.eLT_SECTIONOPSTARTDATEFieldSpecified;
+                return eLT_SECTIONOPSTARTDATEFieldSpecified;
             }
             set
             {
-                this.eLT_SECTIONOPSTARTDATEFieldSpecified = value;
+                eLT_SECTIONOPSTARTDATEFieldSpecified = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("ELT_SECTION.OPDATE")]
-        public System.DateTime ELT_SECTIONOPDATE
+        [System.Xml.Serialization.XmlElement("ELT_SECTION.OPDATE")]
+        public DateTime ELT_SECTIONOPDATE
         {
             get
             {
-                return this.eLT_SECTIONOPDATEField;
+                return eLT_SECTIONOPDATEField;
             }
             set
             {
-                this.eLT_SECTIONOPDATEField = value;
+                eLT_SECTIONOPDATEField = value;
             }
         }
 
         /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        [System.Xml.Serialization.XmlIgnore()]
         public bool ELT_SECTIONOPDATESpecified
         {
             get
             {
-                return this.eLT_SECTIONOPDATEFieldSpecified;
+                return eLT_SECTIONOPDATEFieldSpecified;
             }
             set
             {
-                this.eLT_SECTIONOPDATEFieldSpecified = value;
+                eLT_SECTIONOPDATEFieldSpecified = value;
             }
         }
     }
 
     /// <remarks/>
-    [System.SerializableAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
+    [Serializable()]
+    [System.ComponentModel.DesignerCategory("code")]
+    [System.Xml.Serialization.XmlType(AnonymousType = true)]
     public partial class DashboardTestReportTestEnd
     {
 
@@ -1158,11 +1158,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.testResultStateField;
+                return testResultStateField;
             }
             set
             {
-                this.testResultStateField = value;
+                testResultStateField = value;
             }
         }
 
@@ -1171,11 +1171,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.resultCounterField;
+                return resultCounterField;
             }
             set
             {
-                this.resultCounterField = value;
+                resultCounterField = value;
             }
         }
 
@@ -1184,11 +1184,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.notOkResultsField;
+                return notOkResultsField;
             }
             set
             {
-                this.notOkResultsField = value;
+                notOkResultsField = value;
             }
         }
 
@@ -1197,11 +1197,11 @@ namespace MVCENG2.Models
         {
             get
             {
-                return this.endOfReportField;
+                return endOfReportField;
             }
             set
             {
-                this.endOfReportField = value;
+                endOfReportField = value;
             }
         }
     }
