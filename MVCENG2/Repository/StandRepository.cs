@@ -28,7 +28,7 @@ namespace MVCENG2.Repository
 
         public IEnumerable<Stand> GetAll()
         {
-            return _context.Stand.ToList();
+            return _context.stands.ToList();
             
         }
         /*

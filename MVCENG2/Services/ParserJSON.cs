@@ -37,7 +37,7 @@ namespace MVCENG2.Services
                 {
                     if (file.Contains(".json"))
                     {
-                        ResultDataJSON testJSON = new ResultDataJSON();
+                        ResultDataJSON_OLDTEST testJSON = new ResultDataJSON_OLDTEST();
                         try
                         {
                             using (FileStream fs = new FileStream(file, FileMode.Open))

@@ -35,12 +35,12 @@ namespace MVCENG2.Data
             
         }
 
-        public DbSet<Stand> Stand { get; set; }
+        public DbSet<Stand> stands { get; set; }
 
         public DbSet<Statistic> Statistic { get; set; }
 
         public DbSet<TestReport> TestReport { get; set; }
-        public DbSet<ResultDataJSON> TestJson { get; set; }
+        public DbSet<ResultDataJSON_OLDTEST> TestJson { get; set; }
 
     }
 }

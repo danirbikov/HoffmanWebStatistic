@@ -34,15 +34,15 @@ namespace MVCENG2.Repository
 
             if (_standsRepository.GetAll().Select(k => k.Project).ToList().Contains(standsIdentifier))
             {
-                listStands = _standsRepository.GetAll().Where(k => k.Project == standsIdentifier).Select(k=>k.Stand_name).ToList();
+                listStands = _standsRepository.GetAll().Where(k => k.Project == standsIdentifier).Select(k=>k.StandName).ToList();
             }
-            else if (_standsRepository.GetAll().Select(k=>k.Stand_type).ToList().Contains(standsIdentifier))
+            else if (_standsRepository.GetAll().Select(k=>k.StandType).ToList().Contains(standsIdentifier))
             {
-                listStands = _standsRepository.GetAll().Where(k => k.Stand_type == standsIdentifier).Select(k => k.Stand_name).ToList();
+                listStands = _standsRepository.GetAll().Where(k => k.StandType == standsIdentifier).Select(k => k.StandName).ToList();
             }
-            else if (_standsRepository.GetAll().Select(k => k.Stand_name).ToList().Contains(standsIdentifier))
+            else if (_standsRepository.GetAll().Select(k => k.StandName).ToList().Contains(standsIdentifier))
             {
-                listStands = _standsRepository.GetAll().Where(k => k.Stand_name == standsIdentifier).Select(k => k.Stand_name).ToList();
+                listStands = _standsRepository.GetAll().Where(k => k.StandName == standsIdentifier).Select(k => k.StandName).ToList();
             }
 
             return _context.Statistic.Where(k =>listStands.Contains(k.Client)) ;

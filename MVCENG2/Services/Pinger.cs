@@ -31,7 +31,7 @@ namespace MVCENG2.Services
             bool pingable = false;
             try
             {                            
-                PingReply reply = pinger.Send(stand.IP_adress);
+                PingReply reply = pinger.Send(stand.IpAdress);
                 pingable = reply.Status == IPStatus.Success;
                 
             }
@@ -40,8 +40,8 @@ namespace MVCENG2.Services
                 using (StreamWriter writer = new StreamWriter("Logs/PingerLogs.txt"))
                 {
                     writer.WriteLine("Exception in pinging stand: ");
-                    writer.WriteLine(stand.Stand_name);
-                    writer.WriteLine(stand.IP_adress);
+                    writer.WriteLine(stand.StandName);
+                    writer.WriteLine(stand.IpAdress);
                     
                     writer.WriteLine();
                 }
@@ -53,10 +53,10 @@ namespace MVCENG2.Services
                     pinger.Dispose();
                 }
             }
-            if (pingable)
-                stand.Connection_status = "OK";
-            else
-                stand.Connection_status = "NOK";
+            //if (pingable)
+            //    stand.Connection_status = "OK";
+            //else
+            //    stand.Connection_status = "NOK";
 
             _standRepository.Update(stand);
             return pingable;

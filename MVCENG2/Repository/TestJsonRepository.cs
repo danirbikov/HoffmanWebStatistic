@@ -13,14 +13,14 @@ namespace MVCENG2.Repository
             
             _context = context;
         }
-        public bool Add(ResultDataJSON testJson)
+        public bool Add(ResultDataJSON_OLDTEST testJson)
         {
             _context.TestJson.Add(testJson);
             return Save();
 
         }
 
-        public bool Delete(ResultDataJSON testJson)
+        public bool Delete(ResultDataJSON_OLDTEST testJson)
         {
             
             _context.Remove(testJson);
@@ -35,7 +35,7 @@ namespace MVCENG2.Repository
             return true;
         }
 
-        public bool Update(ResultDataJSON testJson)
+        public bool Update(ResultDataJSON_OLDTEST testJson)
         {
             _context.Update(testJson);
             return Save();

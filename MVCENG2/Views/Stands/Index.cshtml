@@ -23,20 +23,20 @@
                         </a>
 
                         @* Group by stand type *@
-                        @foreach (var standType in Model.Where(p => p.Project==standProject).GroupBy(p => p.Stand_type))
+                        @foreach (var standType in Model.Where(p => p.Project==standProject).GroupBy(p => p.StandType))
                         {
                             <a asp-controller=@standType.FirstOrDefault().Project asp-action="Detail" asp-route-standsIdentidier=@standType.Key>
                                 <div class="row">
 
                                     <h4 class="page-title">@standType.Key</h4>
-                                    @foreach (var standObject in Model.Where(p=> p.Stand_type==standType.Key))
+                                    @foreach (var standObject in Model.Where(p => p.StandType == standType.Key))
                                     {
                                         <div class="col-xl-5 col-lg-6">
                                             <div class="card widget-flat div-hover">
-                                                <a asp-controller=@standObject.Project asp-action="Detail" asp-route-standsIdentidier=@standObject.Stand_name>
+                                                <a asp-controller=@standObject.Project asp-action="Detail" asp-route-standsIdentidier=@standObject.StandName>
                                                     <div class="card-body">
                                                             
-                                                        @if (standObject.Connection_status == "OK")
+                                                        @*@if (standObject.Connection_status == "OK")
                                                         {
                                                             color = "background-color:rgba(0,255,20,0.52)";
                                                             onlineCondition = "Online";
@@ -46,13 +46,17 @@
                                                             color = "background-color:rgba(255,0,20,0.52)";
                                                             onlineCondition = "Offline";
                                                         }
-
+                                                        *@
+                                                        @{
+                                                            color = "background-color:rgba(255,0,20,0.52)";
+                                                        onlineCondition = "Offline";
+                                                        }
                                                         <div class="float-end">
                                                             <i class="mdi mdi-account-multiple widget-icon" style=@color></i>
                                                         </div>
                                                         <h5 class="text-muted fw-normal mt-0" title="Number of Customers">@onlineCondition</h5>
 
-                                                        <h3 class="mt-3 mb-3">@standObject.Stand_name</h3>
+                                                        <h3 class="mt-3 mb-3">@standObject.StandName</h3>
                                                         <p class="mb-0 text-muted">
                                                             <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i> @Tests_count_last_month</span>
                                                             <span class="text-nowrap">Tests last month</span>

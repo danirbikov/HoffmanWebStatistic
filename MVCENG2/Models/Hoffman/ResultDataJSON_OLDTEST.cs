@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MVCENG2.Models.Hoffman
 {
-    public class ResultDataJSON
+    public class ResultDataJSON_OLDTEST
     {
         [Key]
         public long id { get; set; }

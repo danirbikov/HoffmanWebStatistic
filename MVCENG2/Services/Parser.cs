@@ -83,7 +83,7 @@ namespace MVCENG2.Services
             IEnumerable<Stand> stands = _standRepository.GetAll();
             foreach (Stand stand in stands)
             {
-                stands_URL.Add(stand.File_location);
+                stands_URL.Add(stand.Mes2supTelegramsStands.ToString());
             }
             return stands_URL;
         }
