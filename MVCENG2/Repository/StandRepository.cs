@@ -2,6 +2,7 @@
 using MVCENG2.Data;
 using MVCENG2.Interfaces;
 using MVCENG2.Models.General;
+using System.IO;
 
 namespace MVCENG2.Repository
 {
@@ -45,6 +46,24 @@ namespace MVCENG2.Repository
             return await _context.Stand.FirstOrDefaultAsync(i => i.Project == projectName);
         }
         */
+        public int GetStandIDbyName(string standName)
+        {
+            var standObject = _context.stands.Where(k => k.StandName == standName).FirstOrDefault();
+            if (standObject!=null)
+            {
+                return standObject.Id;
+            }
+            else
+            {
+                using (StreamWriter writer = new StreamWriter("C:\\Users\\BikovDI\\source\\repos\\MVCENG2\\MVCENG2\\Logs\\MysteryStands.txt", true, System.Text.Encoding.Default))
+                {
+                    writer.WriteLine(standName);
+                }
+                return _context.stands.Where(k => k.StandName == "UNKNOWN").FirstOrDefault().Id;
+            }
+              
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

@@ -4,6 +4,7 @@ using MVCENG2.Data;
 using MVCENG2.Interfaces;
 using MVCENG2.Services;
 using MVCENG2.Repository;
+using MVCENG2.Models.Hoffman;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,10 @@ builder.Services.AddScoped<IStandsStatisticRepository, StandsStatisticRepository
 builder.Services.AddScoped<ITestReportRepository, TestReportRepository>();
 builder.Services.AddScoped<ITestJsonRepository, TestJsonRepository>();
 builder.Services.AddScoped<DateFunctions>();
+builder.Services.AddScoped<OperatorsRepository>();
+builder.Services.AddScoped<JsonHeadersRepository>();
+builder.Services.AddScoped<JsonTestsRepository>();
+builder.Services.AddScoped<JsonValuesRepository>();
 //builder.Services.AddTransient<ParserJSON>();
 builder.Services.AddTransient<Parser>();
 builder.Services.AddScoped<Pinger>();

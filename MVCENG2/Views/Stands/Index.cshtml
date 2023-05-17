@@ -18,14 +18,14 @@
                 @foreach (var standProject in Model.Select(g => g.Project).Distinct())
                 {
                     <div class="row">
-                        <a asp-controller=@standProject asp-action="Detail" asp-route-standsIdentidier=@standProject>
+                        <a asp-controller=@standProject asp-action="Detail" asp-route-standsIdentifier=@standProject>
                             <h1 class="page-title">@standProject</h1>
                         </a>
 
                         @* Group by stand type *@
                         @foreach (var standType in Model.Where(p => p.Project==standProject).GroupBy(p => p.StandType))
                         {
-                            <a asp-controller=@standType.FirstOrDefault().Project asp-action="Detail" asp-route-standsIdentidier=@standType.Key>
+                            <a asp-controller=@standType.FirstOrDefault().Project asp-action="Detail" asp-route-standsIdentifier=@standType.Key>
                                 <div class="row">
 
                                     <h4 class="page-title">@standType.Key</h4>
@@ -33,7 +33,7 @@
                                     {
                                         <div class="col-xl-5 col-lg-6">
                                             <div class="card widget-flat div-hover">
-                                                <a asp-controller=@standObject.Project asp-action="Detail" asp-route-standsIdentidier=@standObject.StandName>
+                                                <a asp-controller=@standObject.Project asp-action="Detail" asp-route-standsIdentifier=@standObject.StandName>
                                                     <div class="card-body">
                                                             
                                                         @*@if (standObject.Connection_status == "OK")

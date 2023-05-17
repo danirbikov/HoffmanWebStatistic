@@ -29,7 +29,7 @@ namespace MVCENG2.Controllers
             #region Initialize paginated list (BoilerPlate code) 
 
 
-            ViewBag.ColumnNames = new List<string>() { "ProductionNumber", "VIN", "TestStart", "TestEnd", "TotalDuration", "Results", "NotOks", "Client", "TestType" }; ;
+            ViewBag.ColumnNames = new List<string>() { "ProductionNumber", "VIN", "TestStart", "TestEnd", "TotalDuration", "Results", "NotOks", "Client", "TestType" }; 
 
             ViewData["CurrentSort"] = sortOrder;
 

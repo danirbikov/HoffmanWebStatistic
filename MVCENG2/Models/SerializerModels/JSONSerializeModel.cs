@@ -15,7 +15,7 @@
             public string VIN { get; set; }
             public string orderNum { get; set; }
             public string model { get; set; }
-            public string _operator { get; set; }
+            public string @operator { get; set; }
             public string date { get; set; }
         }
 

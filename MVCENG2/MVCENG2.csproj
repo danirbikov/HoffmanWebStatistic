@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Logs\PingerLogs - Копировать.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Include="C:\Users\BikovDI\Desktop\DateFunctions.cs" Link="DateFunctions.cs" />
   </ItemGroup>
 

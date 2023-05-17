@@ -36,7 +36,12 @@ namespace MVCENG2.Data
         }
 
         public DbSet<Stand> stands { get; set; }
+        public DbSet<Operator> operators { get; set; }
 
+        public DbSet<ResultsJsonHeader> results_json_headers { get; set; }
+        public DbSet<ResultsJsonTest> results_json_tests { get; set; }
+
+        public DbSet<ResultsJsonValue> results_json_values { get; set; }
         public DbSet<Statistic> Statistic { get; set; }
 
         public DbSet<TestReport> TestReport { get; set; }

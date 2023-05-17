@@ -1,10 +1,10 @@
-﻿@model MVCENG2.Services.PaginatedList<Statistic>
+﻿@model IndexViewModel
+
 
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    string statisticElementColor;
     string controllerName = @ViewContext.RouteData.Values["controller"].ToString();
 
 }
@@ -17,72 +17,51 @@
         <thead>
             <tr>
                 @{   
-                    foreach (string columnName in ViewBag.ColumnNames)
-                    {
-                        <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentidier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@ViewData[columnName+"SortParam"] asp-route-currentFilter=@ViewData["CurrentFilter"]>@columnName</a></td>
-                    }
+
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.VINSort>VIN</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.OrderNumberSort>OrderNumber</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.StandNameSort>StandName</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.OperatorSort>Operator</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.DateSort>Date</a></td>
                 }
             </tr>
         </thead>
         <tbody>
             @{
         
-                @foreach (var statisticObject in Model)
+                @foreach (var jsonHeaderObject in Model.resultsJsonHeader)
                 {
-                    if (statisticObject.Result == "Ok")
-                    {
-                        statisticElementColor = "background - color:rgba(0, 255, 20, 0.35)";
-                    }
-                    else
-                    {
-                        statisticElementColor = "background-color:rgba(255,0,20,0.52)";
-                    }
-
-                    <tr onClick="document.location='@Url.Action("TestReport", @controllerName, new {}, null)'" style=@statisticElementColor>
-                            @switch (controllerName)
-                            {
-                                case ("Siemens"):
-                                    <td>@statisticObject.ProductionNumber</td>
-                                    <td>@statisticObject.VIN</td>
-                                    <td>@statisticObject.TestStart</td>
-                                    <td>@statisticObject.TestEnd</td>
-                                    <td>@statisticObject.TotalDuration</td>
-                                    <td>@statisticObject.Result</td>
-                                    <td>@statisticObject.NotOks</td>
-                                    <td>@statisticObject.Client</td>
-                                    <td>@statisticObject.TestType</td>
-                                break;
-
-                                case ("Hoffman"):
-                                    <td>@statisticObject.VIN</td>
-                                break;
-                            }
-                        </tr>      
+                    <tr onClick="document.location='@Url.Action("TestReport", @controllerName, new {}, null)'">
+                        <td>@jsonHeaderObject.VIN</td>
+                        <td>@jsonHeaderObject.Ordernum</td>
+                        <td>@jsonHeaderObject.Stand.StandName</td>
+                        <td>@jsonHeaderObject.Operator.OLogin</td>
+                        <td>@jsonHeaderObject.Created</td>
+                    </tr>
                 }
             }     
         </tbody>
     </table>
 
-    @{
-        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-    }
-
-    <a asp-controller=@controllerName
-       asp-action="Detail"
-       asp-route-sortOrder="@ViewData["CurrentSort"]"
-       asp-route-pageNumber="@(Model.PageIndex - 1)"
-       asp-route-standsIdentidier=@ViewData["StandsIdentifier"]
-       class="btn btn-default @prevDisabled">
-        Previous
-    </a>
-    <a asp-controller=@controllerName
-       asp-action="Detail"
-       asp-route-sortOrder="@ViewData["CurrentSort"]"
-       asp-route-pageNumber="@(Model.PageIndex + 1)"
-       asp-route-standsIdentidier=@ViewData["StandsIdentifier"]
-       class="btn btn-default @nextDisabled">
-        Next
-    </a>
-
+    <p>
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <a asp-action="Detail"
+           asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
+           asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+           asp-route-sortorder="@(Model.SortViewModel.Current)"
+               class="glyphicon glyphicon-chevron-left">
+                Назад
+            </a>
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+            <a asp-action="Detail"
+           asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
+           asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+           asp-route-sortorder="@(Model.SortViewModel.Current)"
+               class="glyphicon glyphicon-chevron-right">
+                Вперед
+            </a>
+        }
 </div>

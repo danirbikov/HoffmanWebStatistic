@@ -277,7 +277,7 @@ namespace MVCENG2.Models.Hoffman
 
                 entity.Property(e => e.StandId).HasColumnName("stand_id");
 
-                entity.Property(e => e.Vin)
+                entity.Property(e => e.VIN)
                     .HasMaxLength(17)
                     .HasColumnName("vin");
 

@@ -12,7 +12,7 @@ namespace MVCENG2.Models.Hoffman
         }
 
         public long Id { get; set; }
-        public string Vin { get; set; } = null!;
+        public string VIN { get; set; } = null!;
         public string Ordernum { get; set; } = null!;
         public string JsonFilename { get; set; } = null!;
         public int StandId { get; set; }
