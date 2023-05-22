@@ -61,7 +61,7 @@ namespace MVCENG2.Services
                             using (FileStream fs = new FileStream(file, FileMode.Open))
                             {
                                 ERROR_URL = fs.Name;
-                                
+
                                 Rootobject deserializeJSONObject = System.Text.Json.JsonSerializer.Deserialize<Rootobject>(fs);
 
                                 if (deserializeJSONObject.header.VIN.Length >= 18)
@@ -79,6 +79,22 @@ namespace MVCENG2.Services
                                     File.Copy(file, "C:\\STAND_Results\\ERRORS\\IncorrectFileName\\" + fs.Name.Split("\\")[^1], true);
                                     continue;
                                 }
+
+                                if (deserializeJSONObject.header.standName.Contains("line"))
+                                {
+                                    if (deserializeJSONObject.header.standName.Contains("7"))
+                                    {
+                                        deserializeJSONObject.header.standName = "rts7";
+                                    }
+                                    if (deserializeJSONObject.header.standName.Contains("6"))
+                                    {
+                                        deserializeJSONObject.header.standName = "bts6";
+                                    }
+                                }
+
+
+
+
                                 ResultsJsonHeader jsonHeaderModel = new ResultsJsonHeader();
                                 jsonHeaderModel.VIN = deserializeJSONObject.header.VIN;
                                 jsonHeaderModel.Ordernum = deserializeJSONObject.header.orderNum;
@@ -95,7 +111,7 @@ namespace MVCENG2.Services
                                         jsonTestsModel.TName = jsonTestObject.nameTest;
                                         jsonTestsModel.TSpecname = jsonTestObject.testID;
                                         jsonTestsModel.ResId = (byte)(jsonTestObject.testRes.Contains("NOK") ? 2 : 1);
-                                        jsonTestsModel.Created = DateTime.ParseExact(deserializeJSONObject.header.date, "yyyy.MM.dd HH-mm-ss", CultureInfo.InvariantCulture);
+                                        jsonTestsModel.Created = DateTime.ParseExact(jsonTestObject.date, "yyyy.MM.dd HH-mm-ss", CultureInfo.InvariantCulture);
                                         jsonTestsModel.HeaderId = jsonHeaderModel.Id;//_jsonHeadersRepository.GetJsonHeaderIDbyFileName(jsonHeaderModel.JsonFilename);
                                         _jsonTestsRepository.Add(jsonTestsModel);
 
@@ -116,7 +132,7 @@ namespace MVCENG2.Services
                         catch (Exception ex)
                         {
                             count++;
-                            using (StreamWriter writer = new StreamWriter("C:\\Users\\BikovDI\\source\\repos\\MVCENG2\\MVCENG2\\Logs\\MysteryStands.txt", true, System.Text.Encoding.Default))
+                            using (StreamWriter writer = new StreamWriter("C:\\Users\\BikovDI\\source\\repos\\MVCENG2\\MVCENG2\\Logs\\ErrorInJsonParser.txt", true, System.Text.Encoding.Default))
                             {
                                 writer.WriteLine(ex.Message);
                             }

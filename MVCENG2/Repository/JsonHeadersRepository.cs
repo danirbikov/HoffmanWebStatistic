@@ -28,7 +28,7 @@ namespace MVCENG2.Repository
 
         public long GetJsonHeaderIDbyFileName(string jsonHeaderFileName)
         {
-            var jsonHeaderObject = _context.results_json_headers.Where(k => k.JsonFilename == jsonHeaderFileName).FirstOrDefault();
+            var jsonHeaderObject = GetAllElementsForRead().Where(k => k.JsonFilename == jsonHeaderFileName).FirstOrDefault();
             if (jsonHeaderObject != null)
             {
                 return jsonHeaderObject.Id;
@@ -38,17 +38,12 @@ namespace MVCENG2.Repository
                 return _context.results_json_headers.Where(k => k.JsonFilename == jsonHeaderFileName).FirstOrDefault().Id;
             }
         }
-        public IQueryable<ResultsJsonHeader> Include()
-        {
-            
-            return _context.results_json_headers.Include(x => x.Stand).Include(x => x.Operator);
-                   
-                    
-        }
 
-        public IQueryable<ResultsJsonHeader> GetJsonHeadersByStandsIdentidier(string standsIdentifier, IQueryable<ResultsJsonHeader> resultsJsonHeaders)
+        public IQueryable<ResultsJsonHeader> GetJsonHeadersByStandsIdentidier(string standsIdentifier)
         {
-            if (standsIdentifier == "Hoffman")
+            IQueryable<ResultsJsonHeader> resultsJsonHeaders = GetAllElementsForRead().Include(k=>k.Stand);
+
+            if (standsIdentifier == "HOFFMAN")
                 resultsJsonHeaders = resultsJsonHeaders.Where(p => p.Stand.Project == standsIdentifier);
             else if (_context.stands.Select(k=>k.StandType).Distinct().Contains(standsIdentifier))
                 resultsJsonHeaders = resultsJsonHeaders.Where(p => p.Stand.StandType == standsIdentifier);
@@ -58,11 +53,28 @@ namespace MVCENG2.Repository
             return resultsJsonHeaders;
         }
 
-        
-
-        public IEnumerable<ResultsJsonHeader> GetAll()
+        public ResultsJsonHeader GetJsonHeadersById(long id)
         {
-            return _context.results_json_headers.ToList();
+            var returnObject = GetAllElementsForRead().Where(k => k.Id == id)
+                .Include(k => k.ResultsJsonTests).ThenInclude(k => k.ResultsJsonValues)
+                .Include(k => k.ResultsJsonTests).ThenInclude(k => k.Res)
+                .Include(k => k.Stand)
+                .Include(k => k.Operator)
+                .FirstOrDefault();
+            return (returnObject);
+        }
+        public List<ResultsJsonHeader> GetJsonHeadersById(List<long>id)
+        {
+            var returnObject = GetAllElementsForRead().Where(k => id.Contains(k.Id))
+                .Include(k => k.Stand)
+                .Include(k => k.Operator)
+                .Include(k => k.ResultsJsonTests).ThenInclude(k => k.Res)
+                .ToList();
+            return (returnObject);
+        }
+        public IQueryable<ResultsJsonHeader> GetAllElementsForRead()
+        {
+            return _context.results_json_headers.AsNoTracking();
             
         }
         public bool Save()

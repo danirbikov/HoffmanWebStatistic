@@ -6,7 +6,7 @@
 *@
 @{
     string controllerName = @ViewContext.RouteData.Values["controller"].ToString();
-
+    string statisticElementColor;
 }
 
 
@@ -31,7 +31,17 @@
         
                 @foreach (var jsonHeaderObject in Model.resultsJsonHeader)
                 {
-                    <tr onClick="document.location='@Url.Action("TestReport", @controllerName, new {}, null)'">
+
+                    if (jsonHeaderObject.ResultsJsonTests.Select(k => k.Res.Val).ToList().Contains("NOK"))
+                    {
+                        statisticElementColor = "background-color:rgba(255,0,20,0.52)";
+                        
+                    }
+                    else
+                    {
+                        statisticElementColor = "background-color:rgba(0,255,20,0.35)";
+                    }
+                    <tr onClick="document.location='@Url.Action("TestReport", @controllerName, new {jsonHeaderId = jsonHeaderObject.Id}, null)'" style=@statisticElementColor>
                         <td>@jsonHeaderObject.VIN</td>
                         <td>@jsonHeaderObject.Ordernum</td>
                         <td>@jsonHeaderObject.Stand.StandName</td>

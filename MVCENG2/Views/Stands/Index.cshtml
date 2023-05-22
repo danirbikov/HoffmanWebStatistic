@@ -12,7 +12,7 @@
 <div class="content">
     <!-- Start Content-->
     <div class="container-fluid">
-        <div class="row">
+       <div class="row">
             @{
                 @* Group by project name *@
                 @foreach (var standProject in Model.Select(g => g.Project).Distinct())
@@ -35,7 +35,7 @@
                                             <div class="card widget-flat div-hover">
                                                 <a asp-controller=@standObject.Project asp-action="Detail" asp-route-standsIdentifier=@standObject.StandName>
                                                     <div class="card-body">
-                                                            
+                                                        
                                                         @*@if (standObject.Connection_status == "OK")
                                                         {
                                                             color = "background-color:rgba(0,255,20,0.52)";
@@ -48,7 +48,8 @@
                                                         }
                                                         *@
                                                         @{
-                                                            color = "background-color:rgba(255,0,20,0.52)";
+                                                        //color = (await Component.InvokeAsync("PingStand", new { ipAddress = standObject.IpAdress })).ToString();
+                                                        color = "background-color:rgba(255,0,20,0.52)";
                                                         onlineCondition = "Offline";
                                                         }
                                                         <div class="float-end">
@@ -76,3 +77,4 @@
         </div>
     </div>
 </div>
+

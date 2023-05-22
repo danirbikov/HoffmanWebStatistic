@@ -19,7 +19,12 @@ namespace MVCENG2.Repository
             return Save();
 
         }
-
+        //public ResultsJsonHeader Add(ResultsJsonTest resultsJsonTest)
+        //{
+        //    _context.Add(resultsJsonTest);
+        //     return Save();
+        //
+       // }
         public bool Delete(ResultsJsonTest resultsJsonTest)
         {
             _context.Remove(resultsJsonTest);

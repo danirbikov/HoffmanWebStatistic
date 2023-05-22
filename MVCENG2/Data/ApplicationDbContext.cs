@@ -40,8 +40,10 @@ namespace MVCENG2.Data
 
         public DbSet<ResultsJsonHeader> results_json_headers { get; set; }
         public DbSet<ResultsJsonTest> results_json_tests { get; set; }
-
+        public DbSet<User> users { get; set; }
+        public DbSet<Role> roles { get; set; }
         public DbSet<ResultsJsonValue> results_json_values { get; set; }
+        public DbSet<OkNokVal> ok_nok_val { get; set; }
         public DbSet<Statistic> Statistic { get; set; }
 
         public DbSet<TestReport> TestReport { get; set; }

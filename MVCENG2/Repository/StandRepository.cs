@@ -20,11 +20,7 @@ namespace MVCENG2.Repository
 
         }
 
-        public bool Delete(Stand stand)
-        {
-            _context.Remove(stand);
-            return Save();
-        }
+
 
 
         public IEnumerable<Stand> GetAll()

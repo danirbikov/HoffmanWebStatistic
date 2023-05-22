@@ -8,7 +8,6 @@ namespace MVCENG2.Interfaces
         int GetStandIDbyName(string standName);
         bool Add(Stand stand);
         bool Update(Stand stand);
-        bool Delete(Stand stand);
         bool Save();
 
 

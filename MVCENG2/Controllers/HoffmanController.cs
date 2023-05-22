@@ -20,24 +20,26 @@ namespace MVCENG2.Controllers
     {
         private readonly JsonHeadersRepository _jsonHeadersRepository;
 
-        public HoffmanController(JsonHeadersRepository jsonHeadersRepository)
+        public HoffmanController(JsonHeadersRepository jsonHeadersRepository, JsonTestsRepository jsonTestsRepository)
         {
             _jsonHeadersRepository = jsonHeadersRepository;
         }
 
+        
+
         public async Task<IActionResult> Detail(string standsIdentifier,  int pageNumber=1, SortState sortOrder = SortState.VINAsc)
         {
+            ViewData["UserName"] = HttpContext.User.Identity.Name;
+            ViewData["UserRole"] = HttpContext.User.Claims.Select(k => k.Value).ToList()[1];
             ViewData["StandsIdentifier"] = standsIdentifier;
             ViewBag.ColumnNames = new List<string>() { "VIN", "OrderNumber", "StandName", "Operator", "Date" };
 
-            //Добавление в модуль ResultsJsonHeader модели Cтенда
-            IQueryable<ResultsJsonHeader> resultsJsonHeader = _jsonHeadersRepository.Include();
 
             //Получение всех ResultsJsonHeader моделей по значению standsIdentifier
-            resultsJsonHeader = _jsonHeadersRepository.GetJsonHeadersByStandsIdentidier(standsIdentifier, resultsJsonHeader);
+            IQueryable<ResultsJsonHeader> resultsJsonHeader = _jsonHeadersRepository.GetJsonHeadersByStandsIdentidier(standsIdentifier);
 
             #region Initialize paginated list (BoilerPlate code) 
-            int pageSize = 13;
+            
             // сортировка
             switch (sortOrder)
             {
@@ -72,14 +74,17 @@ namespace MVCENG2.Controllers
                     resultsJsonHeader = resultsJsonHeader.OrderBy(s => s.VIN);
                     break;
             }
-
             // пагинация
-            var count = resultsJsonHeader.Count();
-            var items = resultsJsonHeader.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+            int pageSize = 13;          
+            var jsonHeaderIDs = resultsJsonHeader.Select(k => k.Id).ToList(); 
+            var count = jsonHeaderIDs.Count();
+            var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
 
             // формируем модель представления
+            
             IndexViewModel viewModel = new IndexViewModel(
-                items,
+                _jsonHeadersRepository.GetJsonHeadersById(itemsId),
                 new PageViewModel(count, pageNumber, pageSize),
                 new SortViewModel(sortOrder)
             );
@@ -92,14 +97,16 @@ namespace MVCENG2.Controllers
             //return View(PaginatedList<Statistic>.CreatePage(statistics_val, pageNumber ?? 1, pageSize));
         }
 
-        //public async Task<IActionResult> TestReport()
-        //{
-         //   IEnumerable<TestReport> test_report = await _testReportRepository.GetAll();
-        
+        public async Task<IActionResult> TestReport(long jsonHeaderID)
+        {
+            return View(_jsonHeadersRepository.GetJsonHeadersById(jsonHeaderID));
+        }
 
-         //   return View(test_report);
-       // }
 
+        public async Task<IActionResult> Search(long jsonHeaderID)
+        {
+            return View(_jsonHeadersRepository.GetJsonHeadersById(jsonHeaderID));
+        }
 
 
 

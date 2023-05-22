@@ -30,7 +30,8 @@ namespace MVCENG2.Controllers
         }
 
         public async Task<IActionResult> Index()
-        { 
+        {
+            
             //ParserJSON parserJSON = new ParserJSON(_testJsonRepository);
             //parserJSON.TestParsingJsonFile();
             //await Services(); 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using MVCENG2.Models.General;
 
 namespace MVCENG2.Models.Hoffman
 {

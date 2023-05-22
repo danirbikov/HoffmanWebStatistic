@@ -1,0 +1,87 @@
+﻿@model ResultsJsonHeader
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    
+}
+
+
+    <div class="table-responsive">
+        @*<table class="table table-striped table-sm">*@
+        <table id="myTable" class="table table-centered table-nowrap table-hover mb-0">
+
+            <thead>
+                <tr>
+                    <th>Header</th>
+                    <th>Header value</th>
+                </tr>
+            </thead>
+                <tr>
+                    <td>VIN</td>
+                    <td>@Model.VIN</td>
+                <tr/>
+                <tr>
+                    <td>Order number</td>
+                    <td>@Model.Ordernum</td>
+                </tr>
+                <tr>
+                    <td>Stand name</td>
+                    <td>@Model.Stand.StandName</td>
+                </tr>
+                <tr>
+                    <td>Header date</td>
+                    <td>@Model.Created</td>
+                </tr>
+                <tr>
+                    <td>Operator</td>
+                    <td>@Model.Operator.OLogin</td>
+                </tr>
+            <thead>       
+                <tr>           
+                    <th>Test</th>
+                    <th>Test value</th>
+                </tr>  
+            </thead>
+                <tbody>
+                    @foreach (var testsObj in Model.ResultsJsonTests)
+                    {
+                        int countTests = 0;
+                        
+                        <tr>
+                            <td>Test SpecName</td>
+                            <td>@testsObj.TSpecname</td>
+                        </tr>
+                        <tr>
+                            <td>Test result</td>
+                            <td>@testsObj.Res.Val</td>
+                        </tr>
+                        <tr>
+                            <td>Date</td>
+                            <td>@testsObj.Created</td>  
+                        </tr>
+                        <thead>
+                            <tr>
+                                <th>Value</th>
+                                <th>Value result</th>
+                            </tr>
+                        </thead>
+                        foreach (var testsValues in testsObj.ResultsJsonValues)
+                        {
+                            
+                            countTests++;
+                            <tr>
+                                <th>Value @countTests</th>
+                                <th></th>
+                            </tr>
+                            <tr>
+                                <td>@testsValues.VName</td>
+                                <td>@testsValues.VValue</td>
+                            </tr>
+                        }
+            
+               }
+                </tbody>
+        </table>
+    </div>
