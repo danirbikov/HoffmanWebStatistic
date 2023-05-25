@@ -16,13 +16,13 @@
     <table class="table table-centered table-nowrap table-hover mb-0">
         <thead>
             <tr>
-                @{   
+                @{
 
-                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.VINSort>VIN</a></td>
-                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.OrderNumberSort>OrderNumber</a></td>
-                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.StandNameSort>StandName</a></td>
-                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.OperatorSort>Operator</a></td>
-                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.DateSort>Date</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.VINSort>VIN</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.OrderNumberSort>OrderNumber</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.StandNameSort>StandName</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.OperatorSort>Operator</a></td>
+                    <td><a asp-controller=@controllerName asp-action="Detail" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.DateSort>Date</a></td>
                 }
             </tr>
         </thead>
@@ -58,6 +58,7 @@
         {
             <a asp-action="Detail"
            asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
+           asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
            asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
            asp-route-sortorder="@(Model.SortViewModel.Current)"
                class="glyphicon glyphicon-chevron-left">
@@ -68,6 +69,7 @@
         {
             <a asp-action="Detail"
            asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
+           asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
            asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
            asp-route-sortorder="@(Model.SortViewModel.Current)"
                class="glyphicon glyphicon-chevron-right">

@@ -3,6 +3,7 @@ using MVCENG2.Interfaces;
 using MVCENG2.Models.General;
 using MVCENG2.Repository;
 using Microsoft.AspNetCore.Authorization;
+using MVCENG2.Services;
 
 namespace MVCENG2.Controllers
 {
@@ -41,6 +42,10 @@ namespace MVCENG2.Controllers
             //parser_obj.ParsingJsonFiles();
             IEnumerable<Stand> stands = _standRepository.GetAll();
 
+           //for (int i =0; i<stands.Count(); i++)
+           //{
+            //   stands.Skip(i).Take(1).First().IpAdress = Pinger.PingOneStand(stands.Skip(i).Take(1).First()).ToString();
+           //}
 
             return View(stands);
 

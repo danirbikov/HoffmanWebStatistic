@@ -48,7 +48,10 @@
                     @foreach (var testsObj in Model.ResultsJsonTests)
                     {
                         int countTests = 0;
-                        
+                        <tr>
+                            <td>Name Test</td>
+                            <td>@testsObj.TName</td>
+                        </tr>
                         <tr>
                             <td>Test SpecName</td>
                             <td>@testsObj.TSpecname</td>

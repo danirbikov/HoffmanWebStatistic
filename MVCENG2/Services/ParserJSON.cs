@@ -92,9 +92,6 @@ namespace MVCENG2.Services
                                     }
                                 }
 
-
-
-
                                 ResultsJsonHeader jsonHeaderModel = new ResultsJsonHeader();
                                 jsonHeaderModel.VIN = deserializeJSONObject.header.VIN;
                                 jsonHeaderModel.Ordernum = deserializeJSONObject.header.orderNum;

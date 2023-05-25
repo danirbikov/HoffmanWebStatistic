@@ -38,6 +38,30 @@ namespace MVCENG2.Repository
                 return _context.results_json_headers.Where(k => k.JsonFilename == jsonHeaderFileName).FirstOrDefault().Id;
             }
         }
+        public IQueryable<ResultsJsonHeader> GetJsonHeadersBySearchIdentidier(string searchIdentifier)
+        {
+            IQueryable<ResultsJsonHeader> resultsJsonHeaders = GetAllElementsForRead()
+                .Include(k => k.Stand)
+                .Include(k => k.ResultsJsonTests).ThenInclude(k => k.Res)
+                .Include(k => k.ResultsJsonTests).ThenInclude(k => k.ResultsJsonValues)
+                .Include(k => k.Operator).Take(7);
+            resultsJsonHeaders = resultsJsonHeaders.Where(k => 
+            k.Stand.StandName == searchIdentifier || k.Stand.StandType == searchIdentifier || k.Stand.Project == searchIdentifier
+            || k.ResultsJsonTests.Select(p=>p.TName).Contains(searchIdentifier) || k.ResultsJsonTests.Select(p => p.TSpecname).Contains(searchIdentifier) || k.ResultsJsonTests.Select(p => p.Res.Val).Contains(searchIdentifier));
+            
+            /*if (standsIdentifier == "HOFFMAN")
+                resultsJsonHeaders = resultsJsonHeaders.Where(p => p.Stand.Project == standsIdentifier);
+            else if (_context.stands.Select(k=>k.StandType).Distinct().Contains(standsIdentifier))
+                resultsJsonHeaders = resultsJsonHeaders.Where(p => p.Stand.StandType == standsIdentifier);
+            else
+                resultsJsonHeaders = resultsJsonHeaders.Where(p => p.Stand.StandName == standsIdentifier);
+            */
+            return resultsJsonHeaders;
+        }
+        public void test(IQueryable<ResultsJsonHeader> testObj)
+        {
+
+        }
 
         public IQueryable<ResultsJsonHeader> GetJsonHeadersByStandsIdentidier(string standsIdentifier)
         {

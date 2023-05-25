@@ -23,7 +23,7 @@ builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<RolesRepository>();
 //builder.Services.AddTransient<ParserJSON>();
 builder.Services.AddTransient<Parser>();
-builder.Services.AddScoped<Pinger>();
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
