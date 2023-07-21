@@ -11,9 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IStandRepository, StandRepository>();
-builder.Services.AddScoped<IStandsStatisticRepository, StandsStatisticRepository>();
-builder.Services.AddScoped<ITestReportRepository, TestReportRepository>();
-builder.Services.AddScoped<ITestJsonRepository, TestJsonRepository>();
 builder.Services.AddScoped<OperatorsRepository>();
 builder.Services.AddScoped<JsonHeadersRepository>();
 builder.Services.AddScoped<JsonTestsRepository>();
