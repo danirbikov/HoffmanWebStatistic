@@ -27,9 +27,7 @@ namespace MVCENG2.Controllers
             _jsonHeadersRepository = jsonHeadersRepository;
             _dbContext = dbContext;
         }
-
-        
-
+      
         public async Task<IActionResult> Detail(string standsIdentifier="Hoffman", string searchIdentifier = null,  int pageNumber=1, SortState sortOrder = SortState.VINAsc)
         {
             ViewData["UserName"] = HttpContext.User.Identity.Name;
@@ -93,7 +91,6 @@ namespace MVCENG2.Controllers
             var count = jsonHeaderIDs.Count();
             var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 
-
             // формируем модель представления
             
             IndexViewModel viewModel = new IndexViewModel(
@@ -103,11 +100,6 @@ namespace MVCENG2.Controllers
             );
             #endregion
             return View(viewModel);
-
-
-
-
-            //return View(PaginatedList<Statistic>.CreatePage(statistics_val, pageNumber ?? 1, pageSize));
         }
 
         public async Task<IActionResult> TestReport(long jsonHeaderID)

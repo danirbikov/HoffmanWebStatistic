@@ -22,7 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="FormationFiles\people.xml" />
     <None Remove="Logs\PingerLogs - Копировать.txt" />
+    <None Remove="people.xml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,11 +38,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
+    <PackageReference Include="Quartz" Version="3.6.2" />
     <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ComfortModules\HTML_Helpers\" />
+    <Folder Include="FormationFiles\" />
   </ItemGroup>
 
 </Project>

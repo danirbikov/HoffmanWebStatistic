@@ -12,22 +12,18 @@ namespace MVCENG2.Data
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.EnableSensitiveDataLogging();
-            //optionsBuilder.LogTo(_logStream.WriteLine);
+            optionsBuilder.EnableSensitiveDataLogging();            
         }
-            
-            
-
+                       
         public override void Dispose()
         {
             base.Dispose();
-            //_logStream.Dispose();
+            
         }
 
         public override async ValueTask DisposeAsync()
         {
             await base.DisposeAsync();
-            //await _logStream.DisposeAsync();
         }
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
         {
@@ -37,17 +33,12 @@ namespace MVCENG2.Data
 
         public DbSet<Stand> stands { get; set; }
         public DbSet<Operator> operators { get; set; }
-
         public DbSet<ResultsJsonHeader> results_json_headers { get; set; }
         public DbSet<ResultsJsonTest> results_json_tests { get; set; }
-        public DbSet<User> users { get; set; }
-        public DbSet<Role> roles { get; set; }
         public DbSet<ResultsJsonValue> results_json_values { get; set; }
+        public DbSet<User> users { get; set; }
+        public DbSet<Role> roles { get; set; }     
         public DbSet<OkNokVal> ok_nok_val { get; set; }
-        public DbSet<Statistic> Statistic { get; set; }
-
-        public DbSet<TestReport> TestReport { get; set; }
-        public DbSet<ResultDataJSON_OLDTEST> TestJson { get; set; }
 
     }
 }

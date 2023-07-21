@@ -16,27 +16,9 @@ namespace MVCENG2.ComfortModules
         }
         public IQueryable<ResultsJsonHeader> SearchInAllDB(string searchIdentifier)
         {
-            /*
-            var headersIdList = _context.results_json_headers.Where(k => searchIdentifier.Contains(k.VIN) || searchIdentifier.Contains(k.Ordernum) || searchIdentifier.Contains(k.Created.ToString())).Select(k => k.Id).ToList();
 
-            var standsId = _context.stands.Where(k => searchIdentifier.Contains(k.StandName) || searchIdentifier.Contains(k.Project) || searchIdentifier.Contains(k.StandType)).Select(k => k.Id).ToList();
-            var operatorsId = _context.operators.Where(k => searchIdentifier.Contains(k.OLogin)).Select(k => k.Id).ToList();
 
-            var tests = _context.results_json_tests.Where(k => searchIdentifier.Contains(k.TName) || searchIdentifier.Contains(k.TSpecname) || searchIdentifier.Contains(k.Created.ToString()));
-            var testIdInValues = _context.results_json_values.Where(k => searchIdentifier.Contains(k.VName) || searchIdentifier.Contains(k.VValue)).Select(k => k.TestId).ToList();
-            var okNokValsId = _context.ok_nok_val.Where(k => searchIdentifier.Contains(k.Val)).Select(k => k.Id).ToList();
-
-            var headersIdList = _context.results_json_headers.Where(k => searchIdentifier.Contains(k.VIN) ||   searchIdentifier.Contains(k.Ordernum) ||  searchIdentifier.Contains(k.Created.ToString())).Select(k=>k.Id).ToList();
-
-            var standsId = _context.stands.Where(k =>  searchIdentifier.Contains(k.StandName) || searchIdentifier.Contains(k.Project) || searchIdentifier.Contains(k.StandType)).Select(k=>k.Id).ToList();
-            var operatorsId = _context.operators.Where(k => searchIdentifier.Contains(k.OLogin)).Select(k => k.Id).ToList(); 
-           
-            var tests = _context.results_json_tests.Where(k => searchIdentifier.Contains(k.TName) || searchIdentifier.Contains(k.TSpecname) || searchIdentifier.Contains(k.Created.ToString())); 
-            var testIdInValues = _context.results_json_values.Where(k=> searchIdentifier.Contains(k.VName) || searchIdentifier.Contains(k.VValue)).Select(k=>k.TestId).ToList(); 
-            var okNokValsId = _context.ok_nok_val.Where(k=>searchIdentifier.Contains(k.Val)).Select(k=>k.Id).ToList(); 
-            */
-            var lol = _context.results_json_headers.Select(k=> k.Created).First().ToString()==searchIdentifier;
-            var headersIdList = _context.results_json_headers.Where(k => k.VIN == searchIdentifier || k.Ordernum == searchIdentifier || k.Created.ToString().Contains(searchIdentifier)).Select(k=>k.Id).ToList();
+            var headersIdList = _context.results_json_headers.Where(k => k.VIN == searchIdentifier || k.Ordernum == searchIdentifier || k.Created.ToString() == searchIdentifier).Select(k=>k.Id).ToList();
 
             var standsId = _context.stands.Where(k => k.StandName == searchIdentifier || k.Project == searchIdentifier || k.StandType==searchIdentifier).Select(k=>k.Id).ToList();
             var operatorsId = _context.operators.Where(k => k.OLogin == searchIdentifier).Select(k => k.Id).ToList(); ;

@@ -4,7 +4,6 @@ using MVCENG2.Data;
 using MVCENG2.Interfaces;
 using MVCENG2.Services;
 using MVCENG2.Repository;
-using MVCENG2.Models.Hoffman;
 using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,7 +21,9 @@ builder.Services.AddScoped<JsonValuesRepository>();
 builder.Services.AddScoped<UsersRepository>();
 builder.Services.AddScoped<RolesRepository>();
 //builder.Services.AddTransient<ParserJSON>();
-builder.Services.AddTransient<Parser>();
+
+
+
 
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

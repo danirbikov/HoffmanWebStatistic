@@ -1,0 +1,110 @@
+﻿@using MVCENG2.Models.ViewModel;
+
+@model StandAddViewModel
+
+
+<form method="post" asp-action="AddStand">
+    <div asp-validation-summary="ModelOnly"> </div>
+    <div class="form-group">
+        <label asp-for="@Model.stand.StandName">Stand name</label>
+        <input asp-for="@Model.stand.StandName" class="form-control" placeholder="bts6">
+        <span asp-validation-for="@Model.stand.StandName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.StandNameDescription">Stand name description</label>
+        <input asp-for="@Model.stand.StandNameDescription" class="form-control" placeholder="Тормозной стенд">
+        <span asp-validation-for="@Model.stand.StandNameDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.WorkplaceMes">Work place Mes</label>
+        <input asp-for="@Model.stand.WorkplaceMes" class="form-control" placeholder="Mes">
+        <span asp-validation-for="@Model.stand.WorkplaceMes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.IpAdress">Ip adress</label>
+        <input asp-for="@Model.stand.IpAdress" class="form-control" placeholder="10.194.100.18">
+        <span asp-validation-for="@Model.stand.IpAdress" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.DnsName">Dns name</label>
+        <input asp-for="@Model.stand.DnsName" class="form-control" placeholder="DNS">
+        <span asp-validation-for="@Model.stand.DnsName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.Placement">Placement</label>
+        <input asp-for="@Model.stand.Placement" class="form-control" placeholder="Placement">
+        <span asp-validation-for="@Model.stand.Placement" class="text-danger"></span>
+    </div>    
+    
+    <div class="form-group">
+        <label asp-for="@Model.stand.StandType">Stand type</label>
+        <select asp-for="@Model.stand.StandType">
+            <option>Brake test stand</option>
+            <option>C - Wheel alignment machine</option>
+            <option>Roller Test Stand</option>
+        </select>
+        <span asp-validation-for="@Model.stand.StandType" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="@Model.stand.Project">Project</label>
+        <select asp-for="@Model.stand.Project">
+            <option>HOFFMAN</option>
+            <option>SIEMENS</option>
+        </select>
+        <span asp-validation-for="@Model.stand.Project" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label>Добавить QNX версию?</label>
+        <input type="checkbox" id="myCheckbox" , onclick="showInputField()" />
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.QNX.IpAdress" id="labelID" style="display:none;">QNX IP</label>
+        <input asp-for="@Model.QNX.IpAdress" id="inputID" style="display:none;" value="none" class="form-control" placeholder="QNX IP">
+        <span asp-validation-for="@Model.QNX.IpAdress" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="@Model.QNX.DnsName" id="label2ID"  style="display:none;">DnsName</label>
+        <input asp-for="@Model.QNX.DnsName" id="input2ID" style="display:none;" value="none" class="form-control" placeholder="QNX DnsName">
+        <span asp-validation-for="@Model.QNX.DnsName" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add</button>
+    
+</form>
+
+
+@section Scripts {
+    <script>
+        function showInputField() {
+            var checkbox = document.getElementById("myCheckbox");
+            var labelID = document.getElementById("labelID");
+            var inputID = document.getElementById("inputID");
+            var label2ID = document.getElementById("label2ID");
+            var input2ID = document.getElementById("input2ID");
+
+            if (checkbox.checked) {
+                labelID.style.display = "block";
+                label2ID.style.display = "block";
+                inputID.style.display = "block";
+                input2ID.style.display = "block";
+            } 
+            else {
+                labelID.style.display = "none";
+                label2ID.style.display = "none";
+                inputID.style.display = "none";
+                input2ID.style.display = "none";
+                inputID.value = "none";
+                input2ID.value = "none";
+            }
+        }
+
+    </script>
+}
+

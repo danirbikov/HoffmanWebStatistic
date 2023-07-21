@@ -58,10 +58,7 @@ namespace MVCENG2.Repository
             */
             return resultsJsonHeaders;
         }
-        public void test(IQueryable<ResultsJsonHeader> testObj)
-        {
 
-        }
 
         public IQueryable<ResultsJsonHeader> GetJsonHeadersByStandsIdentidier(string standsIdentifier)
         {

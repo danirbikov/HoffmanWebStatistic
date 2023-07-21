@@ -1,35 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MVCENG2.Interfaces;
 using MVCENG2.Models;
+using MVCENG2.Models.General;
+using MVCENG2.Repository;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace lol { 
-    public class DateFunctions 
+namespace MVCENG2 { 
+    public static class DateFunctions 
     {
-        private readonly IStandRepository _standRepository;
-        private readonly IStandsStatisticRepository _statisticRepository;
-        public DateFunctions(IStandRepository standRepository, IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
+
+        public static DateTime GetLastTestDateForStand(Stand stand, JsonHeadersRepository _testJsonHeaderRepository)
         {
-            _standRepository = standRepository;
-            _statisticRepository = statisticRepository;
+            var lastTestDatesElements = _testJsonHeaderRepository.GetAllElementsForRead().Where(k => k.StandId == stand.Id).OrderByDescending(k => k.Created);
+            
+            if (lastTestDatesElements.Any())
+            {
+                return lastTestDatesElements.FirstOrDefault().Created;               
+            }
+            else
+            {
+                return DateTime.MinValue;
+            }
         }
 
-        //public async Task<IEnumerable<Statistic>> GetValuesTimeInterval(Stand stand, DateTime datetime_before, DateTime datetime_after)
-        //{
-          //  int count_value = 0;
-         //   IEnumerable<Statistic> stands_statistic = await _statisticRepository.GetAllElementsThatStand(stand.Stand_name);
-        //    IEnumerable<Statistic> stands_statistic_after_sorting = new List<Statistic>();
-        //    foreach (Statistic stand_object in stands_statistic)
-         //   {
-       //         DateTime stands_test_date=DateTime.ParseExact(stand_object.TestEnd, "yyyy-MM-dd HH:mm:ss",
-           //                            System.Globalization.CultureInfo.InvariantCulture);
-       //         if (stands_test_date>=datetime_before && stands_test_date<=datetime_after)
-     //           {
-      //              stands_statistic_after_sorting.Append(stand_object);
-     //           }
-       //     }
+        public static int GetAllTestsCountForStand(Stand stand, JsonHeadersRepository _testJsonHeaderRepository)
+        {
+            return _testJsonHeaderRepository.GetAllElementsForRead().Where(k => k.StandId == stand.Id).Count();
+        }
 
-  //          return stands_statistic_after_sorting;
-  //      }
+        public static int GetTestsCountLastmonth(Stand stand, JsonHeadersRepository _testJsonHeaderRepository)
+        {
+            DateTime lastMonth = DateTime.Now.AddMonths(-1);
+            return _testJsonHeaderRepository.GetAllElementsForRead().Where(k => k.StandId == stand.Id).Where(x => x.Created >= lastMonth && x.Created <= DateTime.Now).Count();
+        }
+
+
     }
 }

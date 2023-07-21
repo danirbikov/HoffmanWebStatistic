@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using MVCENG2.Models.Hoffman;
 
 namespace MVCENG2.Models.General
@@ -19,15 +20,34 @@ namespace MVCENG2.Models.General
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(50, ErrorMessage ="Длина не должна превышать 50 символов")]
         public string StandName { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(255, ErrorMessage = "Длина не должна превышать 255 символов")]
         public string StandNameDescription { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(255, ErrorMessage = "Длина не должна превышать 255 символов")]
         public string WorkplaceMes { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
         public string IpAdress { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
         public string DnsName { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
         public string Placement { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]  
         public int OSVersionNavigationID { get; set; }
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
         public string StandType { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(20, ErrorMessage = "Длина не должна превышать 20 символов")]
         public string Project { get; set; } = null!;
+        [Required(ErrorMessage = "Некорректное значение")]
+        [MaxLength(5, ErrorMessage = "Длина не должна превышать 5 символов")]
         public string InactiveMark { get; set; } = null!;
 
         public virtual OsVersions OsVersionNavigation { get; set; } = null!;

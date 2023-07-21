@@ -20,9 +20,6 @@ namespace MVCENG2.Repository
 
         }
 
-
-
-
         public IEnumerable<Stand> GetAll()
         {
             return _context.stands.ToList();
@@ -51,10 +48,7 @@ namespace MVCENG2.Repository
             }
             else
             {
-                using (StreamWriter writer = new StreamWriter("C:\\Users\\BikovDI\\source\\repos\\MVCENG2\\MVCENG2\\Logs\\MysteryStands.txt", true, System.Text.Encoding.Default))
-                {
-                    writer.WriteLine(standName);
-                }
+
                 return _context.stands.Where(k => k.StandName == "UNKNOWN").FirstOrDefault().Id;
             }
               
