@@ -1,4 +1,4 @@
-﻿namespace MvcApp.Models
+﻿namespace MVCENG2.Models.ViewModel
 {
     public class PageViewModel
     {

@@ -76,21 +76,30 @@ namespace MVCENG2.Repository
 
         public ResultsJsonHeader GetJsonHeadersById(long id)
         {
+
+            
+
             var returnObject = GetAllElementsForRead().Where(k => k.Id == id)
                 .Include(k => k.ResultsJsonTests).ThenInclude(k => k.ResultsJsonValues)
                 .Include(k => k.ResultsJsonTests).ThenInclude(k => k.Res)
                 .Include(k => k.Stand)
                 .Include(k => k.Operator)
+                .AsNoTracking()
                 .FirstOrDefault();
             return (returnObject);
         }
-        public List<ResultsJsonHeader> GetJsonHeadersById(List<long>id)
+        public IEnumerable<ResultsJsonHeader> GetJsonHeadersById(List<long>id)
         {
+            
+
             var returnObject = GetAllElementsForRead().Where(k => id.Contains(k.Id))
                 .Include(k => k.Stand)
                 .Include(k => k.Operator)
                 .Include(k => k.ResultsJsonTests).ThenInclude(k => k.Res)
-                .ToList();
+                .Include(k => k.ResultsJsonTests).ThenInclude(k => k.Res)
+                .AsNoTracking()
+                .ToList().OrderBy(x => id.IndexOf(x.Id)).AsEnumerable();
+            
             return (returnObject);
         }
         public IQueryable<ResultsJsonHeader> GetAllElementsForRead()

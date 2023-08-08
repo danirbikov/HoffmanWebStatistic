@@ -21,8 +21,6 @@ builder.Services.AddScoped<RolesRepository>();
 
 
 
-
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
@@ -32,7 +30,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(options => //CookieAuthenticationOptions
     {
         options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-    });;
+    });
 
 var app = builder.Build();
 

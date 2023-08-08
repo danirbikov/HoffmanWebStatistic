@@ -28,10 +28,15 @@ namespace MVCENG2 {
             return _testJsonHeaderRepository.GetAllElementsForRead().Where(k => k.StandId == stand.Id).Count();
         }
 
-        public static int GetTestsCountLastmonth(Stand stand, JsonHeadersRepository _testJsonHeaderRepository)
+        public static int GetCarsCountLastmonth(Stand stand, JsonHeadersRepository _testJsonHeaderRepository)
         {
             DateTime lastMonth = DateTime.Now.AddMonths(-1);
-            return _testJsonHeaderRepository.GetAllElementsForRead().Where(k => k.StandId == stand.Id).Where(x => x.Created >= lastMonth && x.Created <= DateTime.Now).Count();
+            return _testJsonHeaderRepository.GetAllElementsForRead()
+                .GroupBy(t => t.VIN)
+                .Select(t => t.FirstOrDefault()).AsEnumerable()
+                .Where(k => k.StandId == stand.Id)
+                .Where(x => x.Created >= lastMonth && x.Created <= DateTime.Now)
+                .Count();
         }
 
 

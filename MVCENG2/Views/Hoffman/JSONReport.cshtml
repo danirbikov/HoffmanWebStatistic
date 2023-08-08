@@ -1,0 +1,96 @@
+﻿@model ReportViewModel
+
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    string controllerName = @ViewContext.RouteData.Values["controller"].ToString();
+    string statisticElementColor;
+}
+
+
+<div class="table-responsive">
+    @*<table class="table table-striped table-sm">*@
+
+    <table class="table table-centered table-nowrap table-hover mb-0">
+        <thead>
+            <tr>
+                @{
+
+                    <td><a asp-controller=@controllerName asp-action="JSONReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN asp-route-sortOrder=@Model.SortViewModel.VINSort>VIN</a></td>
+                    <td><a asp-controller=@controllerName asp-action="JSONReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN asp-route-sortOrder=@Model.SortViewModel.OrderNumberSort>OrderNumber</a></td>
+                    <td><a asp-controller=@controllerName asp-action="JSONReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN asp-route-sortOrder=@Model.SortViewModel.StandNameSort>StandName</a></td>
+                    <td><a asp-controller=@controllerName asp-action="JSONReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN asp-route-sortOrder=@Model.SortViewModel.OperatorSort>Operator</a></td>
+                    <td><a asp-controller=@controllerName asp-action="JSONReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN asp-route-sortOrder=@Model.SortViewModel.DateSort>Date</a></td>
+                    <td><a asp-controller=@controllerName asp-action="JSONReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN asp-route-sortOrder=@Model.SortViewModel.TNameSort>TName</a></td>
+                    <td><a asp-controller=@controllerName asp-action="JSONReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN asp-route-sortOrder=@Model.SortViewModel.TSpecNameSort>TSpecName</a></td>
+                    }
+            </tr>
+        </thead>
+        <tbody>
+            @{
+        
+                @foreach (var jsonHeaderObject in Model.resultsJsonHeader)
+                {
+
+                    if (jsonHeaderObject.ResultsJsonTests.Select(k => k.Res.Val).ToList().Contains("OK"))
+                    {
+                        statisticElementColor = "background-color:rgba(0,255,20,0.35)";
+                        
+                    }
+                    else
+                    {
+                        statisticElementColor = "background-color:rgba(255,0,20,0.52)";                       
+                    }
+                    <tr onClick="document.location='@Url.Action("TestReport", @controllerName, new {jsonHeaderId = jsonHeaderObject.Id}, null)'" style=@statisticElementColor>
+                        <td>@jsonHeaderObject.VIN</td>
+                        <td>@jsonHeaderObject.Ordernum</td>
+                        <td>@jsonHeaderObject.Stand.StandName</td>
+                        <td>@jsonHeaderObject.Operator.OLogin</td>
+                        
+                        @if (jsonHeaderObject.ResultsJsonTests.Count()>=1)
+                        {
+                            <td>@jsonHeaderObject.ResultsJsonTests.FirstOrDefault().Created</td>
+                            <td>@jsonHeaderObject.ResultsJsonTests.FirstOrDefault().TName</td>
+                            <td>@jsonHeaderObject.ResultsJsonTests.FirstOrDefault().TSpecname</td>
+                        }
+                        else
+                        {
+                            <td>UNKNOWN</td>
+                            <td>UNKNOWN</td>
+                            <td>UNKNOWN</td>
+                        }
+
+                    </tr>
+                }
+            }     
+        </tbody>
+    </table>
+
+    <p>
+        @if (Model.PageViewModel.HasPreviousPage)
+        {
+            <a asp-action="JSONReport"
+           asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
+           asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
+           asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
+           asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN
+           asp-route-sortorder="@(Model.SortViewModel.Current)"
+               class="glyphicon glyphicon-chevron-left">
+                Назад
+            </a>
+        }
+        @if (Model.PageViewModel.HasNextPage)
+        {
+           <a asp-action="JSONReport"
+           asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
+           asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
+           asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
+           asp-route-VIN =@Model.resultsJsonHeader.FirstOrDefault().VIN
+           asp-route-sortorder="@(Model.SortViewModel.Current)"
+               class="glyphicon glyphicon-chevron-right">
+                Вперед
+            </a>
+        }
+</div>

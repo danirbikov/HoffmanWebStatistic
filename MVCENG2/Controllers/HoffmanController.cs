@@ -7,13 +7,14 @@ using PagedList;
 using MVCENG2.Services;
 using MVCENG2.Models.Siemens;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using MvcApp.Models;
+
 using MVCENG2.Models.Hoffman;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static MVCENG2.Models.Enums.SortingEnum;
 using System.Xml.Linq;
 using MVCENG2.Repository;
 using MVCENG2.ComfortModules;
+using MVCENG2.Models.ViewModel;
 
 namespace MVCENG2.Controllers
 {
@@ -27,14 +28,11 @@ namespace MVCENG2.Controllers
             _jsonHeadersRepository = jsonHeadersRepository;
             _dbContext = dbContext;
         }
-      
-        public async Task<IActionResult> Detail(string standsIdentifier="Hoffman", string searchIdentifier = null,  int pageNumber=1, SortState sortOrder = SortState.VINAsc)
+
+        public IEnumerable<ResultsJsonHeader> InitializePageValue(string standsIdentifier, string searchIdentifier, int pageNumber, SortState sortOrder)
         {
-            ViewData["UserName"] = HttpContext.User.Identity.Name;
-            ViewData["UserRole"] = HttpContext.User.Claims.Select(k => k.Value).ToList()[1];
-            ViewData["StandsIdentifier"] = standsIdentifier;
-            ViewData["SearchIdentifier"] = searchIdentifier;
-            ViewBag.ColumnNames = new List<string>() { "VIN", "OrderNumber", "StandName", "Operator", "Date" };
+            
+
             IQueryable<ResultsJsonHeader> resultsJsonHeader;
 
             //Получение всех ResultsJsonHeader моделей по значению standsIdentifier
@@ -45,12 +43,10 @@ namespace MVCENG2.Controllers
             else
             {
                 SearchInDB searchClass = new SearchInDB(_dbContext);
-                
+
                 resultsJsonHeader = searchClass.SearchInAllDB(searchIdentifier);
             }
-
-            #region Initialize paginated list (BoilerPlate code) 
-            
+          
             // сортировка
             switch (sortOrder)
             {
@@ -81,26 +77,74 @@ namespace MVCENG2.Controllers
                 case SortState.DateDesc:
                     resultsJsonHeader = resultsJsonHeader.OrderByDescending(s => s.Created);
                     break;
+                case SortState.TNameAsc:
+                    resultsJsonHeader = resultsJsonHeader.OrderBy(s => s.ResultsJsonTests.FirstOrDefault().TName);
+                    break;
+                case SortState.TNameDesc:
+                    resultsJsonHeader = resultsJsonHeader.OrderByDescending(s => s.ResultsJsonTests.FirstOrDefault().TName);
+                    break;
+                case SortState.TSpecNameAsc:
+                    resultsJsonHeader = resultsJsonHeader.OrderBy(s => s.ResultsJsonTests.FirstOrDefault().TSpecname);
+                    break;
+                case SortState.TSpecNameDesc:
+                    resultsJsonHeader = resultsJsonHeader.OrderByDescending(s => s.ResultsJsonTests.FirstOrDefault().TSpecname);
+                    break;
+
                 default:
                     resultsJsonHeader = resultsJsonHeader.OrderBy(s => s.VIN);
                     break;
             }
+       
+            return resultsJsonHeader;
+        }
+
+        public async Task<IActionResult> VINsReport(string standsIdentifier = "Hoffman", string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.VINAsc)
+        {
+            ViewData["StandsIdentifier"] = standsIdentifier;
+            ViewData["SearchIdentifier"] = searchIdentifier;
+
             // пагинация
-            int pageSize = 13;          
-            var jsonHeaderIDs = resultsJsonHeader.Select(k => k.Id).ToList(); 
+            int pageSize = 13;
+            var jsonHeaderIDs = InitializePageValue(standsIdentifier,searchIdentifier,pageNumber,sortOrder).GroupBy(t => t.VIN).Select(t => t.FirstOrDefault()).Select(k => k.Id).ToList();
             var count = jsonHeaderIDs.Count();
             var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 
+            ViewData["PageCount"] = count/pageSize+1;
+            ViewData["PageCurrent"] = pageNumber;
             // формируем модель представления
-            
-            IndexViewModel viewModel = new IndexViewModel(
+            ReportViewModel viewModel = new ReportViewModel(
                 _jsonHeadersRepository.GetJsonHeadersById(itemsId),
                 new PageViewModel(count, pageNumber, pageSize),
                 new SortViewModel(sortOrder)
             );
-            #endregion
+            
             return View(viewModel);
         }
+
+        public async Task<IActionResult> JSONReport(string standsIdentifier = "Hoffman", string VIN = null, string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.VINAsc)
+        {
+            ViewData["StandsIdentifier"] = standsIdentifier;
+            ViewData["SearchIdentifier"] = searchIdentifier;
+            // пагинация
+            int pageSize = 13;
+            
+            var jsonHeaderIDs = InitializePageValue(standsIdentifier, searchIdentifier, pageNumber, sortOrder).Where(k => k.VIN == VIN).Select(k=>k.Id).ToList();
+            var count = jsonHeaderIDs.Count();
+            var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+            // формируем модель представления
+
+           ReportViewModel viewModel = new ReportViewModel(
+                _jsonHeadersRepository.GetJsonHeadersById(itemsId),
+                new PageViewModel(count, pageNumber, pageSize),
+                new SortViewModel(sortOrder)
+            );
+
+            return View(viewModel);
+        }
+
+
+     
 
         public async Task<IActionResult> TestReport(long jsonHeaderID)
         {

@@ -70,6 +70,69 @@
   }
 }
 
+.mdi-plus::before {
+    content: "\f0415"
+}
+
+.mdi-plus-box::before {
+    content: "\f0416"
+}
+
+.mdi-plus-box-multiple::before {
+    content: "\f0334"
+}
+
+.mdi-plus-box-multiple-outline::before {
+    content: "\f1143"
+}
+
+.mdi-plus-box-outline::before {
+    content: "\f0704"
+}
+
+.mdi-plus-circle::before {
+    content: "\f0417"
+}
+
+.mdi-plus-circle-multiple::before {
+    content: "\f034c"
+}
+
+.mdi-plus-circle-multiple-outline::before {
+    content: "\f0418"
+}
+
+.mdi-plus-circle-outline::before {
+    content: "\f0419"
+}
+
+.mdi-plus-minus::before {
+    content: "\f0992"
+}
+
+.mdi-plus-minus-box::before {
+    content: "\f0993"
+}
+
+.mdi-plus-minus-variant::before {
+    content: "\f14c9"
+}
+
+.mdi-plus-network::before {
+    content: "\f041a"
+}
+
+.mdi-plus-network-outline::before {
+    content: "\f0cba"
+}
+
+.mdi-plus-outline::before {
+    content: "\f0705"
+}
+
+.mdi-plus-thick::before {
+    content: "\f11ec"
+}
 body {
   margin: 0;
   font-family: var(--bs-body-font-family);

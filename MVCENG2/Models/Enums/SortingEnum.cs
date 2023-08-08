@@ -13,7 +13,11 @@
             OperatorAsc,
             OperatorDesc,
             DateAsc,
-            DateDesc
+            DateDesc,
+            TNameAsc,
+            TNameDesc,
+            TSpecNameAsc,
+            TSpecNameDesc
         }
     }
 }

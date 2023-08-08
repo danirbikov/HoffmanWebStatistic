@@ -42,7 +42,7 @@ namespace MVCENG2.Controllers
             }
 
 
-            foreach (Stand stand in _standRepository.GetAll().Where(k => !k.StandName.Contains("QNX") && k.StandName!="UNKNOWN"))
+            foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandName!="UNKNOWN").OrderBy(k=>k.StandName))
             {
                 pingResultFromAPI.TryGetValue(stand.StandName, out pingResultStand);
 

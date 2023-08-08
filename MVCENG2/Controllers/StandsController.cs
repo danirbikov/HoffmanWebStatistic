@@ -9,7 +9,7 @@ using Microsoft.VisualBasic;
 
 namespace MVCENG2.Controllers
 {
-    [Authorize]
+   
     public class StandsController : Controller
     {
 
@@ -24,24 +24,22 @@ namespace MVCENG2.Controllers
 
         //[Authorize(Roles = "sa")]
         public async Task<IActionResult> Index()
-        {
-
-
-            ViewData["UserName"] = HttpContext.User.Identity.Name;
-            ViewData["UserRole"] = HttpContext.User.Claims.Select(k=>k.Value).ToList()[1]; 
+        {           
             
             IEnumerable<Stand> stands = _standRepository.GetAll();
 
-            Dictionary<string, int> testsLastMonth = new Dictionary<string, int>();
+            Dictionary<string, int> carsLastMonth = new Dictionary<string, int>();
             foreach (Stand stand in stands)
             {
-                //testsLastMonth.Add(stand.StandName, DateFunctions.GetTestsCountLastmonth(stand, _jsonHeadersRepository));           
+                //carsLastMonth.Add(stand.StandName, DateFunctions.GetCarsCountLastmonth(stand, _jsonHeadersRepository));           
             }
-            return RedirectToAction("AddOperator", "Admin");
+
+            //return RedirectToAction("AdminPanel", "Admin");
+            
             return View(new StandsForView()
             {
                 stands = stands,
-                testsLastMonth = testsLastMonth,
+                testsLastMonth = carsLastMonth,
 #if RELEASE
                 pingerDict = WebAPIClient.GetPingResult()
 #else 

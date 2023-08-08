@@ -22,14 +22,14 @@
                 @foreach (var standProject in Model.stands.Select(g => g.Project).Distinct())
                 {
                     <div class="row">
-                        <a asp-controller=@standProject asp-action="Detail" asp-route-standsIdentifier=@standProject>
+                        <a asp-controller=@standProject asp-action="VINsReport" asp-route-standsIdentifier=@standProject>
                             <h1 class="page-title">@standProject</h1>
                         </a>
 
                         @* Group by stand type *@
                         @foreach (var standType in Model.stands.Where(p => p.Project == standProject && p.StandType != "QNX").GroupBy(p => p.StandType))
                         {
-                            <a asp-controller=@standType.FirstOrDefault().Project asp-action="Detail" asp-route-standsIdentifier=@standType.Key>
+                            <a asp-controller=@standType.FirstOrDefault().Project asp-action="VINsReport" asp-route-standsIdentifier=@standType.Key>
                                 <div class="row">
 
                                     <h4 class="page-title">@standType.Key</h4>
@@ -37,7 +37,7 @@
                                     {
                                         <div class="col-xl-5 col-lg-6">
                                             <div class="card widget-flat div-hover">
-                                                <a asp-controller=@standObject.Project asp-action="Detail" asp-route-standsIdentifier=@standObject.StandName>
+                                                <a asp-controller=@standObject.Project asp-action="VINsReport" asp-route-standsIdentifier=@standObject.StandName>
                                                     <div class="card-body">
 
                                                         @if (Model.pingerDict!=null && Model.pingerDict.TryGetValue(standObject.StandName, out pingResultStand))
@@ -76,7 +76,7 @@
                                                                 <span class="text-success me-2"><i class="mdi mdi-arrow-up-bold"></i>error</span>
                                                             }
                                                             
-                                                            <span class="text-nowrap">Tests last month</span>
+                                                            <span class="text-nowrap">Cars last month</span>
                                                         </p>
 
                                                     </div>

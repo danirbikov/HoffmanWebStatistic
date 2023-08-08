@@ -1,15 +1,17 @@
 ﻿using static MVCENG2.Models.Enums.SortingEnum;
 
-namespace MvcApp.Models
+namespace MVCENG2.Models.ViewModel
 {
     public class SortViewModel
     {
-        public SortState VINSort { get; } 
-        public SortState OrderNumberSort { get; }    
+        public SortState VINSort { get; }
+        public SortState OrderNumberSort { get; }
         public SortState StandNameSort { get; }
         public SortState OperatorSort { get; }
         public SortState DateSort { get; }
-        public SortState Current { get; }    
+        public SortState Current { get; }
+        public SortState TNameSort { get; }
+        public SortState TSpecNameSort { get; }
 
         public SortViewModel(SortState sortOrder)
         {
@@ -18,6 +20,8 @@ namespace MvcApp.Models
             StandNameSort = sortOrder == SortState.StandNameAsc ? SortState.StandNameDesc : SortState.StandNameAsc;
             OperatorSort = sortOrder == SortState.OperatorAsc ? SortState.OperatorDesc : SortState.OperatorAsc;
             DateSort = sortOrder == SortState.DateAsc ? SortState.DateDesc : SortState.DateAsc;
+            TNameSort = sortOrder == SortState.TNameAsc ? SortState.TNameDesc : SortState.TNameAsc;
+            TSpecNameSort = sortOrder == SortState.TSpecNameAsc ? SortState.TSpecNameDesc : SortState.TSpecNameAsc;
             Current = sortOrder;
         }
     }

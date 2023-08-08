@@ -1,14 +1,15 @@
 ﻿using MVCENG2.Models.Hoffman;
 
-namespace MvcApp.Models
+namespace MVCENG2.Models.ViewModel
 {
-    public class IndexViewModel
+    public class ReportViewModel
     {
+        
         public IEnumerable<ResultsJsonHeader> resultsJsonHeader { get; }
         public PageViewModel PageViewModel { get; }
         //public FilterViewModel FilterViewModel { get; }
         public SortViewModel SortViewModel { get; }
-        public IndexViewModel(IEnumerable<ResultsJsonHeader> resultsJsonHeader, PageViewModel pageViewModel, SortViewModel sortViewModel)
+        public ReportViewModel(IEnumerable<ResultsJsonHeader> resultsJsonHeader, PageViewModel pageViewModel, SortViewModel sortViewModel)
         {
             this.resultsJsonHeader = resultsJsonHeader;
             PageViewModel = pageViewModel;

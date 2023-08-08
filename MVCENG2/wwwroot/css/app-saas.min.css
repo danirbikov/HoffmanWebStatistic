@@ -16011,7 +16011,8 @@ html[data-sidenav-color=dark][data-sidenav-size=condensed] .side-nav .side-nav-i
             color: #fff
         }
 
-        .notification-list .notify-item .notify-details {
+        .notification-list .notify-item .notify-
+        s {
             margin-bottom: 0;
             overflow: hidden;
             margin-left: 45px
