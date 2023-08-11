@@ -11,10 +11,18 @@ namespace MVCENG2
       
         public static Dictionary<string, bool> GetPingResult()
         {
-            string json = GetAPI("api/GetPingResult");
-            Dictionary<string, bool> pingResultsDict = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
+            try
+            {
+                string json = GetAPI("api/GetPingResult");
+                Dictionary<string, bool> pingResultsDict = JsonConvert.DeserializeObject<Dictionary<string, bool>>(json);
+                return pingResultsDict; 
 
-            return pingResultsDict; 
+            }
+            catch
+            {
+                return null;
+            }
+
         }
 
         public static bool StartWebServices()

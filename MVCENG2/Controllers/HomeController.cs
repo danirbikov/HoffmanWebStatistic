@@ -13,39 +13,14 @@ namespace MVCENG2.Controllers
     public class HomeController : Controller
     {
 
-        private readonly StandRepository _standRepository;
-        private readonly JsonHeadersRepository _jsonHeadersRepository;
-
-        public HomeController(StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository)
-        {
-            _standRepository = standRepository;
-            _jsonHeadersRepository = jsonHeadersRepository;
-        }
-
         //[Authorize(Roles = "sa")]
         public async Task<IActionResult> Index()
         {           
             
-            IEnumerable<Stand> stands = _standRepository.GetAll().Where(k => k.StandType != "QNX"); ;
 
-            Dictionary<string, int> carsLastMonth = new Dictionary<string, int>();
-            foreach (Stand stand in stands)
-            {
-                //carsLastMonth.Add(stand.StandName, DateFunctions.GetCarsCountLastmonth(stand, _jsonHeadersRepository));           
-            }
 
-            //return RedirectToAction("AdminPanel", "Admin");
-            
-            return View(new StandsForView()
-            {
-                stands = stands,
-                testsLastMonth = carsLastMonth,
-#if RELEASE
-                pingerDict = WebAPIClient.GetPingResult()
-#else 
-                pingerDict = null
-#endif
-            }); 
+            return View();
+
         }
     }
 }

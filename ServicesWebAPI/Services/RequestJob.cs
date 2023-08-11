@@ -23,7 +23,7 @@ namespace ServicesWebAPI.Services
             try
             {
                 ParserJSON.AddAllJsonFiles(dbContext);
-                //Pinger.PingAllStands(dbContext.stands.Where(k => k.IpAdress != null).ToList());
+                Pinger.PingAllStands(dbContext.stands.Where(k => k.IpAdress != null).ToList());
 
             }
             catch (Exception ex)

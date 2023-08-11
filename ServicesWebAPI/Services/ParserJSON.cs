@@ -56,6 +56,7 @@ namespace PingerWebAPI.Services
                             {
                                 File.Copy(fileInStand, destFilePath + fileName, true);                                
                                 AddSingleFile(destFilePath+fileName, _dbContext);
+                                LoggerTXT.LogParser("File " + fileInStand + " parsed!");
                                 _dbContext.SaveChanges();
                             }
                             //else
@@ -70,14 +71,14 @@ namespace PingerWebAPI.Services
 
                     catch (Exception ex)
                     {
-                        LoggerTXT.LogParser("Stand's IP \n" + ex);
+                        LoggerTXT.LogParser("Stand's IP "+IP+"\n" + ex);
                         
                     }
                 }
             }
             catch (Exception ex)
             {
-                LoggerTXT.LogParser("Stand's IP \n" + ex);
+                LoggerTXT.LogParser("Error in parser \n" + ex);
             }
             
         }  
