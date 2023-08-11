@@ -11,13 +11,13 @@ namespace MVCENG2.Services
 {
     public class ParserSiemens
     {
-        private readonly IStandRepository _standRepository;
+        private readonly StandRepository _standRepository;
         private readonly IStandsStatisticRepository _statisticRepository;
         private readonly ITestReportRepository _testReportRepository;
 
         public XmlSerializer xmlSerializer = new XmlSerializer(typeof(Dashboard));
 
-        public ParserSiemens(IStandRepository standRepository, IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
+        public ParserSiemens(StandRepository standRepository, IStandsStatisticRepository statisticRepository, ITestReportRepository testReportRepository)
         {
             _standRepository = standRepository;
             _statisticRepository = statisticRepository;

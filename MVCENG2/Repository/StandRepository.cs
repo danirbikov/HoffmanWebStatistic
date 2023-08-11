@@ -6,7 +6,7 @@ using System.IO;
 
 namespace MVCENG2.Repository
 {
-    public class StandRepository : IStandRepository
+    public class StandRepository
     {
         private readonly ApplicationDbContext _context;
         public StandRepository (ApplicationDbContext context)
@@ -22,8 +22,46 @@ namespace MVCENG2.Repository
 
         public IEnumerable<Stand> GetAll()
         {
-            return _context.stands.ToList();
+            return _context.stands.Where(k=>k.InactiveMark=="FALSE").ToList();
             
+        }
+
+        public bool UnactiveStand(int standID)
+        {
+            Stand stand = _context.stands.Where(k => k.Id == standID).FirstOrDefault();
+            stand.InactiveMark = "TRUE";
+
+            return Save();
+
+        }
+
+        public IEnumerable<string> GetStandsTypeName()
+        {
+            return _context.stands.Select(k=>k.StandType).Where(k=>k!="QNX" && k!="UNKNOWN").Distinct().ToList();
+
+        }
+        public Stand GetStandByID(int standID)
+        {
+            return _context.stands.Where(k => k.Id == standID).FirstOrDefault();
+
+        }
+
+        public bool EditStand(Stand standObject)
+        {
+            Stand stand = _context.stands.Where(k => k.Id == standObject.Id).FirstOrDefault();
+
+            
+            stand.StandName = standObject.StandName;
+            stand.StandNameDescription = standObject.StandNameDescription;
+            stand.WorkplaceMes = standObject.WorkplaceMes;
+            stand.IpAdress = standObject.IpAdress;
+            stand.DnsName = standObject.DnsName;
+            stand.Placement = standObject.Placement;
+            stand.StandType = standObject.StandType;
+            stand.Project = standObject.Project;
+
+            return Save();
+
         }
         /*
         public Stand GetByStandNameAsync(string standName)

@@ -30,12 +30,39 @@ namespace MVCENG2.Repository
 
         public User GetUserByAuthModel(LoginModel loginModel)
         {
-            return _context.users.Include(k=> k.Role).FirstOrDefault(k=> k.ULogin==loginModel.Email && k.UPassword==loginModel.Password);
+            return _context.users.Include(k=> k.Role).Where(k => k.InactiveMark == "FALSE").FirstOrDefault(k=> k.ULogin==loginModel.Email && k.UPassword==loginModel.Password);
             
         }
         public IEnumerable<User> GetAll()
         {
-            return _context.users.ToList();
+            return _context.users.Where(k=>k.InactiveMark=="FALSE").Include(k=>k.Role).ToList();
+
+        }
+        public bool UnactiveUser(int userId)
+        {
+            User user = _context.users.Where(k => k.Id == userId).FirstOrDefault();
+            user.InactiveMark = "TRUE";
+
+            return Save();
+
+        }
+
+        public bool EditUser(User userObject)
+        {
+            User user = _context.users.Where(k => k.Id == userObject.Id).FirstOrDefault();
+
+            user.ULogin = userObject.ULogin;
+            user.UPassword = userObject.UPassword;
+            user.RoleId = userObject.RoleId;           
+
+            return Save();
+
+        }
+
+        public User GetUserByID(int userID)
+        {
+            var userObject = _context.users.Where(k => k.Id == userID).Include(k=>k.Role).FirstOrDefault();
+            return userObject;
 
         }
 

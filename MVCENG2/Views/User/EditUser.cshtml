@@ -1,0 +1,44 @@
+﻿@model User
+@{
+
+} 
+
+<form method="post" asp-action="EditUser">
+    <div class="form-group">
+        <label asp-for="ULogin">Login</label>
+        <input asp-for="ULogin" class="form-control" placeholder="login" value=@Model.ULogin>
+        <span asp-validation-for="ULogin" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="UPassword">Password</label>
+        <input asp-for="UPassword" class="form-control" placeholder="password" value=@Model.UPassword>
+        <span asp-validation-for="UPassword" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="RoleId">Role</label>
+        <select asp-for="RoleId">
+            
+            @if (ViewData["UserRole"].ToString() == "sa")
+            {
+                <option value=1>sa </option>
+            }           
+            <option value=2>admin</option>
+            <option value=3>user</option>
+        </select>
+        <span asp-validation-for="RoleId" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="Id" value=@Model.Id>
+    <input type="hidden" asp-for="InactiveMark" value=@Model.InactiveMark>
+    <input type="hidden" asp-for="Created" value=@Model.Created>
+
+    <button type="submit" class="btn btn-primary">Edit</button>
+    
+</form>
+
+
+<script>
+    $(document).ready(function () {
+        $('#roleSelect').val(@Model.Role.RName); 
+    });
+</script>

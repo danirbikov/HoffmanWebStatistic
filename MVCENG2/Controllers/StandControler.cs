@@ -10,23 +10,19 @@ using MVCENG2.Models.Hoffman;
 namespace MVCENG2.Controllers
 {
     [Authorize(Roles = "sa, admin")]
-    public class AdminController : Controller
+    public class StandController : Controller
     {
-        private readonly IStandRepository _standRepository;
+        private readonly StandRepository _standRepository;
         private readonly JsonHeadersRepository _jsonHeadersRepository;
-        private readonly OperatorsRepository _operatorsRepository;
 
-        public AdminController(IStandRepository standRepository, JsonHeadersRepository jsonHeadersRepository, OperatorsRepository operatorsRepository)
+        public StandController(StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository)
         {
             _standRepository = standRepository;
             _jsonHeadersRepository = jsonHeadersRepository;
-            _operatorsRepository = operatorsRepository;
         }
 
-        
-        public async Task<IActionResult> AdminPanel()
-        {
-            Dictionary<List<StandsForAdminPanelView>, List<Operator>> infoForAdminPanel = new Dictionary<List<StandsForAdminPanelView>, List<Operator>>();
+        public async Task<IActionResult> MainMenu()
+        {;
             List<StandsForAdminPanelView> standsForAdminPanel = new List<StandsForAdminPanelView>();
 
             bool pingResultStand = false;
@@ -42,7 +38,7 @@ namespace MVCENG2.Controllers
             }
 
 
-            foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandName!="UNKNOWN").OrderBy(k=>k.StandName))
+            foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandName != "UNKNOWN" && k.InactiveMark == "FALSE").OrderBy(k => k.StandName))
             {
                 pingResultFromAPI.TryGetValue(stand.StandName, out pingResultStand);
 
@@ -53,40 +49,15 @@ namespace MVCENG2.Controllers
 
                 standsForAdminPanel.Add(new StandsForAdminPanelView()
                 {
-                    standName = stand.StandName,
+                    stand = stand,
                     allTestsCount = DateFunctions.GetAllTestsCountForStand(stand, _jsonHeadersRepository),
                     pingResult = pingResultStand,
                     lastTestDate = DateFunctions.GetLastTestDateForStand(stand, _jsonHeadersRepository),
-                    
-                });                    
+
+                });
             }
-            infoForAdminPanel.Add(standsForAdminPanel, _operatorsRepository.GetAll().ToList());
 
-            return View(infoForAdminPanel);                    
-        }
-
-
-        [HttpGet]
-        public async Task<IActionResult> AddOperator()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> AddOperator(Operator operatorModel)
-        {
-            if (ModelState.ErrorCount <= 1)
-            {
-                operatorModel.Created = DateTime.Now;
-                operatorModel.InactiveMark = "FALSE";               
-                _operatorsRepository.Add(operatorModel);
-
-                OperatorsXMLFile.FormationAndSendXMLFileForStands(_standRepository.GetAll().ToList(), _operatorsRepository.GetAll().ToList());
-                return RedirectToAction("AdminPanel");
-            }
-            return View();
-                
-
+            return View(standsForAdminPanel);
         }
 
         [HttpPost]
@@ -98,7 +69,7 @@ namespace MVCENG2.Controllers
                 standModel.stand.InactiveMark = "FALSE";
                 standModel.stand.OSVersionNavigationID = 1;
 
-                if (standModel.QNX.IpAdress!="none" && standModel.QNX.DnsName != "none")
+                if (!(standModel.QNX.IpAdress=="0.0.0.0" && standModel.QNX.DnsName == "none"))
                 {
                     standModel.QNX.StandName = standModel.stand.StandName + "_QNX";
                     standModel.QNX.StandNameDescription = standModel.stand.StandNameDescription;
@@ -111,20 +82,48 @@ namespace MVCENG2.Controllers
 
                     _standRepository.Add(standModel.QNX);
                 }
-                _standRepository.Add(standModel.stand);
-            
-                return RedirectToAction("AdminPanel");
+                _standRepository.Add(standModel.stand);               
+                return RedirectToAction("MainMenu");
             }
 
-            return View();           
+            ViewBag.StandTypeList = _standRepository.GetStandsTypeName().ToList();
+            return View(new StandAddViewModel());
         }
 
         [HttpGet]
         public async Task<IActionResult> AddStand()
         {
-
-            return View();
+            ViewBag.StandTypeList = _standRepository.GetStandsTypeName().ToList();
+            return View(new StandAddViewModel());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditStand(int standID)
+        {
+            ViewBag.StandTypeList = _standRepository.GetStandsTypeName().ToList();
+
+            return View(new StandAddViewModel 
+            {
+                stand =  _standRepository.GetStandByID(standID),
+            }
+            );
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditStand(StandAddViewModel standObject)
+        {
+            _standRepository.EditStand(standObject.stand);
+
+            return RedirectToAction("MainMenu");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UnactiveStand(int standID)
+        {
+            _standRepository.UnactiveStand(standID);
+            return RedirectToAction("MainMenu");
+        }
+
+
     }
 }
 

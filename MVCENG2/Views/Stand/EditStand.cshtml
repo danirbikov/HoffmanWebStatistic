@@ -1,0 +1,83 @@
+﻿@using MVCENG2.Models.ViewModel;
+
+@model StandAddViewModel
+
+
+<form method="post" asp-action="EditStand">
+    <div asp-validation-summary="ModelOnly"> </div>
+    <div class="form-group">
+        <label asp-for="@Model.stand.StandName">Stand name</label>
+        <input asp-for="@Model.stand.StandName" class="form-control" placeholder="bts6" value=@Model.stand.StandName>
+        <span asp-validation-for="@Model.stand.StandName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.StandNameDescription">Stand name description</label>
+        <input asp-for="@Model.stand.StandNameDescription" class="form-control" placeholder="Тормозной стенд" value=@Model.stand.StandNameDescription>
+        <span asp-validation-for="@Model.stand.StandNameDescription" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.WorkplaceMes">Work place Mes</label>
+        <input asp-for="@Model.stand.WorkplaceMes" class="form-control" placeholder="Mes" value=@Model.stand.WorkplaceMes>
+        <span asp-validation-for="@Model.stand.WorkplaceMes" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.IpAdress">Ip adress</label>
+        <input asp-for="@Model.stand.IpAdress" class="form-control" placeholder="10.194.100.18" value=@Model.stand.IpAdress>
+        <span asp-validation-for="@Model.stand.IpAdress" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.DnsName">Dns name</label>
+        <input asp-for="@Model.stand.DnsName" class="form-control" placeholder="DNS" value=@Model.stand.DnsName>
+        <span asp-validation-for="@Model.stand.DnsName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="@Model.stand.Placement">Placement</label>
+        <input asp-for="@Model.stand.Placement" class="form-control" placeholder="Placement" value=@Model.stand.Placement>
+        <span asp-validation-for="@Model.stand.Placement" class="text-danger"></span>
+    </div>    
+    
+    <div class="form-group">
+        <label asp-for="@Model.stand.StandType">Stand type</label>
+        <select asp-for="@Model.stand.StandType">
+            @foreach (string standType in ViewBag.StandTypeList)
+            {                
+                <option>@standType</option>
+            }
+            
+        </select>
+        <span asp-validation-for="@Model.stand.StandType" class="text-danger"></span>
+    </div>
+    
+    <div class="form-group">
+        <label asp-for="@Model.stand.Project">Project</label>
+        <select asp-for="@Model.stand.Project">
+            @if (Model.stand.Project == "HOFFMAN")
+            {
+                <option>HOFFMAN</option>
+                <option>SIEMENS</option>
+            }
+            else
+            {
+                <option>SIEMENS</option>
+                <option>HOFFMAN</option>                
+            }
+            
+        </select>
+        <span asp-validation-for="@Model.stand.Project" class="text-danger"></span>
+    </div>
+
+    <input type="hidden" asp-for="@Model.stand.Id" value=@Model.stand.Id>
+    <input type="hidden" asp-for="@Model.stand.OsVersionNavigation" value=@Model.stand.OsVersionNavigation>
+    <input type="hidden" asp-for="@Model.stand.InactiveMark" value=@Model.stand.InactiveMark>
+
+
+    <button type="submit" class="btn btn-primary">Edit</button>
+    
+</form>
+
+

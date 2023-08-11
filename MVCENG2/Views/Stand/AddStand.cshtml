@@ -44,9 +44,11 @@
     <div class="form-group">
         <label asp-for="@Model.stand.StandType">Stand type</label>
         <select asp-for="@Model.stand.StandType">
-            <option>Brake test stand</option>
-            <option>C - Wheel alignment machine</option>
-            <option>Roller Test Stand</option>
+            @foreach (string standType in ViewBag.StandTypeList)
+            {
+                <option>@standType</option>
+            }
+            
         </select>
         <span asp-validation-for="@Model.stand.StandType" class="text-danger"></span>
     </div>
@@ -66,7 +68,7 @@
     </div>
     <div class="form-group">
         <label asp-for="@Model.QNX.IpAdress" id="labelID" style="display:none;">QNX IP</label>
-        <input asp-for="@Model.QNX.IpAdress" id="inputID" style="display:none;" value="none" class="form-control" placeholder="QNX IP">
+        <input asp-for="@Model.QNX.IpAdress" id="inputID" style="display:none;" value="0.0.0.0" class="form-control" placeholder="QNX IP">
         <span asp-validation-for="@Model.QNX.IpAdress" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -74,6 +76,7 @@
         <input asp-for="@Model.QNX.DnsName" id="input2ID" style="display:none;" value="none" class="form-control" placeholder="QNX DnsName">
         <span asp-validation-for="@Model.QNX.DnsName" class="text-danger"></span>
     </div>
+
 
     <button type="submit" class="btn btn-primary">Add</button>
     
@@ -100,7 +103,7 @@
                 label2ID.style.display = "none";
                 inputID.style.display = "none";
                 input2ID.style.display = "none";
-                inputID.value = "none";
+                inputID.value = "0.0.0.0";
                 input2ID.value = "none";
             }
         }

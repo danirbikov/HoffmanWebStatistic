@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<IStandRepository, StandRepository>();
+builder.Services.AddScoped<StandRepository>();
 builder.Services.AddScoped<OperatorsRepository>();
 builder.Services.AddScoped<JsonHeadersRepository>();
 builder.Services.AddScoped<JsonTestsRepository>();
@@ -53,6 +53,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Stands}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

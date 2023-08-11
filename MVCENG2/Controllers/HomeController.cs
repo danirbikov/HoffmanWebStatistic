@@ -10,13 +10,13 @@ using Microsoft.VisualBasic;
 namespace MVCENG2.Controllers
 {
    
-    public class StandsController : Controller
+    public class HomeController : Controller
     {
 
-        private readonly IStandRepository _standRepository;
+        private readonly StandRepository _standRepository;
         private readonly JsonHeadersRepository _jsonHeadersRepository;
 
-        public StandsController(IStandRepository standRepository, JsonHeadersRepository jsonHeadersRepository)
+        public HomeController(StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository)
         {
             _standRepository = standRepository;
             _jsonHeadersRepository = jsonHeadersRepository;
@@ -26,7 +26,7 @@ namespace MVCENG2.Controllers
         public async Task<IActionResult> Index()
         {           
             
-            IEnumerable<Stand> stands = _standRepository.GetAll();
+            IEnumerable<Stand> stands = _standRepository.GetAll().Where(k => k.StandType != "QNX"); ;
 
             Dictionary<string, int> carsLastMonth = new Dictionary<string, int>();
             foreach (Stand stand in stands)

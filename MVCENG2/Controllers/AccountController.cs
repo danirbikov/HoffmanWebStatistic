@@ -34,7 +34,7 @@ namespace MVCENG2.Controllers
                 {
                     await Authenticate(user); // аутентификация
 
-                    return RedirectToAction("Index", "Stands");
+                    return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Некорректные логин и(или) пароль");
             }
@@ -68,7 +68,7 @@ namespace MVCENG2.Controllers
 
                     await Authenticate(addNewUser); // аутентификация
 
-                    return RedirectToAction("Index", "Stands");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");

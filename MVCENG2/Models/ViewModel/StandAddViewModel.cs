@@ -6,6 +6,7 @@ namespace MVCENG2.Models.ViewModel
     {
         public Stand stand { get; set; }
         public Stand QNX { get; set; }
+        
 
     }
 }

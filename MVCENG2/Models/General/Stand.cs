@@ -31,6 +31,7 @@ namespace MVCENG2.Models.General
         public string WorkplaceMes { get; set; } = null!;
         [Required(ErrorMessage = "Некорректное значение")]
         [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
+        [RegularExpression(@"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$", ErrorMessage = "Invalid IP address")]
         public string IpAdress { get; set; } = null!;
         [Required(ErrorMessage = "Некорректное значение")]
         [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
