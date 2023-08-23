@@ -31,9 +31,10 @@
                         <td>@jsonHeaderObject.VIN</td>
                         <td>@jsonHeaderObject.Ordernum</td>
                         <td>@jsonHeaderObject.Stand.StandName</td>
-                        @if (@jsonHeaderObject.ResultsJsonTests.Where(k => k.Created != null).FirstOrDefault()!=null)
+                        @if (jsonHeaderObject.Created != null)
                         {
-                            <td>@jsonHeaderObject.ResultsJsonTests.Where(k=>k.Created!=null).FirstOrDefault().Created</td>
+                            <td>@jsonHeaderObject.Created</td>
+                            
                         }
                         else
                         {
