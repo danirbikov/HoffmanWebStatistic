@@ -1,12 +1,12 @@
 ﻿using System.Xml.Serialization;
 using System;
-using MVCENG2.Models.SerializerModels;
+using HoffmanWebstatistic.Models.SerializerModels;
 using System.Xml.Linq;
-using MVCENG2.Models.General;
-using MVCENG2.Models.Hoffman;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.Hoffman;
 using System.Text;
 
-namespace MVCENG2.Services
+namespace HoffmanWebstatistic.Services
 {
     public static class OperatorsXMLFile
     {

@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MVCENG2.Data;
-using MVCENG2.Models.General;
-using MVCENG2.Models.Hoffman;
+using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.Hoffman;
 using System.Linq;
 
-namespace MVCENG2.ComfortModules
+namespace HoffmanWebstatistic.ComfortModules
 {
     public class SearchInDB
     {

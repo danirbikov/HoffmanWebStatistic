@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MVCENG2.Data;
-using MVCENG2.Interfaces;
-using MVCENG2.Models.General;
+using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models.General;
 using System.IO;
 
-namespace MVCENG2.Repository
+namespace HoffmanWebstatistic.Repository
 {
     public class StandRepository
     {

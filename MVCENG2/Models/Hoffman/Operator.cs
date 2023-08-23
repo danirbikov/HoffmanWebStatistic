@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace MVCENG2.Models.Hoffman
+namespace HoffmanWebstatistic.Models.Hoffman
 {
     public partial class Operator
     {

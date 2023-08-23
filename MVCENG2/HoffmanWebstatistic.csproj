@@ -23,7 +23,6 @@
 
   <ItemGroup>
     <None Remove="FormationFiles\people.xml" />
-    <None Remove="Logs\PingerLogs - Копировать.txt" />
     <None Remove="people.xml" />
   </ItemGroup>
 
@@ -37,14 +36,25 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="7.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog" Version="5.2.3" />
+    <PackageReference Include="NLog.Config" Version="4.7.15" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.3" />
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
-    <PackageReference Include="Quartz" Version="3.6.2" />
+    <PackageReference Include="Quartz" Version="3.7.0" />
+    <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.7.0" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.7.0" />
     <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="ComfortModules\HTML_Helpers\" />
     <Folder Include="FormationFiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="C:\Users\BikovDI\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

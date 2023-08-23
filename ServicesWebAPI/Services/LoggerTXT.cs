@@ -4,9 +4,9 @@ namespace ServicesWebAPI.Services
 {
     public static class LoggerTXT
     {
-        private static readonly string parserTxtFileLocation = @"Logs//Parser.txt";
-        private static readonly string pingerTxtFileLocation = @"Logs//Pinger.txt";
-        private static readonly string servicesTxtFileLocation = @"Logs//Services.txt";
+        private static readonly string parserTxtFileLocation = @"C:\\WebStatistic\\Logs\\Parser.txt";
+        private static readonly string pingerTxtFileLocation = @"C:\\WebStatistic\\Logs\\Pinger.txt";
+        private static readonly string servicesTxtFileLocation = @"C:\\WebStatistic\\Logs\\Services.txt";
 
         public static void LogPinger(string logText)
         {

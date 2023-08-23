@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using MVCENG2.Models.Hoffman;
+using HoffmanWebstatistic.Models.Hoffman;
 
-namespace MVCENG2.Models.General
+namespace HoffmanWebstatistic.Models.General
 {
     public partial class Stand
     {

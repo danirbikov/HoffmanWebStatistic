@@ -1,22 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using MVCENG2.Data;
-using MVCENG2.Interfaces;
+using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Interfaces;
 using PagedList;
-using MVCENG2.Services;
-using MVCENG2.Models.Siemens;
+using HoffmanWebstatistic.Services;
+using HoffmanWebstatistic.Models.Siemens;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-using MVCENG2.Models.Hoffman;
+using HoffmanWebstatistic.Models.Hoffman;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using static MVCENG2.Models.Enums.SortingEnum;
+using static HoffmanWebstatistic.Models.Enums.SortingEnum;
 using System.Xml.Linq;
-using MVCENG2.Repository;
-using MVCENG2.ComfortModules;
-using MVCENG2.Models.ViewModel;
+using HoffmanWebstatistic.Repository;
+using HoffmanWebstatistic.ComfortModules;
+using HoffmanWebstatistic.Models.ViewModel;
 
-namespace MVCENG2.Controllers
+namespace HoffmanWebstatistic.Controllers
 {
     public class HoffmanController : Controller
     {

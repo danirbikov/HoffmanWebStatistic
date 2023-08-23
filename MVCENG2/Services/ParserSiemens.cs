@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MVCENG2.Interfaces;
-using MVCENG2.Models.General;
-using MVCENG2.Models.SerializerModels;
-using MVCENG2.Models.Siemens;
-using MVCENG2.Repository;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.SerializerModels;
+using HoffmanWebstatistic.Models.Siemens;
+using HoffmanWebstatistic.Repository;
 using System.IO;
 using System.Xml.Serialization;
 
-namespace MVCENG2.Services
+namespace HoffmanWebstatistic.Services
 {
     public class ParserSiemens
     {

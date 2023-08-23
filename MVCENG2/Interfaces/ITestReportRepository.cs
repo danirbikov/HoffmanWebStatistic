@@ -1,6 +1,6 @@
-﻿using MVCENG2.Models.Siemens;
+﻿using HoffmanWebstatistic.Models.Siemens;
 
-namespace MVCENG2.Interfaces
+namespace HoffmanWebstatistic.Interfaces
 {
     public interface ITestReportRepository
     {

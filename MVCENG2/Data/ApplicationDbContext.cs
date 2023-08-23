@@ -1,34 +1,53 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using MVCENG2.Models.General;
-using MVCENG2.Models.Hoffman;
-using MVCENG2.Models.Siemens;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.Hoffman;
+using HoffmanWebstatistic.Models.Siemens;
 
-namespace MVCENG2.Data
+namespace HoffmanWebstatistic.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        //private readonly StreamWriter _logStream = new StreamWriter("Logs\\EntityFrameworkLogs.txt", append: true);
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //private readonly StreamWriter logStream = new StreamWriter("C:\\WebStatistic\\Logs\\EFLogs.txt", true);
+        public ApplicationDbContext()
         {
-            optionsBuilder.EnableSensitiveDataLogging();            
         }
-                       
+
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // {
+        //     optionsBuilder.EnableSensitiveDataLogging();
+        //optionsBuilder.LogTo(_logStream.WriteLine);
+        // }
+
         public override void Dispose()
         {
             base.Dispose();
-            
+            //logStream.Dispose();
         }
-
         public override async ValueTask DisposeAsync()
         {
             await base.DisposeAsync();
+            //await logStream.DisposeAsync();
         }
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //optionsBuilder.LogTo(logStream.WriteLine);
+
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                   .AddJsonFile("appsettings.json")
+                   .Build();
+                var connectionString = configuration.GetConnectionString("DefaultConnection");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
             Database.EnsureCreated();
-            
+
         }
 
         public DbSet<Stand> stands { get; set; }

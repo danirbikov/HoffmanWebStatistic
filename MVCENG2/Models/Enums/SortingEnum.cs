@@ -1,4 +1,4 @@
-﻿namespace MVCENG2.Models.Enums
+﻿namespace HoffmanWebstatistic.Models.Enums
 {
     public class SortingEnum
     {

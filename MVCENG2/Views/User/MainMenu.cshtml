@@ -39,9 +39,21 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
                                             </div>
-                                            <div class="flex-grow-1 ms-2">
-                                                @userInfo.UPassword
-                                            </div>
+                                            
+                                            @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+                                            {
+                                                <div class="font-18 text-danger">
+                                                    HIDDEN
+                                                </div>
+                                                    
+                                            }
+                                            else
+                                            {
+                                                <div class="flex-grow-1 ms-2">
+                                                    @userInfo.UPassword
+                                                </div>
+                                            }
+                                            
                                         </div>
                                     </td>
                                                                       

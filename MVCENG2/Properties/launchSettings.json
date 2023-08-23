@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "MVCENG2": {
+    "HoffmanWebstatistic": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

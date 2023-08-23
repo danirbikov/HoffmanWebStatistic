@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using MVCENG2.Models.General;
+using HoffmanWebstatistic.Models.General;
 
-namespace MVCENG2.Models.Hoffman
+namespace HoffmanWebstatistic.Models.Hoffman
 {
     public partial class Mes2supPath
     {

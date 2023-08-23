@@ -2,7 +2,6 @@
 
 @{
     string controllerName = @ViewContext.RouteData.Values["controller"].ToString();
-    string statisticElementColor;
 }
 
 
@@ -15,6 +14,7 @@
                     <td><a asp-controller=@controllerName asp-action="VINsReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"]  asp-route-sortOrder=@Model.SortViewModel.VINSort>VIN</a></td>
                     <td><a asp-controller=@controllerName asp-action="VINsReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"]  asp-route-sortOrder=@Model.SortViewModel.OrderNumberSort>OrderNumber</a></td>
                     <td><a asp-controller=@controllerName asp-action="VINsReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"]  asp-route-sortOrder=@Model.SortViewModel.StandNameSort>StandName</a></td>
+                    <td><a asp-controller=@controllerName asp-action="VINsReport" asp-route-searchIdentifier=@ViewData["SearchIdentifier"] asp-route-standsIdentifier=@ViewData["StandsIdentifier"] asp-route-sortOrder=@Model.SortViewModel.DateSort>Date</a></td>
                 }
             </tr>
         </thead>
@@ -26,21 +26,40 @@
                 {
 
 
-                        <tr onClick="document.location='@Url.Action("JSONReport", @controllerName, new {VIN = @jsonHeaderObject.VIN, standsIdentifier = jsonHeaderObject.Stand.StandName , searchIdentifier = @ViewData["SearchIdentifier"]}, null)'">
+
+                    <tr onClick="document.location='@Url.Action("JSONReport", @controllerName, new {VIN = @jsonHeaderObject.VIN, standsIdentifier = jsonHeaderObject.Stand.StandName , searchIdentifier = @ViewData["SearchIdentifier"]}, null)'">
                         <td>@jsonHeaderObject.VIN</td>
                         <td>@jsonHeaderObject.Ordernum</td>
                         <td>@jsonHeaderObject.Stand.StandName</td>
+                        @if (@jsonHeaderObject.ResultsJsonTests.Where(k => k.Created != null).FirstOrDefault()!=null)
+                        {
+                            <td>@jsonHeaderObject.ResultsJsonTests.Where(k=>k.Created!=null).FirstOrDefault().Created</td>
+                        }
+                        else
+                        {
+                            <td>Date not recognized</td>
+                        }
+
+                        
                     </tr>
                 }
             }     
         </tbody>
     </table>
 
-    <p>
-        
+    <p>    
+        <a asp-action="VINsReport"
+           asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
+           asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
+           asp-route-pageNumber=1
+           asp-route-sortorder="@(Model.SortViewModel.Current)"
+           class="glyphicon glyphicon-chevron-right">
+            1...  
+        </a>
+
         @foreach (int pageNumber in Enumerable.Range((int)ViewData["PageCurrent"] - 2, 5))
         {
-            if (pageNumber < (int)ViewData["PageCount"] && pageNumber>0)
+            if (pageNumber < (int)ViewData["PageCount"] && pageNumber>1)
             {
                <a asp-action="VINsReport"
                asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
@@ -60,26 +79,5 @@
            class="glyphicon glyphicon-chevron-right">
             ...@ViewData["PageCount"]   
         </a>
-        @if (Model.PageViewModel.HasPreviousPage)
-        {
-            <a asp-action="VINsReport"
-           asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
-           asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
-           asp-route-pageNumber="@(Model.PageViewModel.PageNumber - 1)"
-           asp-route-sortorder="@(Model.SortViewModel.Current)"
-               class="glyphicon glyphicon-chevron-left">
-                |Назад|  
-            </a>
-        }
-        @if (Model.PageViewModel.HasNextPage)
-        {
-           <a asp-action="VINsReport"
-           asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
-           asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
-           asp-route-pageNumber="@(Model.PageViewModel.PageNumber + 1)"
-           asp-route-sortorder="@(Model.SortViewModel.Current)"
-               class="glyphicon glyphicon-chevron-right">
-                |Вперед|
-            </a>
-        }
+
 </div>

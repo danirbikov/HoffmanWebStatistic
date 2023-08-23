@@ -10,7 +10,7 @@ namespace PingerWebAPI.Repository
 {
     public class ApplicationDbContext : DbContext
     {
-        //private readonly StreamWriter _logStream = new StreamWriter("Logs\\EntityFrameworkLogs.txt", append: true);
+        //private readonly StreamWriter logStream = new StreamWriter("C:\\WebStatistic\\Logs\\EFLogs.txt", true);
         public ApplicationDbContext()
         {
         }
@@ -24,11 +24,18 @@ namespace PingerWebAPI.Repository
         public override void Dispose()
         {
             base.Dispose();
-            //_logStream.Dispose();
+           // logStream.Dispose();
+        }
+        public override async ValueTask DisposeAsync()
+        {
+            await base.DisposeAsync();
+            //await logStream.DisposeAsync();
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            //optionsBuilder.LogTo(logStream.WriteLine);
+
             if (!optionsBuilder.IsConfigured)
             {
                 IConfigurationRoot configuration = new ConfigurationBuilder()

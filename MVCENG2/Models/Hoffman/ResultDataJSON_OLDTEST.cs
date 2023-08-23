@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MVCENG2.Models.Hoffman
+namespace HoffmanWebstatistic.Models.Hoffman
 {
     public class ResultDataJSON_OLDTEST
     {

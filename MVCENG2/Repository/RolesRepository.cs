@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MVCENG2.Data;
-using MVCENG2.Interfaces;
-using MVCENG2.Models.General;
-using MVCENG2.Models.Hoffman;
-using MVCENG2.Models.ViewModel;
+using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.Hoffman;
+using HoffmanWebstatistic.Models.ViewModel;
 
-namespace MVCENG2.Repository
+namespace HoffmanWebstatistic.Repository
 {
     public class RolesRepository
     {

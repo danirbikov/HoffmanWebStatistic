@@ -1,26 +1,45 @@
 ﻿
 
+using NLog;
 using System.Text;
 
 namespace ServicesWebAPI.Services
 {
     public static class LoggerTXT
     {
-        private static readonly string webApiClientTxtFileLocation = @"Logs//WebApiClient.txt";
+        private static Logger logger = LogManager.GetCurrentClassLogger();
 
-
-        public static void LogWebApiClient(string logText)
+        public static void LogPinger(string logText)
         {
-            Log(webApiClientTxtFileLocation, logText);
+            Log(logText);
         }
 
-
-        private static void Log(string txtFileLocation, string logText)
+        public static void LogParser(string logText)
         {
-            using (StreamWriter writer = new StreamWriter(txtFileLocation, true, Encoding.Default))
+            Log(logText);
+        }
+        public static void LogServices(string logText)
+        {
+            Log(logText);
+        }
+        public static void LogWebApiClient(string logText)
+        {
+            Log(logText);
+        }
+
+        private static void Log(string logText)
+        {
+           
+            try
             {
-                writer.WriteLine(logText);
+                logger.Error(logText);
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Ex "+ex);
+            }
+            
+            
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿using PingerAPI.Models;
-using PingerAPI.Models.General;
+﻿
+using HoffmanWebstatistic.Models.General;
 using Quartz;
 using ServicesWebAPI.Services;
 using System.Net.NetworkInformation;
 
-namespace PingerWebAPI.Services
+namespace HoffmanWebstatistic.Services
 
 {
     public static class Pinger
     {
-        public static Dictionary<string, bool> standsPingResult { get; set; } = new Dictionary<string, bool>() {{ "test", false}};
+        public static Dictionary<string, bool> standsPingResult { get; set; } = new Dictionary<string, bool>() { { "test", false } };
 
 
         public static Task PingAllStands(IEnumerable<Stand> allStands)
@@ -18,7 +18,7 @@ namespace PingerWebAPI.Services
             {
                 bool connection_status = PingOneStand(stand);
 
-                if (standsPingResult==null || !standsPingResult.ContainsKey(stand.StandName))
+                if (standsPingResult == null || !standsPingResult.ContainsKey(stand.StandName))
                 {
                     standsPingResult.Add(stand.StandName, connection_status);
                 }
@@ -43,7 +43,7 @@ namespace PingerWebAPI.Services
             }
             catch (PingException ex)
             {
-                LoggerTXT.LogPinger("Exception in pinging stand: \n"+stand.StandName+"\n"+stand.IpAdress+"\n"+ex);
+                LoggerTXT.LogPinger("Exception in pinging stand: \n" + stand.StandName + "\n" + stand.IpAdress + "\n" + ex);
             }
             finally
             {

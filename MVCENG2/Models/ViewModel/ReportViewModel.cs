@@ -1,6 +1,6 @@
-﻿using MVCENG2.Models.Hoffman;
+﻿using HoffmanWebstatistic.Models.Hoffman;
 
-namespace MVCENG2.Models.ViewModel
+namespace HoffmanWebstatistic.Models.ViewModel
 {
     public class ReportViewModel
     {

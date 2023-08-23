@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-
+using PingerAPI.Models.General;
+using PingerWebAPI.Repository;
 using PingerWebAPI.Services;
-
+using ServicesWebAPI.Services;
 
 namespace ServicesWebAPI.Controllers
 {
@@ -9,13 +10,22 @@ namespace ServicesWebAPI.Controllers
     [Route("api/[controller]")]
     public class GetPingResultController : ControllerBase
     {
+        private readonly ApplicationDbContext dbContext;
 
+        public GetPingResultController(ApplicationDbContext dbContext) 
+        {
+            this.dbContext = dbContext;
+        }
         [HttpGet]
-        public Dictionary<string, bool> GetPingResults()
+        public List<Stand> GetPingResults()
         {
             try
             {
-                return Pinger.standsPingResult;
+                LoggerTXT.LogPinger("GO!!!");
+
+                return dbContext.stands.ToList();
+                
+                //return Pinger.standsPingResult;
             }
 
             catch

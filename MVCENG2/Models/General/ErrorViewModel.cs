@@ -1,4 +1,4 @@
-namespace MVCENG2.Models.General
+namespace HoffmanWebstatistic.Models.General
 {
     public class ErrorViewModel
     {

@@ -1,32 +1,30 @@
-﻿
-using PingerAPI.Models.Hoffman;
-using PingerWebAPI.Repository;
-using ServicesWebAPI.Services;
-using System.Data.Entity;
+﻿using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.Hoffman;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Text.Json;
-using static PingerAPI.Models.SerializerModels.JSONSerializeModel;
-using static System.Net.Mime.MediaTypeNames;
+using static HoffmanWebstatistic.Models.SerializerModels.JSONSerializeModel;
 
-namespace PingerWebAPI.Services
+namespace HoffmanWebstatistic.Services
 {
 
-    public static class ParserJSON
+    public class ParserJSON
     {
+        //private readonly ILogger<ParserJSON> _logger;
+       // public ParserJSON(ILogger<ParserJSON> logger)
+       // {
+      //      _logger = logger;
+      //  }
 
-        public static void AddAllJsonFiles(ApplicationDbContext _dbContext)
+        public void AddAllJsonFiles(ApplicationDbContext _dbContext)
         {
 
             try
             {
-#if DEBUG
-                var sourceFilePath = @"C:\\STAND_Results\\";
-#elif RELEASE
-                    string sourceFilePath;
-#endif
-                string destFilePath = @"C:\\WebStatistic\\ReportsBackup";
+
+                string sourceFilePath;
+                string destFilePath = @"C:\\WebStatistic\\ReportsBackup\\";
                 string fileName;
 
                 DirectoryInfo dirInfo = new DirectoryInfo(destFilePath);
@@ -35,56 +33,60 @@ namespace PingerWebAPI.Services
                     dirInfo.Create();
                 }
 
-#if DEBUG
-                var standIPs = _dbContext.stands.Select(k => k.IpAdress).ToList().Take(1);
-#else
-                var standIPs = _dbContext.stands.Select(k => k.IpAdress).ToList();
-#endif
-                foreach (string IP in standIPs)
+
+                var stands = _dbContext.stands.ToList();
+
+                foreach (Stand stand in stands)
+                {
+                    if (stand.StandType == "QNX")
                     {
-#if RELEASE
-                    sourceFilePath = @"\\" + IP + @"\PAtools\vsp0\data\log_data";
-#endif
+                        sourceFilePath = @"\\" + stand.IpAdress + @"\PAtools\vsp0\data\log_data";
+                    }
+                    else
+                    {
+                        sourceFilePath = "";
+                        //sourceFilePath = @"\\" + stand.IpAdress + @"\c\PressureMeaKAMAZ\mes\out";                                                
+                    }
+                              
                     try
                     {
-                        foreach (var fileInStand in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories).Where(k => DateTime.Now.Subtract(new FileInfo(k).CreationTime).Days <= 10000))
+                        foreach (var fileInStand in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
                         //foreach (var file in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
                         {
                             fileName = new FileInfo(fileInStand).Name;
 
                             if (!File.Exists(destFilePath + fileName))
                             {
-                                File.Copy(fileInStand, destFilePath + fileName, true);                                
-                                AddSingleFile(destFilePath+fileName, _dbContext);
-                                LoggerTXT.LogParser("File " + fileInStand + " parsed!");
+                                File.Copy(fileInStand, destFilePath + fileName, true);
+                                AddSingleFile(destFilePath + fileName, _dbContext);
+                                //LoggerTXT.LogParser("File " + fileInStand + " parsed!");
                                 _dbContext.SaveChanges();
                             }
-                            //else
-                            //{
-                            //    File.Delete(fileInStand);
-                            //}
-                            
-                        }
-                        
-                        break;
-                    }                   
+                            else
+                            {
+                                File.Delete(fileInStand);
+                            }
+                        }                      
+                    }
 
                     catch (Exception ex)
                     {
-                        LoggerTXT.LogParser("Stand's IP "+IP+"\n" + ex);
-                        
+
+                        //_logger.LogError("ERROR! Stand's IP " + stand.IpAdress + "\n" + ex);
+
                     }
                 }
             }
             catch (Exception ex)
             {
-                LoggerTXT.LogParser("Error in parser \n" + ex);
+                //_logger.LogError("Error in parser \n" + ex);
+                
             }
-            
-        }  
-        
 
-        public static void AddSingleFile(string file, ApplicationDbContext _dbContext) 
+        }
+
+
+        public void AddSingleFile(string file, ApplicationDbContext _dbContext)
         {
             using (var transaction = _dbContext.Database.BeginTransaction())
             {
@@ -129,7 +131,7 @@ namespace PingerWebAPI.Services
                         jsonHeaderModel.Ordernum = deserializeJSONObject.header.orderNum;
                         jsonHeaderModel.JsonFilename = fs.Name.Split("\\")[^1];
 
-                        var standObject = _dbContext.stands.Where(k => k.StandName == deserializeJSONObject.header.standName).FirstOrDefault();
+                        var standObject = _dbContext.stands.Where(k => k.StandName == deserializeJSONObject.header.standName.Replace("_QNX", "")).FirstOrDefault();
                         if (standObject != null)
                         {
                             jsonHeaderModel.StandId = standObject.Id;
@@ -198,12 +200,13 @@ namespace PingerWebAPI.Services
                 catch (Exception ex)
                 {
                     transaction.Rollback();
-                    LoggerTXT.LogParser(ex.Message);
+                    //_logger.LogError(ex.Message);
+                    
                 }
             }
-           
+
         }
     }
 
-    
+
 }

@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MVCENG2.Interfaces;
-using MVCENG2.Models.General;
-using MVCENG2.Repository;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using MVCENG2.Services;
-using MVCENG2.Models.ViewModel;
-using MVCENG2.Models.Hoffman;
+using HoffmanWebstatistic.Services;
+using HoffmanWebstatistic.Models.ViewModel;
+using HoffmanWebstatistic.Models.Hoffman;
 
-namespace MVCENG2.Controllers
+namespace HoffmanWebstatistic.Controllers
 {
     [Authorize(Roles = "sa, admin")]
     public class OperatorController : Controller
@@ -76,5 +76,6 @@ namespace MVCENG2.Controllers
         
      
     }
+
 }
 

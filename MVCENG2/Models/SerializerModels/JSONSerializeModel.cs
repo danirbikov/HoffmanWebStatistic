@@ -1,4 +1,4 @@
-﻿namespace MVCENG2.Models.SerializerModels
+﻿namespace HoffmanWebstatistic.Models.SerializerModels
 {
     public class JSONSerializeModel
     {

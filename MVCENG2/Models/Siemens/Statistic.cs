@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
-namespace MVCENG2.Models.Siemens
+namespace HoffmanWebstatistic.Models.Siemens
 {
 
     public class Statistic

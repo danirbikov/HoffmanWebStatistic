@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using MVCENG2.Models.General;
+using HoffmanWebstatistic.Models.General;
 
-namespace MVCENG2.Models.Hoffman
+namespace HoffmanWebstatistic.Models.Hoffman
 {
     public partial class HOFMANN_STATContext : DbContext
     {

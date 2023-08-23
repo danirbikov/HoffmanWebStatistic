@@ -1,6 +1,6 @@
-﻿using static MVCENG2.Models.Enums.SortingEnum;
+﻿using static HoffmanWebstatistic.Models.Enums.SortingEnum;
 
-namespace MVCENG2.Models.ViewModel
+namespace HoffmanWebstatistic.Models.ViewModel
 {
     public class SortViewModel
     {

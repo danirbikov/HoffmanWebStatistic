@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MVCENG2.Interfaces;
-using MVCENG2.Models.General;
-using MVCENG2.Repository;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using MVCENG2.Services;
-using MVCENG2.Models.ViewModel;
-using MVCENG2.Models.Hoffman;
+using HoffmanWebstatistic.Services;
+using HoffmanWebstatistic.Models.ViewModel;
+using HoffmanWebstatistic.Models.Hoffman;
 
-namespace MVCENG2.Controllers
+namespace HoffmanWebstatistic.Controllers
 {
     [Authorize(Roles = "sa, admin")]
     public class StandController : Controller
@@ -26,21 +26,10 @@ namespace MVCENG2.Controllers
             List<StandsForAdminPanelView> standsForAdminPanel = new List<StandsForAdminPanelView>();
 
             bool pingResultStand = false;
-            Dictionary<string, bool> pingResultFromAPI = new Dictionary<string, bool>();
-
-            try
-            {
-                pingResultFromAPI = WebAPIClient.GetPingResult();
-            }
-            catch
-            {
-                pingResultFromAPI.Add("WebApi not activated", false);
-            }
-
 
             foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandName != "UNKNOWN" && k.InactiveMark == "FALSE").OrderBy(k => k.StandName))
             {
-                pingResultFromAPI.TryGetValue(stand.StandName, out pingResultStand);
+                Pinger.standsPingResult.TryGetValue(stand.StandName, out pingResultStand);
 
                 if (pingResultStand == null)
                 {

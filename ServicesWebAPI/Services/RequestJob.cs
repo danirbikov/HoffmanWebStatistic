@@ -1,4 +1,5 @@
-﻿using PingerWebAPI.Repository;
+﻿
+using PingerWebAPI.Repository;
 using PingerWebAPI.Services;
 using Quartz;
 using ServicesWebAPI.Services;
@@ -21,9 +22,9 @@ namespace ServicesWebAPI.Services
             ApplicationDbContext dbContext = new ApplicationDbContext();
 
             try
-            {
-                ParserJSON.AddAllJsonFiles(dbContext);
+            { 
                 Pinger.PingAllStands(dbContext.stands.Where(k => k.IpAdress != null).ToList());
+                ParserJSON.AddAllJsonFiles(dbContext);
 
             }
             catch (Exception ex)

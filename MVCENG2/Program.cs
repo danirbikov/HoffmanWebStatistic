@@ -1,58 +1,87 @@
 using Microsoft.EntityFrameworkCore;
-
-using MVCENG2.Data;
-using MVCENG2.Interfaces;
-using MVCENG2.Services;
-using MVCENG2.Repository;
+using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Services;
+using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Quartz;
+using NLog;
+using NLog.Web;
 
-var builder = WebApplication.CreateBuilder(args);
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+logger.Debug("init main");
 
-// Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddScoped<StandRepository>();
-builder.Services.AddScoped<OperatorsRepository>();
-builder.Services.AddScoped<JsonHeadersRepository>();
-builder.Services.AddScoped<JsonTestsRepository>();
-builder.Services.AddScoped<JsonValuesRepository>();
-builder.Services.AddScoped<UsersRepository>();
-builder.Services.AddScoped<RolesRepository>();
-//builder.Services.AddTransient<ParserJSON>();
-
-
-
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
+try
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
+    var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => //CookieAuthenticationOptions
+    builder.Services.AddControllersWithViews();
+    builder.Services.AddScoped<StandRepository>();
+    builder.Services.AddScoped<OperatorsRepository>();
+    builder.Services.AddScoped<JsonHeadersRepository>();
+    builder.Services.AddScoped<JsonTestsRepository>();
+    builder.Services.AddScoped<JsonValuesRepository>();
+    builder.Services.AddScoped<UsersRepository>();
+    builder.Services.AddScoped<RolesRepository>();
+
+    builder.Logging.ClearProviders();
+    builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+    builder.Host.UseNLog();
+   
+
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
     {
-        options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
 
-var app = builder.Build();
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+        .AddCookie(options => //CookieAuthenticationOptions
+        {
+            options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+        });
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    builder.Services.AddQuartz(q =>
+    {
+        q.UseMicrosoftDependencyInjectionJobFactory();
+        var jobKey = new JobKey("RunParser");
+        q.AddJob<RequestJob>(opts => opts.WithIdentity(jobKey));
+        q.AddTrigger(opts => opts
+                    .ForJob(jobKey)
+                    .WithIdentity("RunParserJobTrigger")
+                    .StartNow()
+                    .WithSimpleSchedule(x =>
+                            x.WithIntervalInSeconds(60)
+                            .RepeatForever()));
+    });
+
+    builder.Services.AddQuartzHostedService(
+        q => q.WaitForJobsToComplete = true);
+
+    var app = builder.Build();
+    if (!app.Environment.IsDevelopment())
+    {
+        app.UseExceptionHandler("/Home/Error");
+        app.UseHsts();
+    }
+
+    app.UseHttpsRedirection();
+    app.UseStaticFiles();
+    app.UseRouting();
+    app.UseAuthentication();
+    app.UseAuthorization();
+    app.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    app.Run();
 }
- 
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
-app.UseAuthentication();
-app.UseAuthorization();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-app.Run();
+catch (Exception exception)
+{
+    // NLog: catch setup errors
+    logger.Error(exception, "Stopped program because of exception");
+    throw;
+}
+finally
+{
+    // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
+    NLog.LogManager.Shutdown();
+}

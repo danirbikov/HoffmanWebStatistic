@@ -1,4 +1,4 @@
-﻿namespace MVCENG2.Models.ViewModel
+﻿namespace HoffmanWebstatistic.Models.ViewModel
 {
     public class PageViewModel
     {

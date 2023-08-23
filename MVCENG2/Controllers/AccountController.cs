@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using MVCENG2.Models.ViewModel;
+using HoffmanWebstatistic.Models.ViewModel;
 using System.Security.Claims;
-using MVCENG2.Repository;
-using MVCENG2.Models.General;
+using HoffmanWebstatistic.Repository;
+using HoffmanWebstatistic.Models.General;
 
-namespace MVCENG2.Controllers
+namespace HoffmanWebstatistic.Controllers
 {
     public class AccountController : Controller
     {

@@ -1,26 +1,52 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MVCENG2.Interfaces;
-using MVCENG2.Models.General;
-using MVCENG2.Repository;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using MVCENG2.Services;
-using MVCENG2.Models.ViewModel;
+using HoffmanWebstatistic.Services;
+using HoffmanWebstatistic.Models.ViewModel;
 using Microsoft.VisualBasic;
+using ServicesWebAPI.Services;
 
-namespace MVCENG2.Controllers
+namespace HoffmanWebstatistic.Controllers
 {
    
     public class HomeController : Controller
     {
 
+        private readonly StandRepository _standRepository;
+        private readonly JsonHeadersRepository _jsonHeadersRepository;
+
+        public HomeController(ILogger<HomeController> logger,StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository)
+        {
+            logger.LogInformation("created homeController");
+            _standRepository = standRepository;
+            _jsonHeadersRepository = jsonHeadersRepository;
+        }
+
         //[Authorize(Roles = "sa")]
         public async Task<IActionResult> Index()
-        {           
+        {
             
 
+            IEnumerable<Stand> stands = _standRepository.GetAll().Where(k => k.StandType != "QNX"); ;
 
-            return View();
+            Dictionary<string, int> carsLastMonth = new Dictionary<string, int>();
+            foreach (Stand stand in stands)
+            {
+                carsLastMonth.Add(stand.StandName, DateFunctions.GetCarsCountLastmonth(stand, _jsonHeadersRepository));           
+            }
 
+            //return RedirectToAction("AdminPanel", "Admin");
+
+            return View(new StandsForView()
+            {
+                stands = stands,
+                testsLastMonth = carsLastMonth,
+
+                pingerDict = Pinger.standsPingResult
+
+            }); 
         }
     }
 }

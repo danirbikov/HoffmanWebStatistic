@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace MVCENG2.Migrations
+namespace HoffmanWebstatistic.Migrations
 {
     public partial class InitialCreate : Migration
     {

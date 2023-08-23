@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using MVCENG2.Data;
-using MVCENG2.Interfaces;
+using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Interfaces;
 using PagedList;
-using MVCENG2.Services;
-using MVCENG2.Models.Siemens;
+using HoffmanWebstatistic.Services;
+using HoffmanWebstatistic.Models.Siemens;
 
-namespace MVCENG2.Controllers
+namespace HoffmanWebstatistic.Controllers
 {
     public class SiemensController : Controller
     {

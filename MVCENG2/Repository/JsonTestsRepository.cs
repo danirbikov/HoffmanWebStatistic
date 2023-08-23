@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MVCENG2.Data;
-using MVCENG2.Interfaces;
-using MVCENG2.Models.General;
-using MVCENG2.Models.Hoffman;
+using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.Hoffman;
 
-namespace MVCENG2.Repository
+namespace HoffmanWebstatistic.Repository
 {
     public class JsonTestsRepository
     {

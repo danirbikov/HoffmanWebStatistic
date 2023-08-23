@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using MVCENG2.Interfaces;
-using MVCENG2.Models;
-using MVCENG2.Models.General;
-using MVCENG2.Repository;
+using HoffmanWebstatistic.Interfaces;
+using HoffmanWebstatistic.Models;
+using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Repository;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
-namespace MVCENG2 { 
+namespace HoffmanWebstatistic { 
     public static class DateFunctions 
     {
 
@@ -31,14 +31,13 @@ namespace MVCENG2 {
         public static int GetCarsCountLastmonth(Stand stand, JsonHeadersRepository _testJsonHeaderRepository)
         {
             DateTime lastMonth = DateTime.Now.AddMonths(-1);
-            return _testJsonHeaderRepository.GetAllElementsForRead()
-                .GroupBy(t => t.VIN)
-                .Select(t => t.FirstOrDefault()).AsEnumerable()
+            return  _testJsonHeaderRepository.GetAllElementsForRead()
                 .Where(k => k.StandId == stand.Id)
-                .Where(x => x.Created >= lastMonth && x.Created <= DateTime.Now)
+                .Where(x => x.Created >= lastMonth)
+                .GroupBy(t => t.VIN)
+                .Select(t => t.FirstOrDefault()).AsEnumerable()               
                 .Count();
+                                      
         }
-
-
     }
 }
