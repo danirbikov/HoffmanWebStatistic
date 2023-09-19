@@ -20,6 +20,7 @@ namespace HoffmanWebstatistic.Controllers
         public TranslateController(TranslateRepository translateRepository)
         {
             _translateRepository = translateRepository;
+            // MALYUTKA BORIS
             
         }
 
