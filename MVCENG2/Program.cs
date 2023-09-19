@@ -22,6 +22,8 @@ try
     builder.Services.AddScoped<JsonValuesRepository>();
     builder.Services.AddScoped<UsersRepository>();
     builder.Services.AddScoped<RolesRepository>();
+    builder.Services.AddScoped<PictureRepository>(); 
+    builder.Services.AddScoped<TranslateRepository>();
 
     builder.Logging.ClearProviders();
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
@@ -49,7 +51,7 @@ try
                     .WithIdentity("RunParserJobTrigger")
                     .StartNow()
                     .WithSimpleSchedule(x =>
-                            x.WithIntervalInSeconds(60)
+                            x.WithIntervalInSeconds(5)
                             .RepeatForever()));
     });
 

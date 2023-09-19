@@ -98,6 +98,7 @@ namespace HoffmanWebstatistic.Services
                     {
                         using (FileStream fs = new FileStream(file, FileMode.OpenOrCreate))
                         {
+
                             Dashboard TestReportFile = (Dashboard)xmlSerializer.Deserialize(fs);
                             string VIN = GetStatisticObjectFromXml(TestReportFile);
                             GetTestReportbjectFromXml(TestReportFile, VIN);

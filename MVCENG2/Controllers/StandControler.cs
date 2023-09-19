@@ -71,7 +71,8 @@ namespace HoffmanWebstatistic.Controllers
 
                     _standRepository.Add(standModel.QNX);
                 }
-                _standRepository.Add(standModel.stand);               
+                _standRepository.Add(standModel.stand);
+                
                 return RedirectToAction("MainMenu");
             }
 

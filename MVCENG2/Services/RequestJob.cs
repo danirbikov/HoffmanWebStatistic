@@ -14,7 +14,7 @@ namespace HoffmanWebstatistic.Services
             _serviceScopeFactory = serviceScopeFactory;
         }
 
-        public Task Execute(IJobExecutionContext context)
+        public async Task Execute(IJobExecutionContext context)
         {
             using (ApplicationDbContext dbContext = new ApplicationDbContext())
             {
@@ -30,7 +30,7 @@ namespace HoffmanWebstatistic.Services
                 {
                     LoggerTXT.LogServices(ex.ToString() + "\n\n");
                 }
-                return null;
+                
             }
         }
     }
