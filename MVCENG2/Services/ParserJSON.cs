@@ -40,10 +40,12 @@ namespace HoffmanWebstatistic.Services
                 {
                     if (stand.StandType == "QNX")
                     {
-                        sourceFilePath = @"\\" + stand.IpAdress + @"\PAtools\vsp0\data\log_data";
+                        InteractionStand interactionStand = new InteractionStand();
+                        sourceFilePath = interactionStand.GetReporFoldertFullPath(stand.IpAdress);
                     }
                     else
                     {
+                        // НУЖНО РЕАЛИЗОВАТЬ!!!!
                         sourceFilePath = "";
                         //sourceFilePath = @"\\" + stand.IpAdress + @"\c\PressureMeaKAMAZ\mes\out";                                                
                     }
@@ -176,7 +178,7 @@ namespace HoffmanWebstatistic.Services
                                 _dbContext.SaveChanges();
 
                                 #endregion
-                                #region Add values from json file
+                               #region Add values from json file
                                 if (jsonTestObject.values != null)
                                     foreach (var jsonValueObject in jsonTestObject.values)
                                     {

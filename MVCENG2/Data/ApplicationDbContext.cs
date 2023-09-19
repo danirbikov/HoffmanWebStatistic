@@ -56,8 +56,12 @@ namespace HoffmanWebstatistic.Data
         public DbSet<ResultsJsonTest> results_json_tests { get; set; }
         public DbSet<ResultsJsonValue> results_json_values { get; set; }
         public DbSet<User> users { get; set; }
-        public DbSet<Role> roles { get; set; }     
+        public DbSet<Role> roles { get; set; }
+        public DbSet<Picture> pictures { get; set; }
+        public DbSet<PicturesPath> pictures_path { get; set; }
         public DbSet<OkNokVal> ok_nok_val { get; set; }
+        public DbSet<Translate> translates { get; set; }
+        public DbSet<TranslatesPath> translates_path { get; set; }
 
     }
 }

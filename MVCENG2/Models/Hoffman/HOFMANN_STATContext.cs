@@ -223,7 +223,7 @@ namespace HoffmanWebstatistic.Models.Hoffman
                     .HasMaxLength(255)
                     .HasColumnName("p_name");
 
-                entity.Property(e => e.Picture1)
+                entity.Property(e => e.PictureBytes)
                     .HasColumnType("image")
                     .HasColumnName("picture");
             });

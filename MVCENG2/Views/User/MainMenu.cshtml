@@ -1,6 +1,10 @@
 ﻿
 @model List<User>
 
+@{
+    string confirmMessage = "Вы уверены, что хотите удалить пользователя?";
+    string confirmScript = "return confirm('" + confirmMessage + "');";
+}
 
 
 <div class="row">
@@ -71,13 +75,13 @@
                                     }
                                     else{
                                         <td class="text-end">
-                                                <a asp-action="EditUser" asp-route-userID=@userInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-                                                    <i class="uil uil-pen">
+                                            <a asp-action="EditUser" asp-route-userID=@userInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+                                                <i class="btn btn-primary">
                                                         Edit
                                                     </i>
                                                 </a>
-                                                <a asp-action="UnactiveUser" asp-route-userID=@userInfo.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
-                                                    <i class="uil uil-trash">
+                                            <a onclick="@confirmScript" asp-action="UnactiveUser" asp-route-userID=@userInfo.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
+                                                <i class="btn btn-danger">
                                                         Del
                                                     </i>
                                                 </a>
