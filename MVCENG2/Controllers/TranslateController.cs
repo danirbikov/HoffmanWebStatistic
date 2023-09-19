@@ -21,6 +21,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             _translateRepository = translateRepository;
             // MALYUTKA BORIS
+            // HI BIBIKOV
             
         }
 
