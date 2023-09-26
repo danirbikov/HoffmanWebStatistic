@@ -43,7 +43,7 @@ namespace HoffmanWebstatistic.Controllers
                 operatorModel.InactiveMark = "FALSE";               
                 _operatorsRepository.Add(operatorModel);
 
-                OperatorsXMLFile.FormationAndSendXMLFileForStands(_standRepository.GetAll().ToList(), _operatorsRepository.GetAll().ToList());
+                OperatorsXMLFile.FormationAndSendXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
                 return RedirectToAction("MainMenu");
             }
             return View();               
@@ -62,7 +62,7 @@ namespace HoffmanWebstatistic.Controllers
         public async Task<IActionResult> EditOperator(Operator operatorObject)
         {
             _operatorsRepository.EditOperator(operatorObject);
-            
+            OperatorsXMLFile.FormationAndSendXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
             return RedirectToAction("MainMenu");
             
         }
@@ -70,6 +70,7 @@ namespace HoffmanWebstatistic.Controllers
         public async Task<IActionResult> UnactiveOperator(int operatorID)
         {
             _operatorsRepository.UnactiveOperator(operatorID);
+            OperatorsXMLFile.FormationAndSendXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
             return RedirectToAction("MainMenu");
             
         }

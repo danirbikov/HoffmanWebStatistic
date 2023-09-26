@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Xml.Serialization;
 using System.Linq.Expressions;
 using ServicesWebAPI.Services;
+using HoffmanWebstatistic.Services;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -15,21 +16,19 @@ namespace HoffmanWebstatistic.Controllers
     public class TranslateController : Controller
     {
         private readonly TranslateRepository _translateRepository;
-        
+        private readonly StandRepository _standRepository;
 
-        public TranslateController(TranslateRepository translateRepository)
+        public TranslateController(TranslateRepository translateRepository, StandRepository standRepository)
         {
             _translateRepository = translateRepository;
-            // MALYUTKA BORIS
-            // HI BIBIKOV
-            
+            _standRepository = standRepository;
         }
 
         public async Task<IActionResult> MainMenu()
-        {          
-            var allTranslates = _translateRepository.GetAll().Take(5).ToList();
-          
-            
+        {
+            var allTranslates = _translateRepository.GetAll();
+
+
             return View(allTranslates);
         }
 
@@ -39,7 +38,7 @@ namespace HoffmanWebstatistic.Controllers
             return View();
         }
 
-       
+
 
         [HttpPost]
         public async Task<IActionResult> ParseTranslationFile(IFormFile file)
@@ -50,38 +49,52 @@ namespace HoffmanWebstatistic.Controllers
                 {
                     await file.CopyToAsync(ms);
                     ms.Seek(0, SeekOrigin.Begin);
-               
+
                     XmlSerializer xmlSerializer = new XmlSerializer(typeof(Entries));
                     Entries deserializeTranslationObject = (Entries)xmlSerializer.Deserialize(ms);
-                    
+
                     foreach (var translate in deserializeTranslationObject.E)
                     {
-                        _translateRepository.Add(new Translate() { EngVariant=translate.key, RusVariant=translate.value});
+                        _translateRepository.Add(new Translate() { EngVariant = translate.key, RusVariant = translate.value });
                     }
-                
+
                 }
             }
             catch (Exception ex)
             {
                 LoggerTXT.LogServices(ex.Message);
             }
-            
-            
-                return RedirectToAction("MainMenu");
+
+
+            return RedirectToAction("MainMenu");
         }
-        
-       
-        
-        [HttpGet]
-        public async Task<IActionResult> DeleteTranslate(string translateEngName)
+
+
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteTranslate([FromBody] string translateEngName)
         {
 
             _translateRepository.Delete(translateEngName);
             return RedirectToAction("MainMenu");
             
         }
-        
-     
+
+        [HttpPost]
+        public IActionResult UpdateAndSave([FromBody] Dictionary<string, string> inputData)
+        { 
+            foreach (var dictionaryElement in inputData)
+            {
+                _translateRepository.AddOrEdit(new Translate() { EngVariant = dictionaryElement.Key, RusVariant = dictionaryElement.Value });
+            }
+            TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();
+
+            
+            translatesXMLFile.FormationAndSendXMLFileForStands(_translateRepository.GetAll(), _standRepository);
+            return Ok();
+        }
+
+
     }
 
 }

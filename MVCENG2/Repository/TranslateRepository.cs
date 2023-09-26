@@ -17,13 +17,11 @@ namespace HoffmanWebstatistic.Repository
             if (!_context.translates.Any(m => m.EngVariant == translate.EngVariant))
             {
                 _context.Add(translate);
-            }
-            
+            }                       
             
             return Save();
 
         }
-
         
         public bool Delete(string translateName)
         {
@@ -34,36 +32,36 @@ namespace HoffmanWebstatistic.Repository
 
         public IEnumerable<Translate> GetAll()
         {
-            return _context.translates.ToList();
-            
+            return _context.translates.ToList();           
         }
-        /*
-        public Translate EditTranslate(string oldTranslateName, string newTranslateName, byte[] fileBytes)
-        {
-            
-            Translate translate = _context.translates.Where(k => k.PName == oldTranslateName).FirstOrDefault();
-            
-            translate.PName=newTranslateName;
 
-            if (fileBytes!=null)
+        public bool AddOrEdit(Translate translate)
+        {
+            if (!_context.translates.Any(m => m.EngVariant == translate.EngVariant))
             {
-                translate.TranslateBytes=fileBytes;
+                if (translate.EngVariant!=null && translate.EngVariant != "")
+                {
+                    _context.Add(translate);
+                }
+                
+                return Save();
             }
+            else
+            {
+                return EditTranslate(translate);
+            }            
+        }
 
-            Save();
-
-            return translate;
+        
+        public bool EditTranslate(Translate translate)
+        {            
+            Translate oldTranslate = _context.translates.Where(k => k.EngVariant == translate.EngVariant).FirstOrDefault();
+            oldTranslate.RusVariant = translate.RusVariant;
             
-
+            return Save();           
         }
 
-        public Translate GetTranslateByName(string translateName)
-        {
-           
-            return _context.translates.Where(k => k.PName == translateName).FirstOrDefault();
-
-        }
-       */
+       
         public bool Save()
         {
             var saved = _context.SaveChanges();

@@ -5,20 +5,16 @@ using System.Xml.Linq;
 using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 using System.Text;
+using HoffmanWebstatistic.Repository;
 
 namespace HoffmanWebstatistic.Services
 {
     public static class OperatorsXMLFile
     {
-#if RELEASE
-        private static readonly string xmlFilePathInStand = @"\PAtools\\vsp0\\data\\lp.xml";
-#else
-        private static readonly string xmlFilePathInStand = @"C:\\PAtools\\lp.xml";
-#endif
 
-        private static readonly string xmlFilePathInProject = @"FormationFiles\\lp.xml";
+        
 
-        public static void FormationAndSendXMLFileForStands(List<Stand> stands, List<Operator> operators)
+        public static void FormationAndSendXMLFileForStands(StandRepository _standRepository, List<Operator> operators)
         {
 
             XDocument xdoc = new XDocument();
@@ -26,7 +22,7 @@ namespace HoffmanWebstatistic.Services
             XElement operatorsXML = new XElement("STANDPOOL");
             int operatorCount = 0;
             
-            foreach (Stand stand in stands) 
+            foreach (Stand stand in _standRepository.GetAll()) 
             {
                 XElement xmlElement = new XElement("stand");
                 XAttribute standNameAttr = new XAttribute("number", CryptData(stand.StandName));
@@ -46,24 +42,18 @@ namespace HoffmanWebstatistic.Services
                     xmlElement2.Add(operatorAgeElem);                    
                 }
                 operatorCount = 0;                
-            }                
-            xdoc.Add(operatorsXML);
-
-            xdoc.Save(xmlFilePathInProject);
-            SendXmlFilesOnStands(stands);
-        }
-
-        public static void SendXmlFilesOnStands (List<Stand> stands)
-        {
-            foreach (string IP in stands.Select(k=>k.IpAdress))
-            {
-#if RELEASE              
-                File.Copy(xmlFilePathInProject, @"\\" + IP + xmlFilePathInStand, true);
-#else
-                File.Copy(xmlFilePathInProject, xmlFilePathInStand, true);
-#endif
             }
+
+            InteractionStand interactionStand = new InteractionStand(_standRepository);
+
+            xdoc.Add(operatorsXML);
+            xdoc.Save(interactionStand.operatorFilePathInProject);
+
+            
+            interactionStand.SendFileOnStands("Operator");
+
         }
+        
 
         private static string CryptData(string str)
         {

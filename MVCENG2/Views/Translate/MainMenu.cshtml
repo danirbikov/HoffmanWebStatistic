@@ -1,12 +1,9 @@
 ﻿@model List<Translate>
 
-@{
-    string confirmMessage = "Вы уверены, что хотите удалить перевод?";
-    string confirmScript = "return confirm('" + confirmMessage + "');";
-}
+
 <div class="row">
     <div class="col-xxl-6">
-        <div class="card" style="width: 800px;">
+        <div class="card" style="width: 800px;" >
             
                 <div class="card-header d-flex justify-content-between align-items-center">
                     <h4 class="header-title mb-0">Translation list</h4>
@@ -17,8 +14,8 @@
 
                         <button type="button" onclick="document.getElementById('parseInputFile').click();" class="btn btn-secondary">Parse translation file</button>
                     </form>
-                                       
-                    <button onclick="document.getElementById('confirmButton').click();" type="submit" class="btn btn-primary">
+                    
+                    <button onclick="addOrEditInputs()" type="submit" class="btn btn-primary">
                         Save and send stand
                     </button>
                 </div>                                                                                    
@@ -26,7 +23,7 @@
 
                 <div class="card-body pt-0">
                 <div class="table-responsive">
-                    <table class="table table-centered table-nowrap table-hover mb-0">
+                    <table id="tableId" class="table table-centered table-hover mb-0" style="max-width: 1400px;">
                         <thead>
                             <tr>
                                 <th scope="col">English variant</th>
@@ -36,26 +33,27 @@
                             </tr>
                         </thead>
                         
-                            <form method="post" asp-action="SaveChange" id="formId1">
+                            <form method="post" asp-action="SaveChange">
                                 
                                     @foreach (var translate in Model)
                                     {                                    
                                         <tr>
-                                            <td id="@(translate.EngVariant+"Id")">
-                                                <span id="text" name="keys">@translate.EngVariant</span>
+                                            <td>
+                                                <span>@translate.EngVariant</span>
                                             </td>
-                                            <td id="@(translate.EngVariant+"Id2")">
-                                                <span id="text" name="values">@translate.RusVariant</span>
+                                
+                                            <td id="@(translate.EngVariant)">
+                                                <span id="@("Text "+translate.EngVariant)">@translate.RusVariant</span>
                                             </td>
                                             
                                             <td>
-                                            <a onclick="makeEditable('@(translate.EngVariant+"Id")')" class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-                                                    <i class="btn btn-primary">
+                                                <a onclick="makeEditable('@(translate.EngVariant)')" class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+                                                    <i class="btn btn-primary btn-md">
                                                         Edit
                                                     </i>
                                                 </a>
-                                                <a onclick="@confirmScript" asp-action="DeleteTranslate" asp-route-translateEngName=@translate.EngVariant class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
-                                                    <i class="btn btn-danger">
+                                    <a onclick="confirmAndDelete(this,'@(translate.EngVariant)')" class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
+                                                    <i class="btn btn-danger btn-md">
                                                         Del
                                                     </i>
                                                 </a>
@@ -76,8 +74,10 @@
 
 
 
-@section Scripts {
+@section Scripts 
+{
     <script>
+
         function addRow() {
             var table = document.getElementById("tableId");
             var newRow = table.insertRow();
@@ -86,56 +86,96 @@
             var cell2 = newRow.insertCell(1);
             var cell3 = newRow.insertCell(2);
 
-            cell1.innerHTML = '<input style="width: 302px;" type="text" class="form-control" name="keys">';
-            cell2.innerHTML = '<input style="width: 302px;" type="text" class="form-control" name="values">';
-            cell3.innerHTML = '<a href="#" class="font-18 text-danger" onclick="deleteRow(this)"><i class="btn btn-danger">Del</i></a>';
+            cell1.innerHTML = '<input style="width: 302px;" type="text" class="form-control-key" name="keys">';
+            cell2.innerHTML = '<input style="width: 302px;" type="text" class="form-control-value" name="values">';
+            cell3.innerHTML = '<a class="font-18 text-danger" onclick="deleteRow(this)"><i class="btn btn-danger">Del</i></a>';
         }
-    </script>
-    <script>
-        function makeEditable(translateId) 
-        {
-            console.log("click");
-            console.log(translateId);
-            var cell = document.getElementById(translateId);
-            console.log(cell);
-            changeLabel(cell);
-            var cell2 = document.getElementById(translateId+"2");
-            changeLabel(cell2, translateId);
-        }
-             
 
-        function changeLabel (cell, translateId)
+        function deleteRow(element) 
         {
-            console.log(cell);
-            var text = document.getElementById("text");
+            var row = element.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+
+        function confirmAndDelete(element,  translateEngVariant)
+        {
+            console.log(element);
+            console.log(translateEngVariant);
+
+            var confirmResult = confirm("Вы уверены, что хотите удалить перевод?");
+
+            if (confirmResult)
+            {
+                deleteRow(element)
+
+                var xhr = new XMLHttpRequest();
+                xhr.open('DELETE', '/Translate/DeleteTranslate', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                console.log(JSON.stringify(translateEngVariant));
+                xhr.send(JSON.stringify(translateEngVariant))
+            }
             
+        }
+
+        function addOrEditInputs()
+        {
+            console.log('click');
+            var inputData = {};
+
+            var inputsKeys = document.querySelectorAll('.form-control-key');
+            var inputsValues = document.querySelectorAll('.form-control-value');
+
+            // поиск по добавленным обьектам
+            for (var i = 0; i < inputsKeys.length; i++) 
+            {
+                var key = inputsKeys[i].value;
+                console.log("add key " + key);
+                var value = inputsValues[i].value;
+                console.log("add id " + value);
+                inputData[key] = value;
+            }
+
+            var inputsUpdate = document.querySelectorAll('.form-control');
+            
+            // поиск по измененным обьектам
+            for (var i = 1; i < inputsUpdate.length; i++) {
+                var value = inputsUpdate[i].value;
+                var id = inputsUpdate[i].id
+                inputData[id] = value;          
+            }
+            console.log(inputData);
+            
+            // Создаем AJAX запрос
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/Translate/UpdateAndSave', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onload = function () {
+                // Код, который будет выполнен после завершения запроса
+                location.reload();
+            };
+            xhr.send(JSON.stringify(inputData))       
+        }
+
+        function makeEditable(translateKey) {
+            var cell = document.getElementById(translateKey);
+            changeLabel(cell, translateKey);
+
+        }
+
+        function changeLabel(cell, translateKey) {
+            var text = document.getElementById("Text " + translateKey);
             // Создаем элемент input и устанавливаем его значение равным тексту
             var input = document.createElement("input");
             input.value = text.textContent;
             input.className = 'form-control';
-            if (translateId.slice(-1)=='2')
-            {
-                input.name = "keys";
-            }
-            else
-            {
-                input.name = "values";
-            }
-            
-            console.log(text.textContent);
+            input.id = translateKey;
 
             // Заменяем текстовый элемент на поле ввода
             cell.replaceChild(input, text);
 
             // Фокусируемся на поле ввода
-            input.focus();
-
-            // Обработчик события потери фокуса, который превратит поле ввода обратно в текстовый элемент
-            //input.addEventListener("blur", function () {
-            //    text.textContent = input.value;
-            //    cell.replaceChild(text, input);
-           // });
-         
+            input.focus();        
     }
+
     </script>
 }
