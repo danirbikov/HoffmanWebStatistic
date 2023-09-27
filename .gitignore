@@ -360,5 +360,5 @@ MigrationBackup/
 .ionide/
 
 # Fody - auto-generated XML schema
-FodyWeavers.xsd
-/MVCENG2/HoffmanWebstatistic.csproj
+#FodyWeavers.xsd
+#/MVCENG2/HoffmanWebstatistic.csproj

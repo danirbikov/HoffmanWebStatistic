@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TestReport>
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+    <div class="table-responsive">
+        @*<table class="table table-striped table-sm">*@
+        <table id="myTable" class="table table-centered table-nowrap table-hover mb-0">
+            <thead>       
+                <tr>           
+                    <th><a asp-action="TestReport">Component</a></th>
+                    <th><a asp-action="TestReport">Result</a></th>
+                    <th><a asp-action="TestReport">LowerLimit</a></th>
+                    <th><a asp-action="TestReport">UpperLimit</a></th>
+                    <th><a asp-action="TestReport">MeasureValue</a></th>
+                    <th><a asp-action="TestReport">Unit</a></th>
+                    <th><a asp-action="TestReport">ResultValue</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                string page_name = Url.Action().Split("/").Last();
+                        @foreach (var stat in Model.Where(p => p.VIN == page_name))
+                {
+                    if (stat.Result == "Ok")
+                    {
+                                <tr>
+                                    <td>@stat.Component</td>
+                                    <td>@stat.Result</td>
+                                    <td>@stat.LowerLimit</td>
+                                    <td>@stat.UpperLimit</td>
+                                    <td>@stat.MeasureValue</td>
+                                    <td>@stat.Unit</td>
+                                    <td>@stat.ResultValue</td>
+                                        
+                                </tr>
+                    }
+                    else
+                    {
+                                <tr style="background-color:rgba(255,0,0,0.35)">
+                                    <td>@stat.Component</td>
+                                    <td>@stat.Result</td>
+                                    <td>@stat.LowerLimit</td>
+                                    <td>@stat.UpperLimit</td>
+                                    <td>@stat.MeasureValue</td>
+                                    <td>@stat.Unit</td>
+                                    <td>@stat.ResultValue</td>
+                                        
+                                </tr>
+                    }
+                }
+
+                }
+
+
+            </tbody>
+        </table>
+    </div>
+}

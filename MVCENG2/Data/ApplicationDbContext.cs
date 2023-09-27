@@ -62,6 +62,7 @@ namespace HoffmanWebstatistic.Data
         public DbSet<OkNokVal> ok_nok_val { get; set; }
         public DbSet<Translate> translates { get; set; }
         public DbSet<TranslatesPath> translates_paths { get; set; }
+        public DbSet<SendingStatusLog> sending_status_log { get; set; }
 
     }
 }

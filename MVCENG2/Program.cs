@@ -25,6 +25,8 @@ try
     builder.Services.AddScoped<PictureRepository>(); 
     builder.Services.AddScoped<TranslateRepository>();
     builder.Services.AddScoped<TranslatePathRepository>();
+    builder.Services.AddScoped<SendingStatusLogRepository>();
+    
 
     builder.Logging.ClearProviders();
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);

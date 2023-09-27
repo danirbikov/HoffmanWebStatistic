@@ -4,6 +4,7 @@ using HoffmanWebstatistic.Repository;
 using ServicesWebAPI.Services;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Claims;
 
 namespace HoffmanWebstatistic.Services
 {   
@@ -28,6 +29,7 @@ namespace HoffmanWebstatistic.Services
 
         private readonly StandRepository _standRepository;
         private readonly TranslatePathRepository _translatePathRepository;
+        private readonly SendingStatusLogRepository _sendingStatusLogRepository;
 
         #region Constructors
         public InteractionStand()
@@ -38,10 +40,11 @@ namespace HoffmanWebstatistic.Services
         {
            _standRepository = standRepository;
         }
-        public InteractionStand(StandRepository standRepository, TranslatePathRepository translatePathRepository)
+        public InteractionStand(StandRepository standRepository, TranslatePathRepository translatePathRepository, SendingStatusLogRepository sendingStatusLogRepository)
         {
             _standRepository = standRepository;
             _translatePathRepository = translatePathRepository;
+            _sendingStatusLogRepository = sendingStatusLogRepository;
         }
         #endregion
 
@@ -144,14 +147,14 @@ namespace HoffmanWebstatistic.Services
 
             
 
-        public void SendFileOnStands(string purposeFile)
+        public void SendFileOnStands(string purposeFile, int userId)
         {
 #if DEBUG
             switch (purposeFile)
             {
                 case "Operator":
                     foreach (string IP in _standRepository.GetAll().Where(k => k.StandType == "QNX").Select(k => k.IpAdress))
-                    {
+                    {                        
                         File.Copy(operatorFilePathInProject, operatorFilePathInStand, true);
                     }
                     break;
@@ -165,36 +168,82 @@ namespace HoffmanWebstatistic.Services
             }
             
 #else
+            string destinationFilePath = "";
+
             switch (purposeFile)
             {
                 case "Operator":
+                    
+                    
                     foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
                     {
+                        destinationFilePath = GetOperatorFolderFullPath(stand.IpAdress);
+                        SendingStatusLog sendingStatusLog = new SendingStatusLog()
+                        {
+                            FileName = Path.GetFileName(operatorFilePathInStand),
+                            FileSize = (int)(new FileInfo(operatorFilePathInProject)).Length / 1024,
+                            SourceFilePath = operatorFilePathInProject,
+                            TargetFilePath = destinationFilePath,
+                            UserId = userId,
+                            Stand = stand,
+                            StandId = stand.Id,
+                            Date = DateTime.Now
+                        };
+
                         try
                         {
-                            File.Copy(operatorFilePathInProject, GetOperatorFolderFullPath(stand.IpAdress), true);
+                            File.Copy(operatorFilePathInProject, destinationFilePath, true);
+
+                            sendingStatusLog.Status = "Ok";
+                            sendingStatusLog.ErrorMessage = "";
+                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);                         
                         }
+
                         catch (Exception ex)
                         {
+                            sendingStatusLog.Status = "Error";
+                            sendingStatusLog.ErrorMessage = ex.Message;
+                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+
                             LoggerTXT.LogServices(ex.Message);
                         }
                     }
                     break;
 
-                case "Translate":
+                case "Translate":                   
                     foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType != "QNX")) 
                     {
+                        TranslatesPath translatePathObject = _translatePathRepository.GetTranslatePathByStandID(stand.Id);
+
+                        destinationFilePath = @"\\" + stand.IpAdress + "\\" + translatePathObject.CPath + "\\" + "translations.xml";
+
+                        SendingStatusLog sendingStatusLog = new SendingStatusLog()
+                        {
+                            FileName = Path.GetFileName(destinationFilePath),
+                            FileSize = (int)(new FileInfo(translationFilePathInProject)).Length / 1024,
+                            SourceFilePath = translationFilePathInProject,
+                            TargetFilePath = destinationFilePath,
+                            UserId = userId,
+                            Stand = stand,
+                            StandId = stand.Id,
+                            Date = DateTime.Now
+                        };
+
                         try
                         {
-                            TranslatesPath translatePathObject = _translatePathRepository.GetTranslatePathByStandID(stand.Id);
+                            SendSingleFileToStandWithAuth(translationFilePathInProject, destinationFilePath, translatePathObject.CLogin, translatePathObject.CPassword);
 
-                            string destiantionPath = @"\\" + stand.IpAdress + "\\" + translatePathObject.CPath + "\\" + "translations.xml";
-
-                            SendSingleFileToStandWithAuth(translationFilePathInProject, destiantionPath, translatePathObject.CLogin, translatePathObject.CPassword);
-                        
+                            sendingStatusLog.Status = "OK";
+                            sendingStatusLog.ErrorMessage = "";
+                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
                         }
-                        catch (Exception ex) 
+
+                        catch (Exception ex)
                         {
+                            sendingStatusLog.Status = "Error";
+                            sendingStatusLog.ErrorMessage = ex.Message;
+
+                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
                             LoggerTXT.LogServices(ex.Message);
                         }
 

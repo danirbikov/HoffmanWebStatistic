@@ -66,6 +66,13 @@ namespace HoffmanWebstatistic.Repository
 
         }
 
+        public User GetUserByName(string userName)
+        {
+            var userObject = _context.users.Where(k => k.ULogin == userName).FirstOrDefault();
+            return userObject;
+
+        }
+
         public bool Save()
         {
             var saved = _context.SaveChanges();

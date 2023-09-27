@@ -14,11 +14,15 @@ namespace HoffmanWebstatistic.Controllers
     {
         private readonly StandRepository _standRepository;
         private readonly OperatorsRepository _operatorsRepository;
+        private readonly UsersRepository _usersRepository;
+        private readonly SendingStatusLogRepository _sendingStatusLogRepository;
 
-        public OperatorController(StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository, OperatorsRepository operatorsRepository)
+        public OperatorController(StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository, OperatorsRepository operatorsRepository, UsersRepository usersRepository, SendingStatusLogRepository sendingStatusLogRepository)
         {
             _standRepository = standRepository;
             _operatorsRepository = operatorsRepository;
+            _usersRepository = usersRepository;
+            _sendingStatusLogRepository = sendingStatusLogRepository;
         }
 
 
@@ -84,8 +88,8 @@ namespace HoffmanWebstatistic.Controllers
         {
             OperatorsXMLFile.FormationXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository);
-            interactionStand.SendFileOnStands("Operator");
+            InteractionStand interactionStand = new InteractionStand(_standRepository, null, _sendingStatusLogRepository);
+            interactionStand.SendFileOnStands("Operator", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
 
         }
     }
