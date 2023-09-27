@@ -22,7 +22,7 @@
             <span class="text-success fw-semibold">@operatorInfo.Created</span>
         </td>
         <td class="text-end">
-            <a onclick="@confirmScript" asp-action="EditOperator" asp-route-operatorID=@operatorInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+            <a asp-action="EditOperator" asp-route-operatorID=@operatorInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
                 <i class="btn btn-primary">
                     Edit
                 </i>

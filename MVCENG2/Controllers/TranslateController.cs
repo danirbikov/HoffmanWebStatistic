@@ -17,11 +17,13 @@ namespace HoffmanWebstatistic.Controllers
     {
         private readonly TranslateRepository _translateRepository;
         private readonly StandRepository _standRepository;
+        private readonly TranslatePathRepository _translatePathRepository;
 
-        public TranslateController(TranslateRepository translateRepository, StandRepository standRepository)
+        public TranslateController(TranslateRepository translateRepository, StandRepository standRepository, TranslatePathRepository translatePathRepository)
         {
             _translateRepository = translateRepository;
             _standRepository = standRepository;
+            _translatePathRepository = translatePathRepository;
         }
 
         public async Task<IActionResult> MainMenu()
@@ -87,10 +89,12 @@ namespace HoffmanWebstatistic.Controllers
             {
                 _translateRepository.AddOrEdit(new Translate() { EngVariant = dictionaryElement.Key, RusVariant = dictionaryElement.Value });
             }
-            TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();
+            TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();        
+            translatesXMLFile.FormationXMLFileForStands(_translateRepository.GetAll());
 
-            
-            translatesXMLFile.FormationAndSendXMLFileForStands(_translateRepository.GetAll(), _standRepository);
+            InteractionStand interactionStand = new InteractionStand(_standRepository, _translatePathRepository);           
+            interactionStand.SendFileOnStands("Translate");
+
             return Ok();
         }
 

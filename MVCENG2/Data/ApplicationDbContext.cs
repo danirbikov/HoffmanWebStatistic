@@ -61,7 +61,7 @@ namespace HoffmanWebstatistic.Data
         public DbSet<PicturesPath> pictures_path { get; set; }
         public DbSet<OkNokVal> ok_nok_val { get; set; }
         public DbSet<Translate> translates { get; set; }
-        public DbSet<TranslatesPath> translates_path { get; set; }
+        public DbSet<TranslatesPath> translates_paths { get; set; }
 
     }
 }

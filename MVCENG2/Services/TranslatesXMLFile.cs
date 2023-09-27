@@ -12,9 +12,8 @@ namespace HoffmanWebstatistic.Services
     public class TranslatesXMLFile
     {       
 
-        public void FormationAndSendXMLFileForStands(IEnumerable<Translate> translates, StandRepository _standRepository)
+        public void FormationXMLFileForStands(IEnumerable<Translate> translates)
         {
-
             XDocument xdoc = new XDocument();
 
             XElement TranslateXML = new XElement("Entries");
@@ -33,15 +32,10 @@ namespace HoffmanWebstatistic.Services
                 TranslateXML.Add(E_Element);                        
             }
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository);
+            InteractionStand interactionStand = new InteractionStand();
 
             xdoc.Add(TranslateXML);
             xdoc.Save(interactionStand.translationFilePathInProject);
-
-            
-            interactionStand.SendFileOnStands("Translate");
-            
-            
 
         }
     }

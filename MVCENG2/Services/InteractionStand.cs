@@ -2,6 +2,7 @@
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
 using ServicesWebAPI.Services;
+using System.Diagnostics;
 using System.Net;
 
 namespace HoffmanWebstatistic.Services
@@ -20,14 +21,15 @@ namespace HoffmanWebstatistic.Services
 
         public readonly string standsPicturePath = @"\PAtools\pictures" ;
         public readonly string operatorFilePathInStand = @"\PAtools\vsp0\data\lp.xml";
-        public readonly string translationFilePathInStand = @"\c\ProgramData\Kratzer Automation AG\PAtools TX\Helix\translations.xml";
 #endif
 
         public readonly string operatorFilePathInProject = @"C:\WebStatistic\FormationFiles\lp.xml";
         public readonly string translationFilePathInProject = @"C:\WebStatistic\FormationFiles\translations.xml";
 
-        public readonly StandRepository _standRepository;
+        private readonly StandRepository _standRepository;
+        private readonly TranslatePathRepository _translatePathRepository;
 
+        #region Constructors
         public InteractionStand()
         {
         }
@@ -36,6 +38,12 @@ namespace HoffmanWebstatistic.Services
         {
            _standRepository = standRepository;
         }
+        public InteractionStand(StandRepository standRepository, TranslatePathRepository translatePathRepository)
+        {
+            _standRepository = standRepository;
+            _translatePathRepository = translatePathRepository;
+        }
+        #endregion
 
         #region GetFullPaths
         public string GetReporFoldertFullPath(string IpAdress)
@@ -48,15 +56,8 @@ namespace HoffmanWebstatistic.Services
             return @"\\" + IpAdress + standsPicturePath;
         }
 
-        public string GetTranslateFolderFullPath(string IpAdress)
-        {
-            var a = @"\\" + IpAdress + translationFilePathInStand;
-            return @"\\" + IpAdress + translationFilePathInStand;
-        }
-
         public string GetOperatorFolderFullPath(string IpAdress)
         {
-            var a = @"\\" + IpAdress + operatorFilePathInStand;
             return @"\\" + IpAdress + operatorFilePathInStand;
         }
         #endregion
@@ -118,49 +119,30 @@ namespace HoffmanWebstatistic.Services
             AddPictureForStands(picture);
         }
 
-        #endregion        
+        #endregion
 
-        public void SendSingleFile(string sourcePath , string IPAddress)
-        {
-            
-            string remoteFolderPath = @"\\10.194.100.18\c\ProgramData\Kratzer Automation AG\PAtools TX\Helix";
+        #region Send single file to stands
+        public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
+        {          
 
-            try
+            string folderPath = Path.GetDirectoryName(destinationPath);
+
+            NetworkCredential credentials = new NetworkCredential(username, password);
+
+            using (Process process = new Process())
             {
-                using (NetworkManager network = new NetworkManager(@"\\" + IPAddress))
-                {
-                    File.Copy(@"C:\WebStatistic\FormationFiles\translations.xml", @"\\10.194.100.18\c\ProgramData\Kratzer Automation AG\PAtools TX\Helix\translations2.xml", true);
-                }
-
-                    LoggerTXT.LogServices("Файл успешно передан в удаленную папку.");
-            }
-            catch (Exception ex)
-            {
-                LoggerTXT.LogServices("Ошибка при передаче файла: " + ex.Message);
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.Arguments = $"net use {folderPath} /delete";
+                process.Start();
             }
 
-
-
-
-            /*
-            try
+            using (new NetworkConnection(folderPath, credentials))
             {
-                string username = "admin";
-                string password = "Kamaz2019";
-
-                NetworkCredential credentials = new NetworkCredential(username, password);
-                CredentialCache credentialCache = new CredentialCache();
-                credentialCache.Add(new Uri(GetTranslateFolderFullPath(IPAddress)), "Basic", credentials);
-
-                File.Copy(sourcePath, GetTranslateFolderFullPath(IPAddress), true);
-                
-            }
-            catch (Exception ex)
-            {
-                LoggerTXT.LogServices(ex.Message);
-            }
-            */
+                System.IO.File.Copy(sourcePath, destinationPath, true);
+            }      
         }
+
+            
 
         public void SendFileOnStands(string purposeFile)
         {
@@ -175,10 +157,8 @@ namespace HoffmanWebstatistic.Services
                     break;
                 case "Translate":                    
                     foreach (string IP in _standRepository.GetAll().Where(k => k.StandType != "QNX").Select(k => k.IpAdress))
-                    {
-                        
-                            File.Copy(translationFilePathInProject, translationFilePathInStand, true);
-                        
+                    {                       
+                       File.Copy(translationFilePathInProject, translationFilePathInStand, true);                        
                     }
                     
                     break;
@@ -188,22 +168,41 @@ namespace HoffmanWebstatistic.Services
             switch (purposeFile)
             {
                 case "Operator":
-                    foreach (string IP in _standRepository.GetAll().Where(k => k.StandType == "QNX").Select(k => k.IpAdress))
+                    foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
                     {
-                        SendSingleFile(operatorFilePathInProject, IP);
-                        //File.Copy(operatorFilePathInProject, GetOperatorFolderFullPath(IP), true);
+                        try
+                        {
+                            File.Copy(operatorFilePathInProject, GetOperatorFolderFullPath(stand.IpAdress), true);
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerTXT.LogServices(ex.Message);
+                        }
                     }
                     break;
+
                 case "Translate":
-                    foreach (string IP in _standRepository.GetAll().Where(k => k.StandType != "QNX").Select(k => k.IpAdress))
+                    foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType != "QNX")) 
                     {
-                        SendSingleFile(translationFilePathInProject, IP);
-                        //File.Copy(translationFilePathInProject, GetTranslateFolderFullPath(IP), true);
+                        try
+                        {
+                            TranslatesPath translatePathObject = _translatePathRepository.GetTranslatePathByStandID(stand.Id);
+
+                            string destiantionPath = @"\\" + stand.IpAdress + "\\" + translatePathObject.CPath + "\\" + "translations.xml";
+
+                            SendSingleFileToStandWithAuth(translationFilePathInProject, destiantionPath, translatePathObject.CLogin, translatePathObject.CPassword);
+                        
+                        }
+                        catch (Exception ex) 
+                        {
+                            LoggerTXT.LogServices(ex.Message);
+                        }
+
                     }
                     break;
             }
 #endif
         }
-
+        #endregion
     }
 }

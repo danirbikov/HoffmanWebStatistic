@@ -24,6 +24,7 @@ try
     builder.Services.AddScoped<RolesRepository>();
     builder.Services.AddScoped<PictureRepository>(); 
     builder.Services.AddScoped<TranslateRepository>();
+    builder.Services.AddScoped<TranslatePathRepository>();
 
     builder.Logging.ClearProviders();
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);

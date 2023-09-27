@@ -6,6 +6,7 @@ using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 using System.Text;
 using HoffmanWebstatistic.Repository;
+using System.Text.RegularExpressions;
 
 namespace HoffmanWebstatistic.Services
 {
@@ -14,14 +15,14 @@ namespace HoffmanWebstatistic.Services
 
         
 
-        public static void FormationAndSendXMLFileForStands(StandRepository _standRepository, List<Operator> operators)
+        public static void FormationXMLFileForStands(StandRepository _standRepository, List<Operator> operators)
         {
 
             XDocument xdoc = new XDocument();
 
             XElement operatorsXML = new XElement("STANDPOOL");
-            int operatorCount = 0;
-            
+            int operatorCount = 0; 
+
             foreach (Stand stand in _standRepository.GetAll()) 
             {
                 XElement xmlElement = new XElement("stand");
@@ -30,33 +31,34 @@ namespace HoffmanWebstatistic.Services
                 operatorsXML.Add(xmlElement);
 
                 foreach (Operator @operator in operators)
-                {
+                {                  
                     operatorCount++;
                     XElement xmlElement2 = new XElement("user");
                     xmlElement.Add(xmlElement2);
                     XAttribute operatorNameAttr = new XAttribute("number", operatorCount);
                     xmlElement2.Add(operatorNameAttr);
-                    XElement operatorCompanyElem = new XElement("login", CryptData(@operator.OLogin));
-                    XElement operatorAgeElem = new XElement("password", CryptData(@operator.OPassword));
-                    xmlElement2.Add(operatorCompanyElem);
-                    xmlElement2.Add(operatorAgeElem);                    
+                    XElement operatorLoginElem = new XElement("login", CryptData(@operator.OLogin));
+                    XElement operatorPasswordElem = new XElement("password", CryptData(@operator.OPassword));
+                    xmlElement2.Add(operatorLoginElem);
+                    xmlElement2.Add(operatorPasswordElem);                    
                 }
                 operatorCount = 0;                
             }
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository);
+            InteractionStand interactionStand = new InteractionStand();
 
             xdoc.Add(operatorsXML);
             xdoc.Save(interactionStand.operatorFilePathInProject);
 
-            
-            interactionStand.SendFileOnStands("Operator");
 
         }
         
 
         private static string CryptData(string str)
         {
+            // Удаляем возможные переносы
+            str = Regex.Replace(str, "[\r\n]+", "");
+
             StringBuilder myString = new StringBuilder();
             byte[] myStrToByteArr = Encoding.ASCII.GetBytes(str);
             int sizeArr = myStrToByteArr.Length;
