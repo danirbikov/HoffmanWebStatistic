@@ -3,6 +3,7 @@ using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
 using ServicesWebAPI.Services;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 using System.Security.Claims;
 
@@ -11,7 +12,7 @@ namespace HoffmanWebstatistic.Services
     public class InteractionStand
     {
 
-#if DEBUG
+#if RELEASE
         public readonly string standsReportPath = @"\PAtools\vsp0\data\log_data";
 
         public readonly string standsPicturePath = @"C:\WebStatistic\Pictures";
@@ -30,6 +31,7 @@ namespace HoffmanWebstatistic.Services
         private readonly StandRepository _standRepository;
         private readonly TranslatePathRepository _translatePathRepository;
         private readonly SendingStatusLogRepository _sendingStatusLogRepository;
+        private readonly PictureRepository _pictureRepository;
 
         #region Constructors
         public InteractionStand()
@@ -40,10 +42,21 @@ namespace HoffmanWebstatistic.Services
         {
            _standRepository = standRepository;
         }
+        public InteractionStand(StandRepository standRepository, SendingStatusLogRepository sendingStatusLogRepository)
+        {
+            _standRepository = standRepository;
+            _sendingStatusLogRepository = sendingStatusLogRepository;
+        }
         public InteractionStand(StandRepository standRepository, TranslatePathRepository translatePathRepository, SendingStatusLogRepository sendingStatusLogRepository)
         {
             _standRepository = standRepository;
             _translatePathRepository = translatePathRepository;
+            _sendingStatusLogRepository = sendingStatusLogRepository;
+        }
+        public InteractionStand(StandRepository standRepository, PictureRepository pictureRepository, SendingStatusLogRepository sendingStatusLogRepository)
+        {
+            _standRepository = standRepository;
+            _pictureRepository = pictureRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
         }
         #endregion
@@ -66,28 +79,34 @@ namespace HoffmanWebstatistic.Services
         #endregion
 
         #region Picture operations
-        public void AddPictureForStands(Picture picture)
+        public void AddPictureForStands(Picture picture, int userId = 15)
         {
             using (MemoryStream stream = new MemoryStream(picture.PictureBytes))
             {
                 using (System.Drawing.Image image = System.Drawing.Image.FromStream(stream))
                 {
-                    
-                    var onlineStands = Pinger.standsPingResult.Where(k => k.Value == true).Select(k=>k.Key).ToList();
+                    string destinationFilePath = "";
 
-                    foreach (string standIP in _standRepository.GetAll().Where(k=>onlineStands.Contains(k.StandName)).Select(k => k.IpAdress))
+                    foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
                     {
+                        destinationFilePath = GetPictureFolderFullPath(stand.IpAdress) + "\\" + picture.PName;
+
                         try
                         {
-#if DEBUG
+#if RELEASE
+                            
                             image.Save(standsPicturePath + @"\\" + picture.PName, System.Drawing.Imaging.ImageFormat.Png);
+                            
 #else
-                            image.Save(GetPictureFolderFullPath(standIP) + @"\\" + picture.PName, System.Drawing.Imaging.ImageFormat.Png);
+                            
+                            image.Save(destinationFilePath, System.Drawing.Imaging.ImageFormat.Png);
+                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Ok", "");                       
 #endif
                         }
-                        catch
+                        catch (Exception ex)
                         {
-                            LoggerTXT.LogServices("Error in connection by path: "+ standsPicturePath + @"\\" + picture.PName);
+                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Error", ex.Message);
+                            LoggerTXT.LogServices("Error in connection by path: "+ standsPicturePath + "\\" + picture.PName);
                         }
                     }
                 } 
@@ -95,37 +114,78 @@ namespace HoffmanWebstatistic.Services
             
         }
 
-        public void DeletePictureFromStands(string pictureName)
+        public void DeletePictureFromStands(string pictureName, int userId = 15)
         {
-            var onlineStands = Pinger.standsPingResult.Where(k => k.Value == true).Select(k => k.Key).ToList();
-            foreach (string standIP in _standRepository.GetAll().Where(k => onlineStands.Contains(k.StandName)).Select(k=>k.IpAdress).ToList())
+           
+            string destinationFilePath ="";
+
+            foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
             {
+                destinationFilePath = GetPictureFolderFullPath(stand.IpAdress) + "\\" + pictureName;
+
                 try
                 {
-#if DEBUG
-                    
+#if RELEASE                    
                     File.Delete(standsPicturePath + "\\" + pictureName);
+
 #else
-                    File.Delete(GetPictureFolderFullPath(standIP)+@"\\" + pictureName);
+                    File.Delete(destinationFilePath);
+                    AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Ok", "");
 #endif
                 }
-                catch
+                catch (Exception ex)
                 {
+                    AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Error", ex.Message);
                     LoggerTXT.LogServices("Error in connection by path: " + standsPicturePath + @"\\" + pictureName);
                 }
             }
         }
 
-        public void EditPictureFromStands(Picture picture)
+        public void EditPictureFromStands(Picture picture, int userId = 15)
         {
-            DeletePictureFromStands(picture.PName);
-            AddPictureForStands(picture);
+            DeletePictureFromStands(picture.PName, userId);
+            AddPictureForStands(picture, userId);
         }
 
-        #endregion
 
-        #region Send single file to stands
-        public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
+
+        public bool ComparePictureFilesOnStand(PictureRepository _pictureRepository)
+        {
+            List<byte[]> picturesInDBHashCodes = new List<byte[]>();
+            List<byte[]> picturesInFileHashCodes = new List<byte[]>();
+            string[] files = Directory.GetFiles("C:\\WebStatistic\\Pictures", "*.png");
+
+            foreach (byte[] byteArr in _pictureRepository.GetAll().Select(k => k.PictureBytes).Take(1))
+            {
+                foreach (string file in files)
+                {
+
+                    byte[] imageBytes = File.ReadAllBytes(file);
+                    picturesInFileHashCodes.Add(Hashing.CalculateFileHash(file));
+
+                }
+                picturesInDBHashCodes.Add(Hashing.CalculateImageHash(byteArr));
+            }
+
+            
+
+
+
+            
+
+            if (picturesInDBHashCodes.OrderBy(x => x).SequenceEqual(picturesInFileHashCodes.OrderBy(x => x)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+            #endregion
+
+            #region Send single file to stands
+            public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
         {          
 
             string folderPath = Path.GetDirectoryName(destinationPath);
@@ -147,9 +207,9 @@ namespace HoffmanWebstatistic.Services
 
             
 
-        public void SendFileOnStands(string purposeFile, int userId)
+        public void SendFileOnStands(string purposeFile, int userId=15)
         {
-#if DEBUG
+#if RELEASE
             switch (purposeFile)
             {
                 case "Operator":
@@ -173,37 +233,22 @@ namespace HoffmanWebstatistic.Services
             switch (purposeFile)
             {
                 case "Operator":
-                    
-                    
+                                        
                     foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
                     {
                         destinationFilePath = GetOperatorFolderFullPath(stand.IpAdress);
-                        SendingStatusLog sendingStatusLog = new SendingStatusLog()
-                        {
-                            FileName = Path.GetFileName(operatorFilePathInStand),
-                            FileSize = (int)(new FileInfo(operatorFilePathInProject)).Length / 1024,
-                            SourceFilePath = operatorFilePathInProject,
-                            TargetFilePath = destinationFilePath,
-                            UserId = userId,
-                            Stand = stand,
-                            StandId = stand.Id,
-                            Date = DateTime.Now
-                        };
+                        
 
                         try
                         {
                             File.Copy(operatorFilePathInProject, destinationFilePath, true);
-
-                            sendingStatusLog.Status = "Ok";
-                            sendingStatusLog.ErrorMessage = "";
-                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);                         
+                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, stand, "Ok", "");
+                     
                         }
 
                         catch (Exception ex)
                         {
-                            sendingStatusLog.Status = "Error";
-                            sendingStatusLog.ErrorMessage = ex.Message;
-                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, stand, "Error", ex.Message);
 
                             LoggerTXT.LogServices(ex.Message);
                         }
@@ -217,33 +262,17 @@ namespace HoffmanWebstatistic.Services
 
                         destinationFilePath = @"\\" + stand.IpAdress + "\\" + translatePathObject.CPath + "\\" + "translations.xml";
 
-                        SendingStatusLog sendingStatusLog = new SendingStatusLog()
-                        {
-                            FileName = Path.GetFileName(destinationFilePath),
-                            FileSize = (int)(new FileInfo(translationFilePathInProject)).Length / 1024,
-                            SourceFilePath = translationFilePathInProject,
-                            TargetFilePath = destinationFilePath,
-                            UserId = userId,
-                            Stand = stand,
-                            StandId = stand.Id,
-                            Date = DateTime.Now
-                        };
 
                         try
                         {
                             SendSingleFileToStandWithAuth(translationFilePathInProject, destinationFilePath, translatePathObject.CLogin, translatePathObject.CPassword);
+                            AddSendStatusLogInDB(destinationFilePath,translationFilePathInProject, userId, stand, "Ok", "");
 
-                            sendingStatusLog.Status = "OK";
-                            sendingStatusLog.ErrorMessage = "";
-                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
                         }
 
                         catch (Exception ex)
                         {
-                            sendingStatusLog.Status = "Error";
-                            sendingStatusLog.ErrorMessage = ex.Message;
-
-                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+                            AddSendStatusLogInDB(destinationFilePath, translationFilePathInProject, userId, stand, "Error", ex.Message);
                             LoggerTXT.LogServices(ex.Message);
                         }
 
@@ -251,6 +280,48 @@ namespace HoffmanWebstatistic.Services
                     break;
             }
 #endif
+        }
+        #endregion
+
+        #region Add send status log
+        public void AddSendStatusLogInDB(string destinationFilePath, string sourceFilePath, int userId, Stand stand, string status, string exceptonMessage)
+        {
+            SendingStatusLog sendingStatusLog = new SendingStatusLog()
+            {
+                FileName = Path.GetFileName(destinationFilePath),
+                FileSize = (int)(new FileInfo(sourceFilePath)).Length / 1024,
+                SourceFilePath = sourceFilePath,
+                TargetFilePath = destinationFilePath,
+                UserId = userId,
+                Stand = stand,
+                StandId = stand.Id,
+                Date = DateTime.Now,
+                Status = status,
+                ErrorMessage = exceptonMessage
+            };
+
+            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+            
+        }
+
+        public void AddSendStatusLogInDB(string fileName, string destinationFilePath, string sourceFilePath, int userId, Stand stand, string status, string exceptonMessage)
+        {
+            SendingStatusLog sendingStatusLog = new SendingStatusLog()
+            {
+                FileName = fileName,
+                FileSize = 0,
+                SourceFilePath = sourceFilePath,
+                TargetFilePath = destinationFilePath,
+                UserId = userId,
+                Stand = stand,
+                StandId = stand.Id,
+                Date = DateTime.Now,
+                Status = status,
+                ErrorMessage = exceptonMessage
+            };
+
+            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+
         }
         #endregion
     }

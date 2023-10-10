@@ -16,7 +16,7 @@ namespace HoffmanWebstatistic.Repository
         public bool AddOrUpdate(SendingStatusLog sendingStatusLog)
         {
             SendingStatusLog sendingStatusLogObject = _context.sending_status_log.Where(k=>k.FileName==sendingStatusLog.FileName && k.Stand.StandName==sendingStatusLog.Stand.StandName).FirstOrDefault();
-            int sendingStatusLogObjectId = sendingStatusLogObject.Id;
+
 
             if (sendingStatusLogObject!=null)
             {

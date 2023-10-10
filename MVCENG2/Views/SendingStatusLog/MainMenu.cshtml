@@ -40,10 +40,10 @@
                                 }
 
 
-                                <h1 class="page-title">
+                                <h2 class="page-title">
                                 <span>@standName:</span>
                                 <span style=@color>@onlineCondition</span>
-                                </h1>
+                                </h2>
 
                                 @foreach (var statusObject in Model.sendingStatusLog.Where(k => k.Stand.StandName == @standName))
                                 {
@@ -51,13 +51,22 @@
                                         <div class="card widget-flat div-hover">
                                             <div class="card-body">                                           
 
-                                                <h3 class="mt-3 mb-3">@statusObject.FileName</h3>
-                                                <h4 class="mb-0 text-muted">File size: @statusObject.FileSize</h4>
-                                                <h4 class="mb-0 text-muted">Source file path: @statusObject.SourceFilePath</h4>
-                                                <h4 class="mb-0 text-muted">Target file path: @statusObject.TargetFilePath</h4>
-                                                <h4 class="mb-0 text-muted">User name: @statusObject.User.ULogin</h4>
-                                                <h4 class="mb-0 text-muted">Status: @statusObject.Status</h4>
-                                                <h4 class="mb-0 text-muted">Error message: @statusObject.ErrorMessage</h4>
+                                                <h2 class="mt-3 mb-3">@statusObject.FileName</h2>
+                                                <h5 class="mb-0 text-muted">File size: @statusObject.FileSize KB</h5>
+                                                <h5 class="mb-0 text-muted">Source file path: @statusObject.SourceFilePath</h5>
+                                                <h5 class="mb-0 text-muted">Target file path: @statusObject.TargetFilePath</h5>
+                                                <h5 class="mb-0 text-muted">User name: @statusObject.User.ULogin</h5>
+                                                <h5 class="mb-0 text-muted">Status:
+                                                    @if (statusObject.Status.ToUpper()=="OK")
+                                                    {
+                                                        <font style="color:rgba(0,255,20,0.52)">@statusObject.Status</font>                                                       
+                                                    }
+                                                    else
+                                                    {
+                                                        <font style="color:rgba(255,0,20,0.52)">@statusObject.Status</font>                                                        
+                                                    }
+                                                </h5>
+                                                <h5 class="mb-0 text-muted">Error message: @statusObject.ErrorMessage</h5>
 
                                             </div>
 

@@ -47,7 +47,7 @@ namespace HoffmanWebstatistic.Controllers
                 operatorModel.InactiveMark = "FALSE";               
                 _operatorsRepository.Add(operatorModel);
 
-                
+                FormationAndSendOperatoFileToStand();
 
                 return RedirectToAction("MainMenu");
             }
@@ -88,7 +88,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             OperatorsXMLFile.FormationXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository, null, _sendingStatusLogRepository);
+            InteractionStand interactionStand = new InteractionStand(_standRepository, _sendingStatusLogRepository);
             interactionStand.SendFileOnStands("Operator", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
 
         }
