@@ -12,7 +12,7 @@ namespace HoffmanWebstatistic.Services
     public class InteractionStand
     {
 
-#if RELEASE
+#if DEBUG
         public readonly string standsReportPath = @"\PAtools\vsp0\data\log_data";
 
         public readonly string standsPicturePath = @"C:\WebStatistic\Pictures";
@@ -93,19 +93,19 @@ namespace HoffmanWebstatistic.Services
 
                         try
                         {
-#if RELEASE
+#if DEBUG
                             
                             image.Save(standsPicturePath + @"\\" + picture.PName, System.Drawing.Imaging.ImageFormat.Png);
                             
 #else
                             
                             image.Save(destinationFilePath, System.Drawing.Imaging.ImageFormat.Png);
-                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Ok", "");                       
+                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Ok", "");                       
 #endif
                         }
                         catch (Exception ex)
                         {
-                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Error", ex.Message);
+                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Error", ex.Message);
                             LoggerTXT.LogServices("Error in connection by path: "+ standsPicturePath + "\\" + picture.PName);
                         }
                     }
@@ -125,7 +125,7 @@ namespace HoffmanWebstatistic.Services
 
                 try
                 {
-#if RELEASE                    
+#if DEBUG                    
                     File.Delete(standsPicturePath + "\\" + pictureName);
 
 #else
@@ -184,7 +184,7 @@ namespace HoffmanWebstatistic.Services
         }
             #endregion
 
-            #region Send single file to stands
+        #region Send single file to stands
             public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
         {          
 
@@ -197,6 +197,7 @@ namespace HoffmanWebstatistic.Services
                 process.StartInfo.FileName = "cmd.exe";
                 process.StartInfo.Arguments = $"net use {folderPath} /delete";
                 process.Start();
+                process.Close();
             }
 
             using (new NetworkConnection(folderPath, credentials))
@@ -209,7 +210,7 @@ namespace HoffmanWebstatistic.Services
 
         public void SendFileOnStands(string purposeFile, int userId=15)
         {
-#if RELEASE
+#if DEBUG
             switch (purposeFile)
             {
                 case "Operator":
@@ -261,7 +262,6 @@ namespace HoffmanWebstatistic.Services
                         TranslatesPath translatePathObject = _translatePathRepository.GetTranslatePathByStandID(stand.Id);
 
                         destinationFilePath = @"\\" + stand.IpAdress + "\\" + translatePathObject.CPath + "\\" + "translations.xml";
-
 
                         try
                         {

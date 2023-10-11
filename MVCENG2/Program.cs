@@ -44,6 +44,8 @@ try
             options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
         });
 
+   
+
     builder.Services.AddQuartz(q =>
     {
         q.UseMicrosoftDependencyInjectionJobFactory();
@@ -60,6 +62,8 @@ try
 
     builder.Services.AddQuartzHostedService(
         q => q.WaitForJobsToComplete = true);
+
+
 
     var app = builder.Build();
     if (!app.Environment.IsDevelopment())

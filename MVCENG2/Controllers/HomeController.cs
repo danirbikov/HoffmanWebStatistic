@@ -19,15 +19,14 @@ namespace HoffmanWebstatistic.Controllers
 
         public HomeController(ILogger<HomeController> logger,StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository)
         {
-            logger.LogInformation("created homeController");
             _standRepository = standRepository;
             _jsonHeadersRepository = jsonHeadersRepository;
-        }
 
-        //[Authorize(Roles = "sa")]
+
+        }
+        [Authorize(Roles = "sa, admin")]
         public async Task<IActionResult> Index()
         {
-            
 
             IEnumerable<Stand> stands = _standRepository.GetAll().Where(k => k.StandType != "QNX"); ;
 

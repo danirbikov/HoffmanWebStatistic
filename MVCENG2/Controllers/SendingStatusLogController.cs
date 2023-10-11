@@ -21,9 +21,10 @@ namespace HoffmanWebstatistic.Controllers
             _sendingStatusLog = sendingStatusLog;
         }
 
+        [Authorize(Roles = "sa, admin")]
         public async Task<IActionResult> MainMenu()
         {            
-            IEnumerable<SendingStatusLog> sendingStatusLogs = _sendingStatusLog.GetAllWithInclude() ;
+            IEnumerable<SendingStatusLog> sendingStatusLogs = _sendingStatusLog.GetAllWithInclude();
             
 
             return View(new SendingStatusLogViewModel()

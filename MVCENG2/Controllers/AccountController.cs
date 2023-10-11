@@ -40,11 +40,13 @@ namespace HoffmanWebstatistic.Controllers
             }
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Register()
         {
             return View();
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterModel model)
@@ -95,6 +97,11 @@ namespace HoffmanWebstatistic.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
+        }
+        public IActionResult AccessDenied()
+        {
+           
+            return View("CustomErrorPage", "Недостаточно прав доступа для просмотра страницы. Обратитесь к администратору сервиса.");
         }
     }
 }
