@@ -90,8 +90,10 @@ namespace HoffmanWebstatistic.Controllers
                     
                     _pictureRepository.Add(picture);
 
+
+                    int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
                     InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository);
-                    interactionStand.AddPictureForStands(picture, _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);                
+                    interactionStand.AddPictureForStands(picture, userId);                
                                                                                              
                 }
                 
@@ -134,9 +136,10 @@ namespace HoffmanWebstatistic.Controllers
                 }
             }
 
-            interactionStand.DeletePictureFromStands(oldPictureName, _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
+            int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            interactionStand.EditPictureFromStands(newPicture, _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
+            interactionStand.DeletePictureFromStands(oldPictureName, userId);
+            interactionStand.EditPictureFromStands(newPicture, userId);
                        
             return RedirectToAction("MainMenu");            
         }
@@ -144,8 +147,10 @@ namespace HoffmanWebstatistic.Controllers
         [HttpGet]
         public async Task<IActionResult> DeletePicture(string pictureName)
         {
+            int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
+
             InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository);
-            interactionStand.DeletePictureFromStands(pictureName, _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
+            interactionStand.DeletePictureFromStands(pictureName, userId);
 
             _pictureRepository.Delete(pictureName);
 

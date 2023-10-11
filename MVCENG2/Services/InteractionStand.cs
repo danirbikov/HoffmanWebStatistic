@@ -196,8 +196,13 @@ namespace HoffmanWebstatistic.Services
             {
                 process.StartInfo.FileName = "cmd.exe";
                 process.StartInfo.Arguments = $"net use {folderPath} /delete";
-                process.Start();
-                process.Close();
+                process.Start();                
+
+                if (!process.HasExited)
+                {
+                    process.Kill();
+                    process.WaitForExit();
+                }
             }
 
             using (new NetworkConnection(folderPath, credentials))
