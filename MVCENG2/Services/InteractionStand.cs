@@ -1,4 +1,5 @@
-﻿using HoffmanWebstatistic.Models.General;
+﻿using HoffmanWebstatistic.ComfortModules;
+using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
 using ServicesWebAPI.Services;
@@ -185,29 +186,19 @@ namespace HoffmanWebstatistic.Services
             #endregion
 
         #region Send single file to stands
-            public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
-        {          
 
-            string folderPath = Path.GetDirectoryName(destinationPath);
+        public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
+        {          
+            string folderPath = Path.GetDirectoryName(destinationPath);           
+
+            CmdOperations cmdOperations = new CmdOperations();
+            cmdOperations.DeleteCredentialForFolder(folderPath);
 
             NetworkCredential credentials = new NetworkCredential(username, password);
 
-            using (Process process = new Process())
-            {
-                process.StartInfo.FileName = "cmd.exe";
-                process.StartInfo.Arguments = $"net use {folderPath} /delete";
-                process.Start();                
-
-                if (!process.HasExited)
-                {
-                    process.Kill();
-                    process.WaitForExit();
-                }
-            }
-
             using (new NetworkConnection(folderPath, credentials))
             {
-                System.IO.File.Copy(sourcePath, destinationPath, true);
+                File.Copy(sourcePath, destinationPath, true);
             }      
         }
 

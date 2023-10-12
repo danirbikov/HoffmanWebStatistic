@@ -34,16 +34,8 @@ namespace HoffmanWebstatistic.Controllers
         {
             var allTranslates = _translateRepository.GetAll();
 
-
             return View(allTranslates);
         }
-
-        [HttpPost]
-        public async Task<IActionResult> SaveChange(List<string> keys, List<string> values)
-        {
-            return View();
-        }
-
 
 
         [HttpPost]
@@ -65,12 +57,14 @@ namespace HoffmanWebstatistic.Controllers
                     }
 
                 }
+
+                formationAndSendTranslateFile();
             }
+
             catch (Exception ex)
             {
                 LoggerTXT.LogServices(ex.Message);
-            }
-
+            }            
 
             return RedirectToAction("MainMenu");
         }
@@ -82,6 +76,9 @@ namespace HoffmanWebstatistic.Controllers
         {
 
             _translateRepository.Delete(translateEngName);
+
+            formationAndSendTranslateFile();
+
             return RedirectToAction("MainMenu");
             
         }
@@ -95,15 +92,20 @@ namespace HoffmanWebstatistic.Controllers
             {
                 _translateRepository.AddOrEdit(new Translate() { EngVariant = dictionaryElement.Key, RusVariant = dictionaryElement.Value });
             }
-            TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();        
-            translatesXMLFile.FormationXMLFileForStands(_translateRepository.GetAll());
-            
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _translatePathRepository, _sendingStatusLogRepository);           
-            interactionStand.SendFileOnStands("Translate", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
+
+            formationAndSendTranslateFile();
 
             return Ok();
         }
 
+        public void formationAndSendTranslateFile()
+        {
+            TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();
+            translatesXMLFile.FormationXMLFileForStands(_translateRepository.GetAll());
+
+            InteractionStand interactionStand = new InteractionStand(_standRepository, _translatePathRepository, _sendingStatusLogRepository);
+            interactionStand.SendFileOnStands("Translate", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
+        }
 
     }
 

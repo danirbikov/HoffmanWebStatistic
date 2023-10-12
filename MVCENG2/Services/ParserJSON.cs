@@ -1,7 +1,13 @@
-﻿using HoffmanWebstatistic.Data;
+﻿using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
+using HoffmanWebstatistic.ComfortModules;
+using HoffmanWebstatistic.Data;
 using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
+using HoffmanWebstatistic.Repository;
+using Microsoft.EntityFrameworkCore;
+using ServicesWebAPI.Services;
 using System.Globalization;
+using System.Net;
 using System.Text;
 using System.Text.Json;
 using static HoffmanWebstatistic.Models.SerializerModels.JSONSerializeModel;
@@ -26,6 +32,7 @@ namespace HoffmanWebstatistic.Services
                 string sourceFilePath;
                 string destFilePath = @"C:\\WebStatistic\\ReportsBackup\\";
                 string fileName;
+                NetworkCredential credentials = new NetworkCredential();
 
                 DirectoryInfo dirInfo = new DirectoryInfo(destFilePath);
                 if (!dirInfo.Exists)
@@ -34,54 +41,67 @@ namespace HoffmanWebstatistic.Services
                 }
 
 
-                var stands = _dbContext.stands.ToList();
+                var stands = _dbContext.stands.ToList().Where(k=>k.StandName!="UNKNOWN");
 
                 foreach (Stand stand in stands)
                 {
+
                     if (stand.StandType == "QNX")
                     {
+                        PicturesPath picturePathObject = _dbContext.pictures_paths.Where(k => k.StandId == stand.Id).FirstOrDefault();
+                        credentials = new NetworkCredential(picturePathObject.CLogin, picturePathObject.CPassword);
+
                         InteractionStand interactionStand = new InteractionStand();
                         sourceFilePath = interactionStand.GetReporFoldertFullPath(stand.IpAdress);
+
                     }
                     else
                     {
-                        // НУЖНО РЕАЛИЗОВАТЬ!!!!
-                        sourceFilePath = "";
-                        //sourceFilePath = @"\\" + stand.IpAdress + @"\c\PressureMeaKAMAZ\mes\out";                                                
+                        
+                        TranslatesPath translatePathObject = _dbContext.translates_paths.Where(k => k.StandId == stand.Id).FirstOrDefault();
+                        credentials = new NetworkCredential(translatePathObject.CLogin, translatePathObject.CPassword);
+
+                        sourceFilePath = @"\\" + stand.IpAdress + @"\c\PressureMeaKAMAZ\mes\out";                                                
                     }
-                              
+
+                    CmdOperations cmdOperations = new CmdOperations();
+                    cmdOperations.DeleteCredentialForFolder(sourceFilePath);
+                    
                     try
                     {
-                        foreach (var fileInStand in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
-                        //foreach (var file in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
+                        using (new NetworkConnection(sourceFilePath, credentials))
                         {
-                            fileName = new FileInfo(fileInStand).Name;
+                            foreach (var fileInStand in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
+                            //foreach (var file in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
+                            {
+                                fileName = new FileInfo(fileInStand).Name;
+                                LoggerTXT.LogServices("Filename "+fileName);
 
-                            if (!File.Exists(destFilePath + fileName))
-                            {
-                                File.Copy(fileInStand, destFilePath + fileName, true);
-                                AddSingleFile(destFilePath + fileName, _dbContext);
-                                //LoggerTXT.LogParser("File " + fileInStand + " parsed!");
-                                _dbContext.SaveChanges();
+                                if (!File.Exists(destFilePath + fileName))
+                                {
+                                    LoggerTXT.LogServices("destfilepath "+destFilePath);                                 
+                                    
+                                    File.Copy(fileInStand, destFilePath + fileName, true);
+                                    AddSingleFile(destFilePath + fileName, _dbContext);
+                                    _dbContext.SaveChanges();
+                                }
+                                else
+                                {
+                                    File.Delete(fileInStand);
+                                }
                             }
-                            else
-                            {
-                                File.Delete(fileInStand);
-                            }
-                        }                      
+                        }
                     }
 
                     catch (Exception ex)
                     {
-
-                        //_logger.LogError("ERROR! Stand's IP " + stand.IpAdress + "\n" + ex);
-
+                        LoggerTXT.LogServices("ERROR! Stand's IP " + stand.IpAdress + $"\n{sourceFilePath}\n" + ex);                        
                     }
                 }
             }
             catch (Exception ex)
             {
-                //_logger.LogError("Error in parser \n" + ex);
+                LoggerTXT.LogServices("Error in parser \n" + ex);
                 
             }
 
@@ -94,7 +114,6 @@ namespace HoffmanWebstatistic.Services
             {
                 try
                 {
-
                     using (FileStream fs = new FileStream(file, FileMode.Open))
                     {
                         #region Check correctness file
@@ -102,17 +121,17 @@ namespace HoffmanWebstatistic.Services
 
                         if (deserializeJSONObject.header.VIN.Length >= 18)
                         {
-                            File.Copy(file, "Incorrect_VIN\\" + fs.Name.Split("\\")[^1], true);
+                            File.Copy(file, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
 
                         }
                         if (deserializeJSONObject.header.orderNum.Length >= 21)
                         {
-                            File.Copy(file, "Incorrect_ProductionNumber\\" + fs.Name.Split("\\")[^1], true);
+                            File.Copy(file, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
 
                         }
                         if (fs.Name.Split("\\")[^1].Contains("ЧЕС"))
                         {
-                            File.Copy(file, "IncorrectFileName\\" + fs.Name.Split("\\")[^1], true);
+                            File.Copy(file, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
                         }
 
                         if (deserializeJSONObject.header.standName.Contains("line"))
@@ -140,10 +159,6 @@ namespace HoffmanWebstatistic.Services
                         }
                         else
                         {
-                            using (StreamWriter writer = new StreamWriter("Logs\\MysteryStands.txt", true, Encoding.Default))
-                            {
-                                writer.WriteLine(deserializeJSONObject.header.standName);
-                            }
                             jsonHeaderModel.StandId = _dbContext.stands.Where(k => k.StandName == "UNKNOWN").FirstOrDefault().Id;
                         }
 
@@ -201,6 +216,7 @@ namespace HoffmanWebstatistic.Services
 
                 catch (Exception ex)
                 {
+                    LoggerTXT.LogServices("ERROR! "+ ex.Message);
                     transaction.Rollback();
                     //_logger.LogError(ex.Message);
                     

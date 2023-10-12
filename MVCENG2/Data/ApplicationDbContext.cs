@@ -58,11 +58,11 @@ namespace HoffmanWebstatistic.Data
         public DbSet<User> users { get; set; }
         public DbSet<Role> roles { get; set; }
         public DbSet<Picture> pictures { get; set; }
-        public DbSet<PicturesPath> pictures_path { get; set; }
         public DbSet<OkNokVal> ok_nok_val { get; set; }
         public DbSet<Translate> translates { get; set; }
         public DbSet<TranslatesPath> translates_paths { get; set; }
         public DbSet<SendingStatusLog> sending_status_log { get; set; }
+        public DbSet<PicturesPath> pictures_paths { get; set; }
 
     }
 }
