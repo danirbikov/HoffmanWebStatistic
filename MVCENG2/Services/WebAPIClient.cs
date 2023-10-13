@@ -54,7 +54,7 @@ namespace HoffmanWebstatistic
             }
             else
             {
-                LoggerTXT.LogWebApiClient("Error: " + response.StatusCode);
+                LoggerTXT.LogError("Error: " + response.StatusCode);
                 return null;
             }            
         }        

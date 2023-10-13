@@ -63,7 +63,7 @@ namespace HoffmanWebstatistic.Controllers
 
             catch (Exception ex)
             {
-                LoggerTXT.LogServices(ex.Message);
+                LoggerTXT.LogError(ex.Message);
             }            
 
             return RedirectToAction("MainMenu");

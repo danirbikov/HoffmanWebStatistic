@@ -9,37 +9,13 @@ namespace ServicesWebAPI.Services
     {
         private static Logger logger = LogManager.GetCurrentClassLogger();
 
-        public static void LogPinger(string logText)
-        {
-            Log(logText);
+        public static void LogError(string logText)
+        {      
+            logger.Error(logText);                       
         }
-
-        public static void LogParser(string logText)
+        public static void LogWarning(string logText)
         {
-            Log(logText);
-        }
-        public static void LogServices(string logText)
-        {
-            Log(logText);
-        }
-        public static void LogWebApiClient(string logText)
-        {
-            Log(logText);
-        }
-
-        private static void Log(string logText)
-        {
-           
-            try
-            {
-                logger.Error(logText);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Ex "+ex);
-            }
-            
-            
+            logger.Warn(logText);
         }
     }
 }

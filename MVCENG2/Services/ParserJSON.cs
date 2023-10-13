@@ -32,6 +32,7 @@ namespace HoffmanWebstatistic.Services
                 string sourceFilePath;
                 string destFilePath = @"C:\\WebStatistic\\ReportsBackup\\";
                 string fileName;
+                string reportException="";
                 NetworkCredential credentials = new NetworkCredential();
 
                 DirectoryInfo dirInfo = new DirectoryInfo(destFilePath);
@@ -69,21 +70,37 @@ namespace HoffmanWebstatistic.Services
                     
                     try
                     {
+
                         using (new NetworkConnection(sourceFilePath, credentials))
                         {
                             foreach (var fileInStand in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
                             //foreach (var file in Directory.GetFileSystemEntries(sourceFilePath, "*.json", SearchOption.AllDirectories))
                             {
                                 fileName = new FileInfo(fileInStand).Name;
-                                LoggerTXT.LogServices("Filename "+fileName);
 
-                                if (!File.Exists(destFilePath + fileName))
+                                if (!(_dbContext.results_json_headers.Where(k => k.JsonFilename == fileName).Any()))
                                 {
-                                    LoggerTXT.LogServices("destfilepath "+destFilePath);                                 
+                                    try
+                                    {
+                                        File.Copy(fileInStand, destFilePath + fileName, true);
+                                        reportException = AddSingleFile(destFilePath + fileName, _dbContext);
+                                        _dbContext.SaveChanges();
+
+                                        if (reportException != "")
+                                        {
+                                            File.Copy(fileInStand, "C:\\WebStatistic\\ErrorBackups\\" + fileName, true);
+                                            LoggerTXT.LogWarning(destFilePath + fileName + " (" + reportException + ")");
+                                            File.Delete(fileInStand);
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        File.Copy(fileInStand, "C:\\WebStatistic\\ErrorBackups\\" + fileName, true);
+                                        LoggerTXT.LogWarning(destFilePath + fileName + " (" + reportException +""+ ex.InnerException + ")");
+                                        File.Delete(fileInStand);
+                                    }
                                     
-                                    File.Copy(fileInStand, destFilePath + fileName, true);
-                                    AddSingleFile(destFilePath + fileName, _dbContext);
-                                    _dbContext.SaveChanges();
+                                    
                                 }
                                 else
                                 {
@@ -95,43 +112,43 @@ namespace HoffmanWebstatistic.Services
 
                     catch (Exception ex)
                     {
-                        LoggerTXT.LogServices("ERROR! Stand's IP " + stand.IpAdress + $"\n{sourceFilePath}\n" + ex);                        
+                        LoggerTXT.LogError("ERROR! Stand's IP " + stand.IpAdress + " " + sourceFilePath+"\n"+ex.Message);                        
                     }
                 }
             }
             catch (Exception ex)
             {
-                LoggerTXT.LogServices("Error in parser \n" + ex);
+                LoggerTXT.LogError("Error in parser \n" + ex);
                 
             }
 
         }
 
 
-        public void AddSingleFile(string file, ApplicationDbContext _dbContext)
+        public string AddSingleFile(string filePath, ApplicationDbContext _dbContext)
         {
             using (var transaction = _dbContext.Database.BeginTransaction())
             {
                 try
                 {
-                    using (FileStream fs = new FileStream(file, FileMode.Open))
+                    using (FileStream fs = new FileStream(filePath, FileMode.Open))
                     {
                         #region Check correctness file
                         Rootobject deserializeJSONObject = JsonSerializer.Deserialize<Rootobject>(fs);
 
                         if (deserializeJSONObject.header.VIN.Length >= 18)
                         {
-                            File.Copy(file, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
+                            File.Copy(filePath, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
 
                         }
                         if (deserializeJSONObject.header.orderNum.Length >= 21)
                         {
-                            File.Copy(file, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
+                            File.Copy(filePath, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
 
                         }
                         if (fs.Name.Split("\\")[^1].Contains("ЧЕС"))
                         {
-                            File.Copy(file, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
+                            File.Copy(filePath, "C:\\WebStatistic\\ReportsBackup\\Errors\\" + fs.Name.Split("\\")[^1], true);
                         }
 
                         if (deserializeJSONObject.header.standName.Contains("line"))
@@ -209,17 +226,21 @@ namespace HoffmanWebstatistic.Services
 
                             }
                         transaction.Commit();
+
+                        
                         #endregion
                     }
+                    return "";
                 }
 
 
                 catch (Exception ex)
                 {
-                    LoggerTXT.LogServices("ERROR! "+ ex.Message);
-                    transaction.Rollback();
-                    //_logger.LogError(ex.Message);
                     
+                    transaction.Rollback();
+                    return ex.Message;
+                    //_logger.LogError(ex.Message);
+
                 }
             }
 

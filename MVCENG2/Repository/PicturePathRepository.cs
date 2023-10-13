@@ -5,19 +5,19 @@ using HoffmanWebstatistic.Models.General;
 
 namespace HoffmanWebstatistic.Repository
 {
-    public class TranslatePathRepository
+    public class PicturePathRepository
     {
         private readonly ApplicationDbContext _context;
-        public TranslatePathRepository(ApplicationDbContext context)
+        public PicturePathRepository(ApplicationDbContext context)
         {
             _context = context;
         }
        
 
-        public TranslatesPath GetTranslatePathByStandID(int standId)
+        public PicturesPath GePicturesPathByStandID(int standId)
         {
 
-            return _context.translates_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
+            return _context.pictures_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
         }
       
     }

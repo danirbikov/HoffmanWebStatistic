@@ -17,13 +17,15 @@ namespace HoffmanWebstatistic.Controllers
         private readonly StandRepository _standRepository;
         private readonly UsersRepository _usersRepository;
         private readonly SendingStatusLogRepository _sendingStatusLogRepository;
+        private readonly PicturePathRepository _picturePathRepository;
 
-        public PictureController(PictureRepository pictureRepository, StandRepository standRepository, UsersRepository usersRepository, SendingStatusLogRepository sendingStatusLogRepository)
+        public PictureController(PictureRepository pictureRepository, StandRepository standRepository, UsersRepository usersRepository, SendingStatusLogRepository sendingStatusLogRepository, PicturePathRepository picturePathRepository)
         {
             _pictureRepository = pictureRepository;
             _standRepository = standRepository;
             _usersRepository = usersRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
+            _picturePathRepository = picturePathRepository;
         }
 
         public async Task<IActionResult> MainMenu()
@@ -92,7 +94,7 @@ namespace HoffmanWebstatistic.Controllers
 
 
                     int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
-                    InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository);
+                    InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
                     interactionStand.AddPictureForStands(picture, userId);                
                                                                                              
                 }
@@ -117,7 +119,7 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPicture(string oldPictureName, string newPictureName, IFormFile file)
         {
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository);
+            InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
             Picture newPicture = new Picture();
 
 
@@ -149,7 +151,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository);
+            InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
             interactionStand.DeletePictureFromStands(pictureName, userId);
 
             _pictureRepository.Delete(pictureName);
