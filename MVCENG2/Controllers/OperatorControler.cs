@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HoffmanWebstatistic.Interfaces;
-using HoffmanWebstatistic.Models.General;
+
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
 using HoffmanWebstatistic.Services;
@@ -16,15 +16,15 @@ namespace HoffmanWebstatistic.Controllers
         private readonly OperatorsRepository _operatorsRepository;
         private readonly UsersRepository _usersRepository;
         private readonly SendingStatusLogRepository _sendingStatusLogRepository;
-        private readonly PicturePathRepository _picturePathRepository;
+        private readonly OperatorPathRepository _operatorPathRepository;
 
-        public OperatorController(StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository, OperatorsRepository operatorsRepository, UsersRepository usersRepository, SendingStatusLogRepository sendingStatusLogRepository, PicturePathRepository picturePathRepository)
+        public OperatorController(StandRepository standRepository, OperatorsRepository operatorsRepository, UsersRepository usersRepository, SendingStatusLogRepository sendingStatusLogRepository, OperatorPathRepository operatorPathRepository)
         {
             _standRepository = standRepository;
             _operatorsRepository = operatorsRepository;
             _usersRepository = usersRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
-            _picturePathRepository = picturePathRepository;
+            _operatorPathRepository = operatorPathRepository;
         }
 
 
@@ -90,7 +90,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             OperatorsXMLFile.FormationXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _sendingStatusLogRepository, _picturePathRepository);
+            InteractionStand interactionStand = new InteractionStand(_standRepository, _sendingStatusLogRepository, _operatorPathRepository);
             interactionStand.SendFileOnStands("Operator", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
 
         }

@@ -1,7 +1,6 @@
 ﻿using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
 using HoffmanWebstatistic.ComfortModules;
 using HoffmanWebstatistic.Data;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -46,24 +45,12 @@ namespace HoffmanWebstatistic.Services
 
                 foreach (Stand stand in stands)
                 {
+                    JsonsPath jsonsPath = _dbContext.jsons_paths.Where(k => k.StandId == stand.Id).FirstOrDefault();
+                    credentials = new NetworkCredential(jsonsPath.CLogin, jsonsPath.CPassword);
 
-                    if (stand.StandType == "QNX")
-                    {
-                        PicturesPath picturePathObject = _dbContext.pictures_paths.Where(k => k.StandId == stand.Id).FirstOrDefault();
-                        credentials = new NetworkCredential(picturePathObject.CLogin, picturePathObject.CPassword);
+                    sourceFilePath = @"\\" + stand.IpAdress + jsonsPath.CPath;
 
-                        InteractionStand interactionStand = new InteractionStand();
-                        sourceFilePath = interactionStand.GetReporFoldertFullPath(stand.IpAdress);
-
-                    }
-                    else
-                    {
-                        
-                        TranslatesPath translatePathObject = _dbContext.translates_paths.Where(k => k.StandId == stand.Id).FirstOrDefault();
-                        credentials = new NetworkCredential(translatePathObject.CLogin, translatePathObject.CPassword);
-
-                        sourceFilePath = @"\\" + stand.IpAdress + @"\c\PressureMeaKAMAZ\mes\out";                                                
-                    }
+                    LoggerTXT.LogError("sourceFile "+sourceFilePath);
 
                     CmdOperations cmdOperations = new CmdOperations();
                     cmdOperations.DeleteCredentialForFolder(sourceFilePath);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using HoffmanWebstatistic.Models.General;
 
 namespace HoffmanWebstatistic.Models.Hoffman
 {

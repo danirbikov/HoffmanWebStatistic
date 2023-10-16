@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Models.Siemens;
 
@@ -63,6 +62,8 @@ namespace HoffmanWebstatistic.Data
         public DbSet<TranslatesPath> translates_paths { get; set; }
         public DbSet<SendingStatusLog> sending_status_log { get; set; }
         public DbSet<PicturesPath> pictures_paths { get; set; }
+        public DbSet<JsonsPath> jsons_paths { get; set; }
+        public DbSet<OperatorsPath> operators_paths { get; set; }
 
     }
 }

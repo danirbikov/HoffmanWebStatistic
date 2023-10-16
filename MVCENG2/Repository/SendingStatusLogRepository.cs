@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HoffmanWebstatistic.Data;
 using HoffmanWebstatistic.Models.Hoffman;
-using HoffmanWebstatistic.Models.General;
 
 namespace HoffmanWebstatistic.Repository
 {

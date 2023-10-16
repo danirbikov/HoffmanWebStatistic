@@ -1,5 +1,4 @@
-﻿using HoffmanWebstatistic.Models.General;
-using HoffmanWebstatistic.Models.Hoffman;
+﻿using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Models.ViewModel
 {

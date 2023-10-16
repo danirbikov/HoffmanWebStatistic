@@ -2,7 +2,6 @@
 using System;
 using HoffmanWebstatistic.Models.SerializerModels;
 using System.Xml.Linq;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 using System.Text;
 using HoffmanWebstatistic.Repository;

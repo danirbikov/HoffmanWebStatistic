@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HoffmanWebstatistic.Interfaces;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
 using HoffmanWebstatistic.Services;
 using HoffmanWebstatistic.Models.ViewModel;
 using Microsoft.VisualBasic;
 using ServicesWebAPI.Services;
+using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Controllers
 {
-   
+
     public class HomeController : Controller
     {
 

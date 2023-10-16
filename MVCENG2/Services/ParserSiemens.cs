@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HoffmanWebstatistic.Interfaces;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.SerializerModels;
 using HoffmanWebstatistic.Models.Siemens;
 using HoffmanWebstatistic.Repository;
 using System.IO;
 using System.Xml.Serialization;
+using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Services
 {

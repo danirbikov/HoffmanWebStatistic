@@ -1,5 +1,4 @@
-﻿
-using HoffmanWebstatistic.Models.General;
+﻿using HoffmanWebstatistic.Models.Hoffman;
 using Quartz;
 using ServicesWebAPI.Services;
 using System.Net.NetworkInformation;

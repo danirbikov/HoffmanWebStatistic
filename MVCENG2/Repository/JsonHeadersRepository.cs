@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HoffmanWebstatistic.Data;
 using HoffmanWebstatistic.Interfaces;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Repository
@@ -75,10 +74,7 @@ namespace HoffmanWebstatistic.Repository
         }
 
         public ResultsJsonHeader GetJsonHeadersById(long id)
-        {
-
-            
-
+        {          
             var returnObject = GetAllElementsForRead().Where(k => k.Id == id)
                 .Include(k => k.ResultsJsonTests).ThenInclude(k => k.ResultsJsonValues)
                 .Include(k => k.ResultsJsonTests).ThenInclude(k => k.Res)

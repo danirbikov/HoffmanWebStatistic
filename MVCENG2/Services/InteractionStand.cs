@@ -1,6 +1,5 @@
 ﻿using AjaxControlToolkit.HtmlEditor.ToolbarButtons;
 using HoffmanWebstatistic.ComfortModules;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
 using ServicesWebAPI.Services;
@@ -10,21 +9,10 @@ using System.Net;
 using System.Security.Claims;
 
 namespace HoffmanWebstatistic.Services
-{   
+{
     public class InteractionStand
     {
 
-#if DEBUG
-        public readonly string standsReportPath = @"\PAtools\vsp0\data\log_data";
-
-        public readonly string standsPicturePath = @"C:\WebStatistic\Pictures";
-        public readonly string operatorFilePathInStand = @"C:\\PAtools\\lp.xml";
-        public readonly string translationFilePathInStand = @"C:\\PAtools\\translations.xml";
-#else
-        public readonly string standsReportPath = @"\PAtools\vsp0\data\log_data";
-
-        public readonly string operatorFilePathInStand = @"\PAtools\vsp0\data\lp.xml";
-#endif
 
         public readonly string operatorFilePathInProject = @"C:\WebStatistic\FormationFiles\lp.xml";
         public readonly string translationFilePathInProject = @"C:\WebStatistic\FormationFiles\translations.xml";
@@ -34,6 +22,7 @@ namespace HoffmanWebstatistic.Services
         private readonly PicturePathRepository _picturePathRepository;
         private readonly SendingStatusLogRepository _sendingStatusLogRepository;
         private readonly PictureRepository _pictureRepository;
+        private readonly OperatorPathRepository _operatorPathRepository;
 
         #region Constructors
         public InteractionStand()
@@ -44,11 +33,11 @@ namespace HoffmanWebstatistic.Services
         {
            _standRepository = standRepository;
         }
-        public InteractionStand(StandRepository standRepository, SendingStatusLogRepository sendingStatusLogRepository, PicturePathRepository picturePathRepository)
+        public InteractionStand(StandRepository standRepository, SendingStatusLogRepository sendingStatusLogRepository, OperatorPathRepository operatorPathRepository)
         {
             _standRepository = standRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
-            _picturePathRepository = picturePathRepository;
+            _operatorPathRepository = operatorPathRepository;
         }
         public InteractionStand(StandRepository standRepository, TranslatePathRepository translatePathRepository, SendingStatusLogRepository sendingStatusLogRepository)
         {
@@ -65,17 +54,7 @@ namespace HoffmanWebstatistic.Services
         }
         #endregion
 
-        #region GetFullPaths
-        public string GetReporFoldertFullPath(string IpAdress)
-        {
-            return @"\\" + IpAdress + standsReportPath;
-        }
 
-        public string GetOperatorFolderFullPath(string IpAdress)
-        {
-            return @"\\" + IpAdress + operatorFilePathInStand;
-        }
-        #endregion
 
         #region Picture operations
         public void AddPictureForStands(Picture picture, int userId = 15)
@@ -94,10 +73,7 @@ namespace HoffmanWebstatistic.Services
 
                         try
                         {
-#if DEBUG                          
-                            image.Save(standsPicturePath + @"\\" + picture.PName, System.Drawing.Imaging.ImageFormat.Png);
-                            
-#else
+
                             CmdOperations cmdOperations = new CmdOperations();
                             cmdOperations.DeleteCredentialForFolder(Path.GetDirectoryName(destinationFilePath));
 
@@ -108,8 +84,7 @@ namespace HoffmanWebstatistic.Services
                                 image.Save(destinationFilePath, System.Drawing.Imaging.ImageFormat.Png);
                                 AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Ok", "");
                             }
-                                                  
-#endif
+                                                 
                         }
                         catch (Exception ex)
                         {
@@ -135,10 +110,6 @@ namespace HoffmanWebstatistic.Services
 
                 try
                 {
-#if DEBUG                    
-                    File.Delete(standsPicturePath + "\\" + pictureName);
-
-#else
                     CmdOperations cmdOperations = new CmdOperations();
                     cmdOperations.DeleteCredentialForFolder(Path.GetDirectoryName(destinationFilePath));
                    
@@ -149,7 +120,6 @@ namespace HoffmanWebstatistic.Services
                         File.Delete(destinationFilePath);
                         AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Ok", "");
                     }                   
-#endif
                 }
                 catch (Exception ex)
                 {
@@ -225,25 +195,7 @@ namespace HoffmanWebstatistic.Services
 
         public void SendFileOnStands(string purposeFile, int userId=15)
         {
-#if DEBUG
-            switch (purposeFile)
-            {
-                case "Operator":
-                    foreach (string IP in _standRepository.GetAll().Where(k => k.StandType == "QNX").Select(k => k.IpAdress))
-                    {                        
-                        File.Copy(operatorFilePathInProject, operatorFilePathInStand, true);
-                    }
-                    break;
-                case "Translate":                    
-                    foreach (string IP in _standRepository.GetAll().Where(k => k.StandType != "QNX").Select(k => k.IpAdress))
-                    {                       
-                       File.Copy(translationFilePathInProject, translationFilePathInStand, true);                        
-                    }
-                    
-                    break;
-            }
-            
-#else
+
             string destinationFilePath = "";
 
             switch (purposeFile)
@@ -252,12 +204,13 @@ namespace HoffmanWebstatistic.Services
                                         
                     foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
                     {
-                        PicturesPath picturePathObject = _picturePathRepository.GePicturesPathByStandID(stand.Id);
-                        destinationFilePath = GetOperatorFolderFullPath(stand.IpAdress);      
+                        OperatorsPath operatorPathObject = _operatorPathRepository.GetOperatorPathByStandID(stand.Id);
+
+                        destinationFilePath = @"\\" + stand.IpAdress + operatorPathObject.CPath;      
                         
                         try
                         {
-                            SendSingleFileToStandWithAuth(operatorFilePathInProject, destinationFilePath, picturePathObject.CLogin, picturePathObject.CPassword);
+                            SendSingleFileToStandWithAuth(operatorFilePathInProject, destinationFilePath, operatorPathObject.CLogin, operatorPathObject.CPassword);
                             AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, stand, "Ok", "");                   
                         }
 
@@ -274,7 +227,7 @@ namespace HoffmanWebstatistic.Services
                     {
                         TranslatesPath translatePathObject = _translatePathRepository.GetTranslatePathByStandID(stand.Id);
 
-                        destinationFilePath = @"\\" + stand.IpAdress + "\\" + translatePathObject.CPath + "\\" + "translations.xml";
+                        destinationFilePath = @"\\" + stand.IpAdress + translatePathObject.CPath;
 
                         try
                         {
@@ -291,7 +244,6 @@ namespace HoffmanWebstatistic.Services
                     }
                     break;
             }
-#endif
         }
         #endregion
 

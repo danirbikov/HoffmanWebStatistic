@@ -1,9 +1,10 @@
-﻿using System;
+﻿using HoffmanWebstatistic.Models.Hoffman;
+using System;
 using System.Collections.Generic;
 
-namespace HoffmanWebstatistic.Models.Hoffman
+namespace HoffmanWebstatistic
 {
-    public partial class PicturesPath
+    public partial class OperatorsPath
     {
         public int Id { get; set; }
         public int StandId { get; set; }

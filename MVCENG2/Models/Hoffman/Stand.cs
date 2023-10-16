@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using HoffmanWebstatistic.Models.Hoffman;
 
-namespace HoffmanWebstatistic.Models.General
+namespace HoffmanWebstatistic.Models.Hoffman
 {
     public partial class Stand
     {
@@ -21,7 +20,7 @@ namespace HoffmanWebstatistic.Models.General
 
         public int Id { get; set; }
         [Required(ErrorMessage = "Некорректное значение")]
-        [MaxLength(50, ErrorMessage ="Длина не должна превышать 50 символов")]
+        [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
         public string StandName { get; set; } = null!;
         [Required(ErrorMessage = "Некорректное значение")]
         [MaxLength(255, ErrorMessage = "Длина не должна превышать 255 символов")]
@@ -39,7 +38,7 @@ namespace HoffmanWebstatistic.Models.General
         [Required(ErrorMessage = "Некорректное значение")]
         [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
         public string Placement { get; set; } = null!;
-        [Required(ErrorMessage = "Некорректное значение")]  
+        [Required(ErrorMessage = "Некорректное значение")]
         public int OSVersionNavigationID { get; set; }
         [Required(ErrorMessage = "Некорректное значение")]
         [MaxLength(50, ErrorMessage = "Длина не должна превышать 50 символов")]
@@ -59,6 +58,10 @@ namespace HoffmanWebstatistic.Models.General
         public virtual ICollection<ResultsJsonHeader> ResultsJsonHeaders { get; set; }
         public virtual ICollection<Sup2mesPath> Sup2mesPaths { get; set; }
         public virtual ICollection<Sup2mesTelegram> Sup2mesTelegrams { get; set; }
+        public virtual ICollection<SendingStatusLog> SendingStatusLogs { get; set; }
         public virtual ICollection<TranslatesPath> TranslatesPaths { get; set; }
+        public virtual ICollection<DtcsPath> DtcsPaths { get; set; }
+        public virtual ICollection<OperatorsPath> OperatorsPaths { get; set; }
+        public virtual ICollection<JsonsPath> JsonsPaths { get; set; }
     }
 }

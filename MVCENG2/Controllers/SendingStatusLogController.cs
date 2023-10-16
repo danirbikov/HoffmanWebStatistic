@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HoffmanWebstatistic.Interfaces;
-using HoffmanWebstatistic.Models.General;
+
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;

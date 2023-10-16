@@ -5,19 +5,18 @@ using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Repository
 {
-    public class PicturePathRepository
+    public class OperatorPathRepository
     {
         private readonly ApplicationDbContext _context;
-        public PicturePathRepository(ApplicationDbContext context)
+        public OperatorPathRepository(ApplicationDbContext context)
         {
             _context = context;
-        }
-       
+        }      
 
-        public PicturesPath GePicturesPathByStandID(int standId)
+        public OperatorsPath GetOperatorPathByStandID(int standId)
         {
 
-            return _context.pictures_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
+            return _context.operators_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
         }
       
     }

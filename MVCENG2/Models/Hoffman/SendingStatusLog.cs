@@ -1,4 +1,4 @@
-﻿using HoffmanWebstatistic.Models.General;
+﻿using HoffmanWebstatistic.Models.Hoffman;
 using System;
 using System.Collections.Generic;
 

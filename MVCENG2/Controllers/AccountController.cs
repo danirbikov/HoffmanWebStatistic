@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using HoffmanWebstatistic.Models.ViewModel;
 using System.Security.Claims;
 using HoffmanWebstatistic.Repository;
-using HoffmanWebstatistic.Models.General;
+using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Controllers
 {

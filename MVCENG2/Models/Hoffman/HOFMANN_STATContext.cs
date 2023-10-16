@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using HoffmanWebstatistic.Models.Hoffman;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using HoffmanWebstatistic.Models.General;
 
-namespace HoffmanWebstatistic.Models.Hoffman
+namespace HoffmanWebstatistic
 {
     public partial class HOFMANN_STATContext : DbContext
     {
@@ -17,11 +17,15 @@ namespace HoffmanWebstatistic.Models.Hoffman
         {
         }
 
+        public virtual DbSet<DtcContent> DtcContents { get; set; } = null!;
+        public virtual DbSet<DtcsPath> DtcsPaths { get; set; } = null!;
+        public virtual DbSet<JsonsPath> JsonsPaths { get; set; } = null!;
         public virtual DbSet<Mes2supPath> Mes2supPaths { get; set; } = null!;
         public virtual DbSet<Mes2supTelegram> Mes2supTelegrams { get; set; } = null!;
         public virtual DbSet<Mes2supTelegramsStand> Mes2supTelegramsStands { get; set; } = null!;
         public virtual DbSet<OkNokVal> OkNokVals { get; set; } = null!;
         public virtual DbSet<Operator> Operators { get; set; } = null!;
+        public virtual DbSet<OperatorsPath> OperatorsPaths { get; set; } = null!;
         public virtual DbSet<OperatorsStand> OperatorsStands { get; set; } = null!;
         public virtual DbSet<OsVersions> OsVersions { get; set; } = null!;
         public virtual DbSet<Picture> Pictures { get; set; } = null!;
@@ -30,6 +34,7 @@ namespace HoffmanWebstatistic.Models.Hoffman
         public virtual DbSet<ResultsJsonTest> ResultsJsonTests { get; set; } = null!;
         public virtual DbSet<ResultsJsonValue> ResultsJsonValues { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
+        public virtual DbSet<SendingStatusLog> SendingStatusLogs { get; set; } = null!;
         public virtual DbSet<Stand> Stands { get; set; } = null!;
         public virtual DbSet<Sup2mesPath> Sup2mesPaths { get; set; } = null!;
         public virtual DbSet<Sup2mesTelegram> Sup2mesTelegrams { get; set; } = null!;
@@ -44,7 +49,7 @@ namespace HoffmanWebstatistic.Models.Hoffman
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-                optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=HOFMANN_STAT;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Data Source=SV-HOFMANN;Initial Catalog=HOFMANN_STAT;Integrated Security=True;");
             }
         }
 
@@ -52,25 +57,94 @@ namespace HoffmanWebstatistic.Models.Hoffman
         {
             modelBuilder.UseCollation("Cyrillic_General_100_CS_AS_KS");
 
+            modelBuilder.Entity<DtcContent>(entity =>
+            {
+                entity.ToTable("dtc_content");
+
+                entity.Property(e => e.Created).HasColumnType("datetime");
+
+                entity.Property(e => e.Fdata)
+                    .HasColumnType("xml")
+                    .HasColumnName("FData");
+
+                entity.Property(e => e.Fname)
+                    .HasMaxLength(255)
+                    .HasColumnName("FName");
+            });
+
+            modelBuilder.Entity<DtcsPath>(entity =>
+            {
+                entity.ToTable("dtcs_paths");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CLogin)
+                    .HasMaxLength(50)
+                    .HasColumnName("CLogin");
+
+                entity.Property(e => e.CPassword)
+                    .HasMaxLength(50)
+                    .HasColumnName("CPassword");
+
+                entity.Property(e => e.CPath)
+                    .HasMaxLength(255)
+                    .HasColumnName("CPath");
+
+                entity.Property(e => e.StandId).HasColumnName("StandID");
+
+                entity.HasOne(d => d.Stand)
+                    .WithMany(p => p.DtcsPaths)
+                    .HasForeignKey(d => d.StandId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_dtcs_paths_stands");
+            });
+
+            modelBuilder.Entity<JsonsPath>(entity =>
+            {
+                entity.ToTable("jsons_paths");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CLogin)
+                    .HasMaxLength(50)
+                    .HasColumnName("CLogin");
+
+                entity.Property(e => e.CPassword)
+                    .HasMaxLength(50)
+                    .HasColumnName("CPassword");
+
+                entity.Property(e => e.CPath)
+                    .HasMaxLength(255)
+                    .HasColumnName("CPath");
+
+                entity.Property(e => e.StandId).HasColumnName("StandID");
+
+                entity.HasOne(d => d.Stand)
+                    .WithMany(p => p.JsonsPaths)
+                    .HasForeignKey(d => d.StandId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_jsons_paths_stands");
+            });
+
             modelBuilder.Entity<Mes2supPath>(entity =>
             {
                 entity.ToTable("mes2sup_paths");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CLogin)
                     .HasMaxLength(50)
-                    .HasColumnName("c_login");
+                    .HasColumnName("CLogin");
 
                 entity.Property(e => e.CPassword)
                     .HasMaxLength(50)
-                    .HasColumnName("c_password");
+                    .HasColumnName("CPassword");
 
                 entity.Property(e => e.CPath)
                     .HasMaxLength(255)
-                    .HasColumnName("c_path");
+                    .HasColumnName("CPath");
 
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
+                entity.Property(e => e.StandId).HasColumnName("StandID");
 
                 entity.HasOne(d => d.Stand)
                     .WithMany(p => p.Mes2supPaths)
@@ -83,42 +157,37 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("mes2sup_telegrams");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.Created)
-                    .HasColumnType("datetime")
-                    .HasColumnName("created");
+                entity.Property(e => e.Created).HasColumnType("datetime");
 
-                entity.Property(e => e.Ordernum)
-                    .HasMaxLength(20)
-                    .HasColumnName("ordernum");
+                entity.Property(e => e.Ordernum).HasMaxLength(20);
 
                 entity.Property(e => e.TgContent)
                     .HasColumnType("xml")
-                    .HasColumnName("tg_content");
+                    .HasColumnName("TGContent");
 
                 entity.Property(e => e.TgFilename)
                     .HasMaxLength(255)
-                    .HasColumnName("tg_filename");
+                    .HasColumnName("TGFilename");
 
                 entity.Property(e => e.Vin)
                     .HasMaxLength(17)
-                    .HasColumnName("vin");
+                    .HasColumnName("VIN");
             });
 
             modelBuilder.Entity<Mes2supTelegramsStand>(entity =>
             {
                 entity.ToTable("mes2sup_telegrams_stands");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
+                entity.Property(e => e.StandId).HasColumnName("StandID");
 
-                entity.Property(e => e.TgId).HasColumnName("tg_id");
+                entity.Property(e => e.TgId).HasColumnName("TGID");
 
                 entity.Property(e => e.Transfered)
                     .HasColumnType("date")
-                    .HasColumnName("transfered")
                     .HasDefaultValueSql("(getdate())");
 
                 entity.HasOne(d => d.Stand)
@@ -138,54 +207,67 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("ok_nok_val");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Val)
-                    .HasMaxLength(3)
-                    .HasColumnName("val");
+                entity.Property(e => e.Val).HasMaxLength(3);
             });
 
             modelBuilder.Entity<Operator>(entity =>
             {
                 entity.ToTable("operators");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.Created)
                     .HasColumnType("datetime")
-                    .HasColumnName("created")
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.InactiveMark)
                     .HasMaxLength(5)
                     .IsUnicode(false)
-                    .HasColumnName("inactive_mark")
                     .HasDefaultValueSql("('FALSE')");
 
                 entity.Property(e => e.ODescription)
                     .HasMaxLength(1024)
-                    .HasColumnName("o_description");
+                    .HasColumnName("ODescription");
 
                 entity.Property(e => e.OLogin)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("o_login");
+                    .HasColumnName("OLogin");
 
                 entity.Property(e => e.OPassword)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("o_password");
+                    .HasColumnName("OPassword");
+            });
+
+            modelBuilder.Entity<OperatorsPath>(entity =>
+            {
+                entity.ToTable("operators_paths");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CLogin)
+                    .HasMaxLength(50)
+                    .HasColumnName("CLogin");
+
+                entity.Property(e => e.CPassword)
+                    .HasMaxLength(50)
+                    .HasColumnName("CPassword");
+
+                entity.Property(e => e.CPath)
+                    .HasMaxLength(255)
+                    .HasColumnName("CPath");
+
+                entity.Property(e => e.StandId).HasColumnName("StandID");
+
+                entity.HasOne(d => d.Stand)
+                    .WithMany(p => p.OperatorsPaths)
+                    .HasForeignKey(d => d.StandId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_operators_paths_standss");
             });
 
             modelBuilder.Entity<OperatorsStand>(entity =>
             {
                 entity.ToTable("operators_stands");
-
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.OperatorId).HasColumnName("operator_id");
-
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
 
                 entity.HasOne(d => d.Operator)
                     .WithMany(p => p.OperatorsStands)
@@ -204,49 +286,43 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("os_versions");
 
-                entity.Property(e => e.ID).HasColumnName("id");
+                entity.Property(e => e.ID).HasColumnName("ID");
 
                 entity.Property(e => e.OSVersion)
                     .HasMaxLength(50)
                     .IsUnicode(false)
-                    .HasColumnName("os_ver");
+                    .HasColumnName("OSVersion");
             });
 
             modelBuilder.Entity<Picture>(entity =>
             {
-                entity.HasKey(e => e.PName)
-                    .HasName("PK_PICTURES");
-
                 entity.ToTable("pictures");
+
+                entity.HasIndex(e => e.PName, "UQ__pictures__42B46083AE6A6C73")
+                    .IsUnique();
+
+                entity.Property(e => e.PictureBytes).HasColumnType("image");
 
                 entity.Property(e => e.PName)
                     .HasMaxLength(255)
-                    .HasColumnName("p_name");
-
-                entity.Property(e => e.PictureBytes)
-                    .HasColumnType("image")
-                    .HasColumnName("picture");
+                    .HasColumnName("PName");
             });
 
             modelBuilder.Entity<PicturesPath>(entity =>
             {
                 entity.ToTable("pictures_paths");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.CLogin)
                     .HasMaxLength(50)
-                    .HasColumnName("c_login");
+                    .HasColumnName("CLogin");
 
                 entity.Property(e => e.CPassword)
                     .HasMaxLength(50)
-                    .HasColumnName("c_password");
+                    .HasColumnName("CPassword");
 
                 entity.Property(e => e.CPath)
                     .HasMaxLength(255)
-                    .HasColumnName("c_path");
-
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
+                    .HasColumnName("CPath");
 
                 entity.HasOne(d => d.Stand)
                     .WithMany(p => p.PicturesPaths)
@@ -259,27 +335,15 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("results_json_headers");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Created).HasColumnType("datetime");
 
-                entity.Property(e => e.Created)
-                    .HasColumnType("datetime")
-                    .HasColumnName("created");
+                entity.Property(e => e.JsonFilename).HasMaxLength(255);
 
-                entity.Property(e => e.JsonFilename)
-                    .HasMaxLength(255)
-                    .HasColumnName("json_filename");
-
-                entity.Property(e => e.OperatorId).HasColumnName("operator_id");
-
-                entity.Property(e => e.Ordernum)
-                    .HasMaxLength(20)
-                    .HasColumnName("ordernum");
-
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
+                entity.Property(e => e.Ordernum).HasMaxLength(20);
 
                 entity.Property(e => e.VIN)
                     .HasMaxLength(17)
-                    .HasColumnName("vin");
+                    .HasColumnName("VIN");
 
                 entity.HasOne(d => d.Operator)
                     .WithMany(p => p.ResultsJsonHeaders)
@@ -298,23 +362,15 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("results_json_tests");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.Created)
-                    .HasColumnType("datetime")
-                    .HasColumnName("created");
-
-                entity.Property(e => e.HeaderId).HasColumnName("header_id");
-
-                entity.Property(e => e.ResId).HasColumnName("res_id");
+                entity.Property(e => e.Created).HasColumnType("datetime");
 
                 entity.Property(e => e.TName)
                     .HasMaxLength(255)
-                    .HasColumnName("t_name");
+                    .HasColumnName("TName");
 
                 entity.Property(e => e.TSpecname)
                     .HasMaxLength(50)
-                    .HasColumnName("t_specname");
+                    .HasColumnName("TSpecname");
 
                 entity.HasOne(d => d.Header)
                     .WithMany(p => p.ResultsJsonTests)
@@ -333,17 +389,13 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("results_json_values");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
-                entity.Property(e => e.TestId).HasColumnName("test_id");
-
                 entity.Property(e => e.VName)
                     .HasMaxLength(100)
-                    .HasColumnName("v_name");
+                    .HasColumnName("VName");
 
                 entity.Property(e => e.VValue)
                     .HasMaxLength(50)
-                    .HasColumnName("v_value");
+                    .HasColumnName("VValue");
 
                 entity.HasOne(d => d.Test)
                     .WithMany(p => p.ResultsJsonValues)
@@ -356,70 +408,80 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("roles");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.RDescription)
                     .HasMaxLength(255)
-                    .HasColumnName("r_description");
+                    .HasColumnName("RDescription");
 
                 entity.Property(e => e.RName)
                     .HasMaxLength(50)
-                    .HasColumnName("r_name")
+                    .HasColumnName("RName")
                     .HasDefaultValueSql("('user')");
+            });
+
+            modelBuilder.Entity<SendingStatusLog>(entity =>
+            {
+                entity.ToTable("sending_status_log");
+
+                entity.Property(e => e.Date).HasColumnType("datetime");
+
+                entity.Property(e => e.FileName).HasMaxLength(255);
+
+                entity.Property(e => e.SourceFilePath).HasMaxLength(255);
+
+                entity.Property(e => e.Status).HasMaxLength(5);
+
+                entity.Property(e => e.TargetFilePath).HasMaxLength(255);
+
+                entity.HasOne(d => d.Stand)
+                    .WithMany(p => p.SendingStatusLogs)
+                    .HasForeignKey(d => d.StandId)
+                    .HasConstraintName("FK__Files__StandName__1DB06A4F");
+
+                entity.HasOne(d => d.User)
+                    .WithMany(p => p.SendingStatusLogs)
+                    .HasForeignKey(d => d.UserId)
+                    .HasConstraintName("FK__Files__UserId__1CBC4616");
             });
 
             modelBuilder.Entity<Stand>(entity =>
             {
                 entity.ToTable("stands");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.DnsName)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("dns_name");
+                    .IsUnicode(false);
 
                 entity.Property(e => e.InactiveMark)
                     .HasMaxLength(5)
                     .IsUnicode(false)
-                    .HasColumnName("inactive_mark")
                     .HasDefaultValueSql("('FALSE')");
 
                 entity.Property(e => e.IpAdress)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("ip_adress");
+                    .IsUnicode(false);
 
-                entity.Property(e => e.OSVersionNavigationID).HasColumnName("os_version");
+                entity.Property(e => e.OSVersionNavigationID).HasColumnName("OSVersionNavigationID");
 
-                entity.Property(e => e.Placement)
-                    .HasMaxLength(50)
-                    .HasColumnName("placement");
+                entity.Property(e => e.Placement).HasMaxLength(50);
 
                 entity.Property(e => e.Project)
                     .HasMaxLength(20)
                     .IsUnicode(false)
-                    .HasColumnName("project")
                     .HasDefaultValueSql("('HOFMANN')");
 
                 entity.Property(e => e.StandName)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("stand_name");
+                    .IsUnicode(false);
 
-                entity.Property(e => e.StandNameDescription)
-                    .HasMaxLength(255)
-                    .HasColumnName("stand_name_description");
+                entity.Property(e => e.StandNameDescription).HasMaxLength(255);
 
                 entity.Property(e => e.StandType)
                     .HasMaxLength(50)
-                    .HasColumnName("stand_type")
                     .HasDefaultValueSql("('UNKNOWN')");
 
                 entity.Property(e => e.WorkplaceMes)
                     .HasMaxLength(255)
-                    .IsUnicode(false)
-                    .HasColumnName("workplace_mes");
+                    .IsUnicode(false);
 
                 entity.HasOne(d => d.OsVersionNavigation)
                     .WithMany(p => p.Stands)
@@ -432,21 +494,21 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("sup2mes_paths");
 
-                entity.Property(e => e.Id).HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CLogin)
                     .HasMaxLength(50)
-                    .HasColumnName("c_login");
+                    .HasColumnName("CLogin");
 
                 entity.Property(e => e.CPassword)
                     .HasMaxLength(50)
-                    .HasColumnName("c_password");
+                    .HasColumnName("CPassword");
 
                 entity.Property(e => e.CPath)
                     .HasMaxLength(255)
-                    .HasColumnName("c_path");
+                    .HasColumnName("CPath");
 
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
+                entity.Property(e => e.StandId).HasColumnName("StandID");
 
                 entity.HasOne(d => d.Stand)
                     .WithMany(p => p.Sup2mesPaths)
@@ -461,28 +523,22 @@ namespace HoffmanWebstatistic.Models.Hoffman
 
                 entity.Property(e => e.Id).HasColumnName("id");
 
-                entity.Property(e => e.Created)
-                    .HasColumnType("datetime")
-                    .HasColumnName("created");
+                entity.Property(e => e.Created).HasColumnType("datetime");
 
-                entity.Property(e => e.Ordernum)
-                    .HasMaxLength(20)
-                    .HasColumnName("ordernum");
+                entity.Property(e => e.Ordernum).HasMaxLength(20);
 
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
+                entity.Property(e => e.StandId).HasColumnName("StandID");
 
                 entity.Property(e => e.TgContent)
                     .HasColumnType("xml")
-                    .HasColumnName("tg_content");
+                    .HasColumnName("TGContent");
 
                 entity.Property(e => e.TgFilename)
                     .HasMaxLength(255)
                     .IsUnicode(false)
-                    .HasColumnName("tg_filename");
+                    .HasColumnName("TGFilename");
 
-                entity.Property(e => e.Vin)
-                    .HasMaxLength(17)
-                    .HasColumnName("vin");
+                entity.Property(e => e.Vin).HasMaxLength(17);
 
                 entity.HasOne(d => d.Stand)
                     .WithMany(p => p.Sup2mesTelegrams)
@@ -498,34 +554,26 @@ namespace HoffmanWebstatistic.Models.Hoffman
 
                 entity.ToTable("translates");
 
-                entity.Property(e => e.EngVariant)
-                    .HasMaxLength(255)
-                    .HasColumnName("eng_variant");
+                entity.Property(e => e.EngVariant).HasMaxLength(255);
 
-                entity.Property(e => e.RusVariant)
-                    .HasMaxLength(255)
-                    .HasColumnName("rus_variant");
+                entity.Property(e => e.RusVariant).HasMaxLength(255);
             });
 
             modelBuilder.Entity<TranslatesPath>(entity =>
             {
                 entity.ToTable("translates_paths");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.CLogin)
                     .HasMaxLength(50)
-                    .HasColumnName("c_login");
+                    .HasColumnName("CLogin");
 
                 entity.Property(e => e.CPassword)
                     .HasMaxLength(50)
-                    .HasColumnName("c_password");
+                    .HasColumnName("CPassword");
 
                 entity.Property(e => e.CPath)
                     .HasMaxLength(255)
-                    .HasColumnName("c_path");
-
-                entity.Property(e => e.StandId).HasColumnName("stand_id");
+                    .HasColumnName("CPath");
 
                 entity.HasOne(d => d.Stand)
                     .WithMany(p => p.TranslatesPaths)
@@ -538,28 +586,22 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("users");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.Created)
                     .HasColumnType("datetime")
-                    .HasColumnName("created")
                     .HasDefaultValueSql("(getdate())");
 
                 entity.Property(e => e.InactiveMark)
                     .HasMaxLength(5)
                     .IsUnicode(false)
-                    .HasColumnName("inactive_mark")
                     .HasDefaultValueSql("('FALSE')");
-
-                entity.Property(e => e.RoleId).HasColumnName("role_id");
 
                 entity.Property(e => e.ULogin)
                     .HasMaxLength(50)
-                    .HasColumnName("u_login");
+                    .HasColumnName("ULogin");
 
                 entity.Property(e => e.UPassword)
                     .HasMaxLength(50)
-                    .HasColumnName("u_password");
+                    .HasColumnName("UPassword");
 
                 entity.HasOne(d => d.Role)
                     .WithMany(p => p.Users)
@@ -572,20 +614,13 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("xsd_schemas");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.Created)
                     .HasColumnType("datetime")
-                    .HasColumnName("created")
                     .HasDefaultValueSql("(getdate())");
 
-                entity.Property(e => e.PurposeId).HasColumnName("purpose_id");
+                entity.Property(e => e.XsdDescription).HasMaxLength(255);
 
-                entity.Property(e => e.XsdDescription)
-                    .HasMaxLength(255)
-                    .HasColumnName("xsd_description");
-
-                entity.Property(e => e.XsdSchema1).HasColumnName("xsd_schema");
+                entity.Property(e => e.XsdSchema1).HasColumnName("XsdSchema");
 
                 entity.HasOne(d => d.Purpose)
                     .WithMany(p => p.XsdSchemas)
@@ -598,12 +633,9 @@ namespace HoffmanWebstatistic.Models.Hoffman
             {
                 entity.ToTable("xsd_schemas_purpose");
 
-                entity.Property(e => e.Id).HasColumnName("id");
-
                 entity.Property(e => e.XsdPurpose)
                     .HasMaxLength(50)
-                    .IsUnicode(false)
-                    .HasColumnName("xsd_purpose");
+                    .IsUnicode(false);
             });
 
             OnModelCreatingPartial(modelBuilder);

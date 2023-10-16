@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using HoffmanWebstatistic.Interfaces;
 using HoffmanWebstatistic.Models;
-using HoffmanWebstatistic.Models.General;
 using HoffmanWebstatistic.Repository;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using HoffmanWebstatistic.Models.Hoffman;
 
-namespace HoffmanWebstatistic { 
+namespace HoffmanWebstatistic
+{
     public static class DateFunctions 
     {
 

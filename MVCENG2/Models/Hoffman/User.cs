@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using HoffmanWebstatistic.Models.Hoffman;
 
-namespace HoffmanWebstatistic.Models.General
+namespace HoffmanWebstatistic.Models.Hoffman
 {
     public partial class User
     {
@@ -14,5 +13,7 @@ namespace HoffmanWebstatistic.Models.General
         public string InactiveMark { get; set; } = null!;
 
         public virtual Role Role { get; set; } = null!;
+
+        public virtual ICollection<SendingStatusLog> SendingStatusLogs { get; set; }
     }
 }
