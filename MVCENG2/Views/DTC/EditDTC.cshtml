@@ -1,0 +1,23 @@
+﻿@model DtcContent
+
+<form method="post" enctype="multipart/form-data" asp-action="EditDTC">
+    
+    <div class="form-group">       
+        <input class="form-control" name="oldDTCName" style="display:none;" placeholder="login" value=@Model.Fname>
+    </div>
+
+    <div class="form-group">
+        <label>DTC Name</label>
+        <input class="form-control" name="newDTCName" placeholder="login" value=@Model.Fname>
+    </div>
+
+    <div class="form-group">
+        <label>@Model.Fname</label>
+        <input type="file" name="file" class="form-control-file" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
+
+

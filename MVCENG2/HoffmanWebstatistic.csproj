@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Parser\**" />
+    <Compile Remove="Views\Siemens\**" />
     <Content Remove="Parser\**" />
+    <Content Remove="Views\Siemens\**" />
     <EmbeddedResource Remove="Parser\**" />
+    <EmbeddedResource Remove="Views\Siemens\**" />
     <None Remove="Parser\**" />
+    <None Remove="Views\Siemens\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,6 +23,7 @@
     <Compile Remove="Interfaces\IDateFunctions.cs" />
     <Compile Remove="Interfaces\IParser.cs" />
     <Compile Remove="Models\Dashboard.cs" />
+    <Compile Remove="Services\ParserJSON_backup.cs" />
   </ItemGroup>
 
   <ItemGroup>

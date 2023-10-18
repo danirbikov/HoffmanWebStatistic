@@ -19,6 +19,11 @@ namespace HoffmanWebstatistic.Repository
 
             return _context.translates_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
         }
-      
+        public List<TranslatesPath> GetAll()
+        {
+
+            return _context.translates_paths.ToList();
+        }
+
     }
 }

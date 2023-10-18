@@ -28,11 +28,13 @@ try
     builder.Services.AddScoped<SendingStatusLogRepository>();
     builder.Services.AddScoped<PicturePathRepository>();
     builder.Services.AddScoped<OperatorPathRepository>();
+    builder.Services.AddScoped<DTCPathRepository>();
+    builder.Services.AddScoped<DTCContentRepository>();
 
 
 
 
-builder.Logging.ClearProviders();
+    builder.Logging.ClearProviders();
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
     builder.Host.UseNLog();
    

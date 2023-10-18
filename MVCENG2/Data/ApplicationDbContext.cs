@@ -64,6 +64,8 @@ namespace HoffmanWebstatistic.Data
         public DbSet<PicturesPath> pictures_paths { get; set; }
         public DbSet<JsonsPath> jsons_paths { get; set; }
         public DbSet<OperatorsPath> operators_paths { get; set; }
+        public DbSet<DtcsPath> dtcs_paths { get; set; }
+        public DbSet<DtcContent> dtc_content { get; set; }
 
     }
 }

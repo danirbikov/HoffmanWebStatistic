@@ -2,11 +2,13 @@
 using HoffmanWebstatistic.ComfortModules;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
+using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using ServicesWebAPI.Services;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Security.Claims;
+using System.Xml;
 
 namespace HoffmanWebstatistic.Services
 {
@@ -23,6 +25,8 @@ namespace HoffmanWebstatistic.Services
         private readonly SendingStatusLogRepository _sendingStatusLogRepository;
         private readonly PictureRepository _pictureRepository;
         private readonly OperatorPathRepository _operatorPathRepository;
+        private readonly DTCContentRepository _dtcContentRepository;
+        private readonly DTCPathRepository _dtcPathRepository;
 
         #region Constructors
         public InteractionStand()
@@ -52,6 +56,13 @@ namespace HoffmanWebstatistic.Services
             _sendingStatusLogRepository = sendingStatusLogRepository;
             _picturePathRepository = picturePathRepository;
         }
+        public InteractionStand(StandRepository standRepository, DTCContentRepository dtcContentRepository, SendingStatusLogRepository sendingStatusLogRepository, DTCPathRepository dtcPathRepository)
+        {
+            _standRepository = standRepository;
+            _dtcContentRepository = dtcContentRepository;
+            _sendingStatusLogRepository = sendingStatusLogRepository;
+            _dtcPathRepository = dtcPathRepository;
+        }
         #endregion
 
 
@@ -64,31 +75,30 @@ namespace HoffmanWebstatistic.Services
                 using (System.Drawing.Image image = System.Drawing.Image.FromStream(stream))
                 {
                     string destinationFilePath = "";
-                    
-                    foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
+                    foreach (var picturePathObject in _picturePathRepository.GetAll())                   
                     {
-                        PicturesPath picturePathObject = _picturePathRepository.GePicturesPathByStandID(stand.Id);
 
-                        destinationFilePath = @"\\" + stand.IpAdress + picturePathObject.CPath + "\\" + picture.PName;
+                        Stand standObject = _standRepository.GetStandByID(picturePathObject.StandId);
+                        destinationFilePath = @"\\" + standObject.IpAdress + picturePathObject.CPath + "\\" + picture.PName;
+                        string fileDirectory = Path.GetDirectoryName(destinationFilePath);
 
                         try
-                        {
-
+                        {                            
                             CmdOperations cmdOperations = new CmdOperations();
-                            cmdOperations.DeleteCredentialForFolder(Path.GetDirectoryName(destinationFilePath));
+                            cmdOperations.DeleteCredentialForFolder(fileDirectory);
 
                             NetworkCredential credentials = new NetworkCredential(picturePathObject.CLogin, picturePathObject.CPassword);
 
-                            using (new NetworkConnection(Path.GetDirectoryName(destinationFilePath), credentials))
+                            using (new NetworkConnection(fileDirectory, credentials))
                             {
                                 image.Save(destinationFilePath, System.Drawing.Imaging.ImageFormat.Png);
-                                AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Ok", "");
+                                AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, standObject, "Ok", "");
                             }
                                                  
                         }
                         catch (Exception ex)
                         {
-                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Error", ex.Message);
+                            AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, standObject, "Error", ex.Message);
                             LoggerTXT.LogError("Error in connection by path: "+ destinationFilePath);
                         }
                     }
@@ -101,12 +111,11 @@ namespace HoffmanWebstatistic.Services
         {
            
             string destinationFilePath ="";
-
-            foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
+            foreach (var picturePathObject in _picturePathRepository.GetAll())      
             {
-                PicturesPath picturePathObject = _picturePathRepository.GePicturesPathByStandID(stand.Id);
-
-                destinationFilePath = @"\\" + stand.IpAdress + picturePathObject.CPath + "\\" + pictureName;
+                Stand standObject = _standRepository.GetStandByID(picturePathObject.StandId);
+                
+                destinationFilePath = @"\\" + standObject.IpAdress + picturePathObject.CPath + "\\" + pictureName;
 
                 try
                 {
@@ -118,12 +127,12 @@ namespace HoffmanWebstatistic.Services
                     using (new NetworkConnection(Path.GetDirectoryName(destinationFilePath), credentials))
                     {
                         File.Delete(destinationFilePath);
-                        AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Ok", "");
+                        AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, standObject, "Ok", "");
                     }                   
                 }
                 catch (Exception ex)
                 {
-                    AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, stand, "Error", ex.Message);
+                    AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, standObject, "Error", ex.Message);
                     LoggerTXT.LogError("Error in connection by path: " + destinationFilePath);
                 }
             }
@@ -172,8 +181,92 @@ namespace HoffmanWebstatistic.Services
         }
         */
 
-            #endregion
+        #endregion
+        
+        #region DTC operations
+        
+        public void AddDTCForStands(DtcContent dtc, int userId = 15)
+        {
+            string destinationFilePath = "";
+            foreach (var dtcPathObject in _dtcPathRepository.GetAll())
+            {
+                var standObject = _standRepository.GetStandByID(dtcPathObject.StandId);
 
+                destinationFilePath = @"\\" + standObject.IpAdress + dtcPathObject.CPath + "\\" + dtc.Fname;
+                string fileDirectory = Path.GetDirectoryName(destinationFilePath);
+
+                try
+                {
+                    CmdOperations cmdOperations = new CmdOperations();
+                    cmdOperations.DeleteCredentialForFolder(fileDirectory);
+
+                    NetworkCredential credentials = new NetworkCredential(dtcPathObject.CLogin, dtcPathObject.CPassword);
+
+                    using (new NetworkConnection(fileDirectory, credentials))
+                    {                      
+                        string xmlString = dtc.Fdata;
+
+                        if (xmlString.Contains("encoding=\"UTF-16\"?"))
+                        {
+                            xmlString = xmlString.Replace("encoding=\"UTF-16\"?", "encoding=\"UTF-8\"?");
+                        }
+
+                        XmlDocument xmlDoc = new XmlDocument();
+                        xmlDoc.LoadXml(xmlString);
+                        xmlDoc.Save(destinationFilePath);
+
+                        AddSendStatusLogInDB("Add DTC in stand", destinationFilePath, "DATABASE", userId, standObject, "Ok", "");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    AddSendStatusLogInDB("Add DTC in stand", destinationFilePath, "DATABASE", userId, standObject, "Error", ex.Message);
+                    LoggerTXT.LogError("Error in connection by path: " + destinationFilePath);
+                }
+            }
+        }
+
+        public void DeleteDTCFromStands(string dtcName, int userId = 15)
+        {
+
+            string destinationFilePath = "";
+            foreach (var dtcPathObject in _dtcPathRepository.GetAll())
+            {
+                var standObject = _standRepository.GetStandByID(dtcPathObject.StandId);
+
+                destinationFilePath = @"\\" + standObject.IpAdress + dtcPathObject.CPath + "\\" + dtcName;
+                try
+                {
+                    CmdOperations cmdOperations = new CmdOperations();
+                    cmdOperations.DeleteCredentialForFolder(Path.GetDirectoryName(destinationFilePath));
+
+                    NetworkCredential credentials = new NetworkCredential(dtcPathObject.CLogin, dtcPathObject.CPassword);
+
+                    using (new NetworkConnection(Path.GetDirectoryName(destinationFilePath), credentials))
+                    {
+                        File.Delete(destinationFilePath);
+
+                        AddSendStatusLogInDB("Delete DTC in stand", destinationFilePath, "DATABASE", userId, standObject, "Ok", "");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+                    AddSendStatusLogInDB("Delete DTC in stand", destinationFilePath, "DATABASE", userId, standObject, "Error", ex.Message);
+                    LoggerTXT.LogError("Error in connection by path: " + destinationFilePath);
+                }
+            }
+        }
+
+        public void EditDTCFromStands(DtcContent dtc, int userId = 15)
+        {
+            DeleteDTCFromStands(dtc.Fname, userId);
+            AddDTCForStands(dtc, userId);
+        }
+        
+        #endregion
+        
         #region Send single file to stands
 
         public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
@@ -201,43 +294,43 @@ namespace HoffmanWebstatistic.Services
             switch (purposeFile)
             {
                 case "Operator":
-                                        
-                    foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType == "QNX"))
+                                            
+                    foreach(var operatorPathObject in _operatorPathRepository.GetAll())
                     {
-                        OperatorsPath operatorPathObject = _operatorPathRepository.GetOperatorPathByStandID(stand.Id);
+                        Stand standObject = _standRepository.GetStandByID(operatorPathObject.StandId);
 
-                        destinationFilePath = @"\\" + stand.IpAdress + operatorPathObject.CPath;      
+                        destinationFilePath = @"\\" + standObject.IpAdress + operatorPathObject.CPath;      
                         
                         try
                         {
                             SendSingleFileToStandWithAuth(operatorFilePathInProject, destinationFilePath, operatorPathObject.CLogin, operatorPathObject.CPassword);
-                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, stand, "Ok", "");                   
+                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, standObject, "Ok", "");                   
                         }
 
                         catch (Exception ex)
                         {
-                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, stand, "Error", ex.Message);
+                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, standObject, "Error", ex.Message);
                             LoggerTXT.LogError(ex.Message);
                         }
                     }
                     break;
 
-                case "Translate":                   
-                    foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandType != "QNX")) 
+                case "Translate":
+                    foreach (var translatePathObject in _translatePathRepository.GetAll())                  
                     {
-                        TranslatesPath translatePathObject = _translatePathRepository.GetTranslatePathByStandID(stand.Id);
+                        Stand standObject = _standRepository.GetStandByID(translatePathObject.StandId);
 
-                        destinationFilePath = @"\\" + stand.IpAdress + translatePathObject.CPath;
+                        destinationFilePath = @"\\" + standObject.IpAdress + translatePathObject.CPath;
 
                         try
                         {
                             SendSingleFileToStandWithAuth(translationFilePathInProject, destinationFilePath, translatePathObject.CLogin, translatePathObject.CPassword);
-                            AddSendStatusLogInDB(destinationFilePath,translationFilePathInProject, userId, stand, "Ok", "");
+                            AddSendStatusLogInDB(destinationFilePath,translationFilePathInProject, userId, standObject, "Ok", "");
                         }
 
                         catch (Exception ex)
                         {
-                            AddSendStatusLogInDB(destinationFilePath, translationFilePathInProject, userId, stand, "Error", ex.Message);
+                            AddSendStatusLogInDB(destinationFilePath, translationFilePathInProject, userId, standObject, "Error", ex.Message);
                             LoggerTXT.LogError(ex.Message);
                         }
 
