@@ -6,7 +6,171 @@
     string confirmScript = "return confirm('" + confirmMessage + "');";
 }
 
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Пользователи</h1>
+    <div class="card mb-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            Пользоватиели
+        </div>
+        <div class="card-body">
+            @* <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th>Логин</th>
+                        <th>Пароль</th>
+                        <th>Роль</th>
+                        <th>Дата создания</th>
+                        <th>Действие</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tiger Nixon</td>
+                        <td>System Architect</td>
+                        <td>Edinburgh</td>
+                        <td>61</td>
+                        <td>2011/04/25</td>
+                    </tr>
+                    <tr>
+                        <td>Garrett Winters</td>
+                        <td>Accountant</td>
+                        <td>Tokyo</td>
+                        <td>63</td>
+                        <td>2011/07/25</td>
+                    </tr>
+                    @foreach (User userInfo in Model)
+                    {
+                        <tr>
+                            <td>
+                                @userInfo.ULogin
+                            </td>
+                            <td>
 
+                                    @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+                                    {
+                                        <a>******</a>
+                                    }
+                                    else
+                                    {
+                                        @userInfo.UPassword
+                                    }
+                            </td>
+                            <td>
+                                @userInfo.Role.RName
+                            </td>
+                            <td>
+                                @userInfo.Created
+                            </td>
+                            <td>
+                                @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+                                {
+                                    <a>-</a>
+                                }
+                                else
+                                {
+                                        <a asp-action="EditUser" asp-route-userID=@userInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+                                            <i class="btn btn-primary">
+                                                Edit
+                                            </i>
+                                        </a>
+                                        <a onclick="@confirmScript" asp-action="UnactiveUser" asp-route-userID=@userInfo.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
+                                            <i class="btn btn-danger">
+                                                Del
+                                            </i>
+                                        </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table> *@
+
+            <table class="table table-centered table-nowrap table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Логин</th>
+                        <th scope="col">Пароль</th>
+                        <th scope="col">Роль</th>
+                        <th scope="col">Создан</th>
+                        <th scope="col" class="text-end">Действие</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (User userInfo in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                    </div>
+                                    <div class="flex-grow-1 ms-2">
+                                        @userInfo.ULogin
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                    </div>
+
+                                    @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+                                    {
+                                        <div class="font-18 text-danger">
+                                            ******
+                                        </div>
+
+                                    }
+                                    else
+                                    {
+                                        <div class="flex-grow-1 ms-2">
+                                            @userInfo.UPassword
+                                        </div>
+                                    }
+
+                                </div>
+                            </td>
+
+                            <td>
+                                <span class="badge bg-success-lighten text-success">@userInfo.Role.RName</span>
+                            </td>
+                            <td><i class="uil uil-calender me-1"></i>@userInfo.Created</td>
+                            <td class="text-end">
+                            @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+                            {
+                                <i class="uil uil-pen">
+                                    
+                                </i>
+                            }
+                            else
+                            {
+                                
+                                    <a asp-action="EditUser" asp-route-userID=@userInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+                                        <i class="btn btn-primary">
+                                            Edit
+                                        </i>
+                                    </a>
+                                    <a onclick="@confirmScript" asp-action="UnactiveUser" asp-route-userID=@userInfo.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
+                                        <i class="btn btn-danger">
+                                            Del
+                                        </i>
+                                    </a>
+                                
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+@* 
 <div class="row">
     <div class="col-xxl-6">
         <div class="card">
@@ -95,5 +259,5 @@
             </div>
         </div>
     </div> 
-</div>
+</div> *@
    
