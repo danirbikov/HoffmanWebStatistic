@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HoffmanWebstatistic.Interfaces;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using HoffmanWebstatistic.Services;
-using HoffmanWebstatistic.Models.ViewModel;
 using HoffmanWebstatistic.Models.Hoffman;
 using System.Drawing;
+using HoffmanWebstatistic.Services.InteractionStand;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -91,9 +89,8 @@ namespace HoffmanWebstatistic.Controllers
                     
                     _pictureRepository.Add(picture);
 
-
                     int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
-                    InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
+                    StandOperation interactionStand = new StandOperation(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
                     interactionStand.AddPictureForStands(picture, userId);                
                                                                                              
                 }
@@ -118,7 +115,7 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPicture(string oldPictureName, string newPictureName, IFormFile file)
         {
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
+            StandOperation interactionStand = new StandOperation(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
             Picture newPicture = new Picture();
 
 
@@ -150,7 +147,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
+            StandOperation interactionStand = new StandOperation(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
             interactionStand.DeletePictureFromStands(pictureName, userId);
 
             _pictureRepository.Delete(pictureName);

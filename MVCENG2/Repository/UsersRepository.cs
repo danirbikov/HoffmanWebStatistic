@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using HoffmanWebstatistic.Data;
-using HoffmanWebstatistic.Interfaces;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Models.ViewModel;
 

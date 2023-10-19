@@ -3,7 +3,7 @@ using Quartz;
 using ServicesWebAPI.Services;
 using System.Net.NetworkInformation;
 
-namespace HoffmanWebstatistic.Services
+namespace HoffmanWebstatistic.Services.Job
 
 {
     public static class Pinger

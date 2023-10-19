@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HoffmanWebstatistic.Interfaces;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using HoffmanWebstatistic.Services;
 using HoffmanWebstatistic.Models.ViewModel;
 using HoffmanWebstatistic.Models.Hoffman;
 using System.Drawing;
@@ -11,6 +9,7 @@ using System.Xml;
 using System.Data.SqlTypes;
 using System.Text;
 using ServicesWebAPI.Services;
+using HoffmanWebstatistic.Services.InteractionStand;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -61,7 +60,7 @@ namespace HoffmanWebstatistic.Controllers
 
                         int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-                        InteractionStand interactionStand = new InteractionStand(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
+                        StandOperation interactionStand = new StandOperation(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
                         interactionStand.AddDTCForStands(dtc, userId);
 
 
@@ -94,7 +93,7 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> EditDTC(string oldDTCName, string newDTCName, IFormFile file)
         {
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
+            StandOperation interactionStand = new StandOperation(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
             DtcContent newDTC = new DtcContent();
 
             if (file == null) 
@@ -127,7 +126,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
+            StandOperation interactionStand = new StandOperation(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
             interactionStand.DeleteDTCFromStands(dtcName, userId);
 
             _dtcContentRepository.Delete(dtcName);

@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HoffmanWebstatistic.Interfaces;
-
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using HoffmanWebstatistic.Services;
-using HoffmanWebstatistic.Models.ViewModel;
 using HoffmanWebstatistic.Models.Hoffman;
+using HoffmanWebstatistic.Services.FormationFile;
+using HoffmanWebstatistic.Services.InteractionStand;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -90,7 +88,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             OperatorsXMLFile.FormationXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _sendingStatusLogRepository, _operatorPathRepository);
+            StandOperation interactionStand = new StandOperation(_standRepository, _sendingStatusLogRepository, _operatorPathRepository);
             interactionStand.SendFileOnStands("Operator", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
 
         }

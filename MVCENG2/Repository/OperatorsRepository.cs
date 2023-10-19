@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using HoffmanWebstatistic.Data;
-using HoffmanWebstatistic.Interfaces;
+﻿using HoffmanWebstatistic.Data;
 using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Repository

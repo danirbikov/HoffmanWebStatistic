@@ -2,18 +2,14 @@
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using HoffmanWebstatistic.Data;
-using HoffmanWebstatistic.Interfaces;
 using PagedList;
 using HoffmanWebstatistic.Services;
-using HoffmanWebstatistic.Models.Siemens;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
 using HoffmanWebstatistic.Models.Hoffman;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using static HoffmanWebstatistic.Models.Enums.SortingEnum;
 using System.Xml.Linq;
 using HoffmanWebstatistic.Repository;
-using HoffmanWebstatistic.ComfortModules;
 using HoffmanWebstatistic.Models.ViewModel;
 
 namespace HoffmanWebstatistic.Controllers
@@ -42,9 +38,9 @@ namespace HoffmanWebstatistic.Controllers
             }
             else
             {
-                SearchInDB searchClass = new SearchInDB(_dbContext);
+                
 
-                resultsJsonHeader = searchClass.SearchInAllDB(searchIdentifier);
+                resultsJsonHeader = _jsonHeadersRepository.SearchInAllDB(searchIdentifier);
             }
           
             // сортировка

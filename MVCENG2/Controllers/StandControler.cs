@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HoffmanWebstatistic.Interfaces;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using HoffmanWebstatistic.Services;
 using HoffmanWebstatistic.Models.ViewModel;
 using HoffmanWebstatistic.Models.Hoffman;
+using HoffmanWebstatistic.Services.Job;
+using HoffmanWebstatistic.Services;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -26,7 +26,7 @@ namespace HoffmanWebstatistic.Controllers
 
             bool pingResultStand = false;
 
-            foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandName != "UNKNOWN" && k.InactiveMark == "FALSE").OrderBy(k => k.StandName))
+            foreach (Stand stand in _standRepository.GetAll().Where(k => k.StandName != "UNKNOWN").OrderBy(k => k.StandName))
             {
                 Pinger.standsPingResult.TryGetValue(stand.StandName, out pingResultStand);
 
@@ -38,9 +38,9 @@ namespace HoffmanWebstatistic.Controllers
                 standsForAdminPanel.Add(new StandsForAdminPanelView()
                 {
                     stand = stand,
-                    allTestsCount = DateFunctions.GetAllTestsCountForStand(stand, _jsonHeadersRepository),
+                    allTestsCount = _jsonHeadersRepository.GetAllTestsCountByStandId(stand.Id),
                     pingResult = pingResultStand,
-                    lastTestDate = DateFunctions.GetLastTestDateForStand(stand, _jsonHeadersRepository),
+                    lastTestDate = _jsonHeadersRepository.GetLastTestDateByStandId(stand.Id),
 
                 });
             }

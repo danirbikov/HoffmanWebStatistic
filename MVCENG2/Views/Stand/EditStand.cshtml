@@ -55,18 +55,8 @@
     
     <div class="form-group">
         <label asp-for="@Model.stand.Project">Project</label>
-        <select asp-for="@Model.stand.Project">
-            @if (Model.stand.Project == "HOFFMAN")
-            {
-                <option>HOFFMAN</option>
-                <option>SIEMENS</option>
-            }
-            else
-            {
-                <option>SIEMENS</option>
-                <option>HOFFMAN</option>                
-            }
-            
+        <select asp-for="@Model.stand.Project">     
+                <option>HOFFMAN</option>           
         </select>
         <span asp-validation-for="@Model.stand.Project" class="text-danger"></span>
     </div>

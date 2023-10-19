@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using HoffmanWebstatistic.Data;
-using HoffmanWebstatistic.Services;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Quartz;
 using NLog;
 using NLog.Web;
+using HoffmanWebstatistic.Services.Job;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 logger.Debug("init main");

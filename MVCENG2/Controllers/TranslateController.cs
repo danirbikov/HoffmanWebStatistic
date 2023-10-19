@@ -8,7 +8,8 @@ using System.Text.Json;
 using System.Xml.Serialization;
 using System.Linq.Expressions;
 using ServicesWebAPI.Services;
-using HoffmanWebstatistic.Services;
+using HoffmanWebstatistic.Services.FormationFile;
+using HoffmanWebstatistic.Services.InteractionStand;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -103,7 +104,7 @@ namespace HoffmanWebstatistic.Controllers
             TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();
             translatesXMLFile.FormationXMLFileForStands(_translateRepository.GetAll());
 
-            InteractionStand interactionStand = new InteractionStand(_standRepository, _translatePathRepository, _sendingStatusLogRepository);
+            StandOperation interactionStand = new StandOperation(_standRepository, _translatePathRepository, _sendingStatusLogRepository);
             interactionStand.SendFileOnStands("Translate", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
         }
 

@@ -1,16 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HoffmanWebstatistic.Interfaces;
-
-using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using HoffmanWebstatistic.Services;
 using HoffmanWebstatistic.Models.ViewModel;
-
+using HoffmanWebstatistic.Services.Job;
 
 namespace HoffmanWebstatistic.Controllers
 {
-   
+
     public class SendingStatusLogController : Controller
     {
 

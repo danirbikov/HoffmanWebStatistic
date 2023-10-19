@@ -3,6 +3,7 @@ using HoffmanWebstatistic.ComfortModules;
 using HoffmanWebstatistic.Data;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Repository;
+using HoffmanWebstatistic.Services;
 using Microsoft.EntityFrameworkCore;
 using ServicesWebAPI.Services;
 using System.Globalization;
@@ -11,16 +12,16 @@ using System.Text;
 using System.Text.Json;
 using static HoffmanWebstatistic.Models.SerializerModels.JSONSerializeModel;
 
-namespace HoffmanWebstatistic.Services
+namespace HoffmanWebstatistic.Services.Job
 {
 
     public class ParserJSON
     {
         //private readonly ILogger<ParserJSON> _logger;
-       // public ParserJSON(ILogger<ParserJSON> logger)
-       // {
-      //      _logger = logger;
-      //  }
+        // public ParserJSON(ILogger<ParserJSON> logger)
+        // {
+        //      _logger = logger;
+        //  }
 
         public void AddAllJsonFiles(ApplicationDbContext _dbContext)
         {
@@ -31,7 +32,7 @@ namespace HoffmanWebstatistic.Services
                 string sourceFilePath;
                 string destFilePath = @"C:\\WebStatistic\\ReportsBackup\\";
                 string fileName;
-                string reportException="";
+                string reportException = "";
                 NetworkCredential credentials = new NetworkCredential();
 
                 DirectoryInfo dirInfo = new DirectoryInfo(destFilePath);
@@ -41,7 +42,7 @@ namespace HoffmanWebstatistic.Services
                 }
 
 
-                var stands = _dbContext.stands.ToList().Where(k=>k.StandName!="UNKNOWN");
+                var stands = _dbContext.stands.ToList().Where(k => k.StandName != "UNKNOWN");
 
                 foreach (Stand stand in stands)
                 {
@@ -50,11 +51,11 @@ namespace HoffmanWebstatistic.Services
 
                     sourceFilePath = @"\\" + stand.IpAdress + jsonsPath.CPath;
 
-                    LoggerTXT.LogError("sourceFile "+sourceFilePath);
+                    LoggerTXT.LogError("sourceFile " + sourceFilePath);
 
                     CmdOperations cmdOperations = new CmdOperations();
                     cmdOperations.DeleteCredentialForFolder(sourceFilePath);
-                    
+
                     try
                     {
 
@@ -65,7 +66,7 @@ namespace HoffmanWebstatistic.Services
                             {
                                 fileName = new FileInfo(fileInStand).Name;
 
-                                if (!(_dbContext.results_json_headers.Where(k => k.JsonFilename == fileName).Any()))
+                                if (!_dbContext.results_json_headers.Where(k => k.JsonFilename == fileName).Any())
                                 {
                                     try
                                     {
@@ -83,11 +84,11 @@ namespace HoffmanWebstatistic.Services
                                     catch (Exception ex)
                                     {
                                         File.Copy(fileInStand, "C:\\WebStatistic\\ErrorBackups\\" + fileName, true);
-                                        LoggerTXT.LogWarning(destFilePath + fileName + " (" + reportException +""+ ex.InnerException + ")");
+                                        LoggerTXT.LogWarning(destFilePath + fileName + " (" + reportException + "" + ex.InnerException + ")");
                                         File.Delete(fileInStand);
                                     }
-                                    
-                                    
+
+
                                 }
                                 else
                                 {
@@ -99,14 +100,14 @@ namespace HoffmanWebstatistic.Services
 
                     catch (Exception ex)
                     {
-                        LoggerTXT.LogError("ERROR! Stand's IP " + stand.IpAdress + " " + sourceFilePath+"\n"+ex.Message);                        
+                        LoggerTXT.LogError("ERROR! Stand's IP " + stand.IpAdress + " " + sourceFilePath + "\n" + ex.Message);
                     }
                 }
             }
             catch (Exception ex)
             {
                 LoggerTXT.LogError("Error in parser \n" + ex);
-                
+
             }
 
         }
@@ -197,7 +198,7 @@ namespace HoffmanWebstatistic.Services
                                 _dbContext.SaveChanges();
 
                                 #endregion
-                               #region Add values from json file
+                                #region Add values from json file
                                 if (jsonTestObject.values != null)
                                     foreach (var jsonValueObject in jsonTestObject.values)
                                     {
@@ -214,7 +215,7 @@ namespace HoffmanWebstatistic.Services
                             }
                         transaction.Commit();
 
-                        
+
                         #endregion
                     }
                     return "";
@@ -223,7 +224,7 @@ namespace HoffmanWebstatistic.Services
 
                 catch (Exception ex)
                 {
-                    
+
                     transaction.Rollback();
                     return ex.Message;
                     //_logger.LogError(ex.Message);

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HoffmanWebstatistic.Interfaces;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
 using HoffmanWebstatistic.Services;

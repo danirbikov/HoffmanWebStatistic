@@ -18,8 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="ComfortModules\HTML_Helpers\DisplayStatistic.cs" />
-    <Compile Remove="Data\Identification.cs" />
+    <Compile Remove="Database\Identification.cs" />
     <Compile Remove="Interfaces\IDateFunctions.cs" />
     <Compile Remove="Interfaces\IParser.cs" />
     <Compile Remove="Models\Dashboard.cs" />
@@ -75,7 +74,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="FormationFiles\people.xml" />
     <None Remove="people.xml" />
   </ItemGroup>
 
@@ -102,11 +100,6 @@
     <PackageReference Include="Quartz.Extensions.DependencyInjection" Version="3.7.0" />
     <PackageReference Include="Quartz.Extensions.Hosting" Version="3.7.0" />
     <PackageReference Include="System.Diagnostics.Tools" Version="4.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ComfortModules\HTML_Helpers\" />
-    <Folder Include="FormationFiles\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -2204,6 +2197,10 @@
     <None Update="C:\Users\BikovDI\.nuget\packages\nlog.config\4.7.15\contentFiles\any\any\NLog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 
 </Project>

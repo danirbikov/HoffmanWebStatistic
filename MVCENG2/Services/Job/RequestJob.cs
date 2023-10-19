@@ -2,7 +2,7 @@
 using Quartz;
 using ServicesWebAPI.Services;
 
-namespace HoffmanWebstatistic.Services
+namespace HoffmanWebstatistic.Services.Job
 {
     [DisallowConcurrentExecution]
     public class RequestJob : IJob
@@ -23,15 +23,15 @@ namespace HoffmanWebstatistic.Services
                     Pinger.PingAllStands(dbContext.stands.Where(k => k.IpAdress != null).ToList());
 
                     ParserJSON parser = new ParserJSON();
-                  
-                    parser.AddAllJsonFiles(dbContext);                                        
+
+                    parser.AddAllJsonFiles(dbContext);
                 }
 
                 catch (Exception ex)
                 {
                     LoggerTXT.LogError(ex.ToString() + "\n\n");
                 }
-                
+
             }
         }
     }

@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using HoffmanWebstatistic.Interfaces;
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
-using HoffmanWebstatistic.Services;
 using HoffmanWebstatistic.Models.ViewModel;
 using Microsoft.VisualBasic;
 using ServicesWebAPI.Services;
 using HoffmanWebstatistic.Models.Hoffman;
+using HoffmanWebstatistic.Services.Job;
+using HoffmanWebstatistic.Services;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -33,7 +33,7 @@ namespace HoffmanWebstatistic.Controllers
             Dictionary<string, int> carsLastMonth = new Dictionary<string, int>();
             foreach (Stand stand in stands)
             {
-                carsLastMonth.Add(stand.StandName, DateFunctions.GetCarsCountLastmonth(stand, _jsonHeadersRepository));           
+                carsLastMonth.Add(stand.StandName, _jsonHeadersRepository.GetCarsCountLastmonth(stand.Id));           
             }
 
             //return RedirectToAction("AdminPanel", "Admin");

@@ -5,20 +5,21 @@ using System.Xml.Linq;
 using HoffmanWebstatistic.Models.Hoffman;
 using System.Text;
 using HoffmanWebstatistic.Repository;
+using HoffmanWebstatistic.Services.InteractionStand;
 
-namespace HoffmanWebstatistic.Services
+namespace HoffmanWebstatistic.Services.FormationFile
 {
     public class TranslatesXMLFile
-    {       
+    {
 
         public void FormationXMLFileForStands(IEnumerable<Translate> translates)
         {
             XDocument xdoc = new XDocument();
 
             XElement TranslateXML = new XElement("Entries");
-            
-            
-            foreach (Translate translate in translates) 
+
+
+            foreach (Translate translate in translates)
             {
                 XElement E_Element = new XElement("E");
 
@@ -28,10 +29,10 @@ namespace HoffmanWebstatistic.Services
                 XAttribute translateValueAttr = new XAttribute("value", translate.RusVariant);
                 E_Element.Add(translateValueAttr);
 
-                TranslateXML.Add(E_Element);                        
+                TranslateXML.Add(E_Element);
             }
 
-            InteractionStand interactionStand = new InteractionStand();
+            StandOperation interactionStand = new StandOperation();
 
             xdoc.Add(TranslateXML);
             xdoc.Save(interactionStand.translationFilePathInProject);

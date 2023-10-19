@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using HoffmanWebstatistic.Models.Hoffman;
-using HoffmanWebstatistic.Models.Siemens;
 
 namespace HoffmanWebstatistic.Data
 {

@@ -10,9 +10,9 @@ using System.Net;
 using System.Security.Claims;
 using System.Xml;
 
-namespace HoffmanWebstatistic.Services
+namespace HoffmanWebstatistic.Services.InteractionStand
 {
-    public class InteractionStand
+    public class StandOperation
     {
 
 
@@ -29,34 +29,34 @@ namespace HoffmanWebstatistic.Services
         private readonly DTCPathRepository _dtcPathRepository;
 
         #region Constructors
-        public InteractionStand()
+        public StandOperation()
         {
         }
 
-        public InteractionStand(StandRepository standRepository)
+        public StandOperation(StandRepository standRepository)
         {
-           _standRepository = standRepository;
+            _standRepository = standRepository;
         }
-        public InteractionStand(StandRepository standRepository, SendingStatusLogRepository sendingStatusLogRepository, OperatorPathRepository operatorPathRepository)
+        public StandOperation(StandRepository standRepository, SendingStatusLogRepository sendingStatusLogRepository, OperatorPathRepository operatorPathRepository)
         {
             _standRepository = standRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
             _operatorPathRepository = operatorPathRepository;
         }
-        public InteractionStand(StandRepository standRepository, TranslatePathRepository translatePathRepository, SendingStatusLogRepository sendingStatusLogRepository)
+        public StandOperation(StandRepository standRepository, TranslatePathRepository translatePathRepository, SendingStatusLogRepository sendingStatusLogRepository)
         {
             _standRepository = standRepository;
             _translatePathRepository = translatePathRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
         }
-        public InteractionStand(StandRepository standRepository, PictureRepository pictureRepository, SendingStatusLogRepository sendingStatusLogRepository, PicturePathRepository picturePathRepository)
+        public StandOperation(StandRepository standRepository, PictureRepository pictureRepository, SendingStatusLogRepository sendingStatusLogRepository, PicturePathRepository picturePathRepository)
         {
             _standRepository = standRepository;
             _pictureRepository = pictureRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
             _picturePathRepository = picturePathRepository;
         }
-        public InteractionStand(StandRepository standRepository, DTCContentRepository dtcContentRepository, SendingStatusLogRepository sendingStatusLogRepository, DTCPathRepository dtcPathRepository)
+        public StandOperation(StandRepository standRepository, DTCContentRepository dtcContentRepository, SendingStatusLogRepository sendingStatusLogRepository, DTCPathRepository dtcPathRepository)
         {
             _standRepository = standRepository;
             _dtcContentRepository = dtcContentRepository;
@@ -75,7 +75,7 @@ namespace HoffmanWebstatistic.Services
                 using (System.Drawing.Image image = System.Drawing.Image.FromStream(stream))
                 {
                     string destinationFilePath = "";
-                    foreach (var picturePathObject in _picturePathRepository.GetAll())                   
+                    foreach (var picturePathObject in _picturePathRepository.GetAll())
                     {
 
                         Stand standObject = _standRepository.GetStandByID(picturePathObject.StandId);
@@ -83,7 +83,7 @@ namespace HoffmanWebstatistic.Services
                         string fileDirectory = Path.GetDirectoryName(destinationFilePath);
 
                         try
-                        {                            
+                        {
                             CmdOperations cmdOperations = new CmdOperations();
                             cmdOperations.DeleteCredentialForFolder(fileDirectory);
 
@@ -94,41 +94,41 @@ namespace HoffmanWebstatistic.Services
                                 image.Save(destinationFilePath, System.Drawing.Imaging.ImageFormat.Png);
                                 AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, standObject, "Ok", "");
                             }
-                                                 
+
                         }
                         catch (Exception ex)
                         {
                             AddSendStatusLogInDB("Add all images in stand", destinationFilePath, "DATABASE", userId, standObject, "Error", ex.Message);
-                            LoggerTXT.LogError("Error in connection by path: "+ destinationFilePath);
+                            LoggerTXT.LogError("Error in connection by path: " + destinationFilePath);
                         }
                     }
-                } 
+                }
             }
-            
+
         }
 
         public void DeletePictureFromStands(string pictureName, int userId = 15)
         {
-           
-            string destinationFilePath ="";
-            foreach (var picturePathObject in _picturePathRepository.GetAll())      
+
+            string destinationFilePath = "";
+            foreach (var picturePathObject in _picturePathRepository.GetAll())
             {
                 Stand standObject = _standRepository.GetStandByID(picturePathObject.StandId);
-                
+
                 destinationFilePath = @"\\" + standObject.IpAdress + picturePathObject.CPath + "\\" + pictureName;
 
                 try
                 {
                     CmdOperations cmdOperations = new CmdOperations();
                     cmdOperations.DeleteCredentialForFolder(Path.GetDirectoryName(destinationFilePath));
-                   
+
                     NetworkCredential credentials = new NetworkCredential(picturePathObject.CLogin, picturePathObject.CPassword);
 
                     using (new NetworkConnection(Path.GetDirectoryName(destinationFilePath), credentials))
                     {
                         File.Delete(destinationFilePath);
                         AddSendStatusLogInDB("Delete all images in stand", destinationFilePath, destinationFilePath, userId, standObject, "Ok", "");
-                    }                   
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -182,9 +182,9 @@ namespace HoffmanWebstatistic.Services
         */
 
         #endregion
-        
+
         #region DTC operations
-        
+
         public void AddDTCForStands(DtcContent dtc, int userId = 15)
         {
             string destinationFilePath = "";
@@ -203,7 +203,7 @@ namespace HoffmanWebstatistic.Services
                     NetworkCredential credentials = new NetworkCredential(dtcPathObject.CLogin, dtcPathObject.CPassword);
 
                     using (new NetworkConnection(fileDirectory, credentials))
-                    {                      
+                    {
                         string xmlString = dtc.Fdata;
 
                         if (xmlString.Contains("encoding=\"UTF-16\"?"))
@@ -264,14 +264,14 @@ namespace HoffmanWebstatistic.Services
             DeleteDTCFromStands(dtc.Fname, userId);
             AddDTCForStands(dtc, userId);
         }
-        
+
         #endregion
-        
+
         #region Send single file to stands
 
-        public void SendSingleFileToStandWithAuth(string sourcePath , string destinationPath, string username, string password)
-        {          
-            string folderPath = Path.GetDirectoryName(destinationPath);           
+        public void SendSingleFileToStandWithAuth(string sourcePath, string destinationPath, string username, string password)
+        {
+            string folderPath = Path.GetDirectoryName(destinationPath);
 
             CmdOperations cmdOperations = new CmdOperations();
             cmdOperations.DeleteCredentialForFolder(folderPath);
@@ -281,12 +281,12 @@ namespace HoffmanWebstatistic.Services
             using (new NetworkConnection(folderPath, credentials))
             {
                 File.Copy(sourcePath, destinationPath, true);
-            }      
+            }
         }
 
-            
 
-        public void SendFileOnStands(string purposeFile, int userId=15)
+
+        public void SendFileOnStands(string purposeFile, int userId = 15)
         {
 
             string destinationFilePath = "";
@@ -294,17 +294,17 @@ namespace HoffmanWebstatistic.Services
             switch (purposeFile)
             {
                 case "Operator":
-                                            
-                    foreach(var operatorPathObject in _operatorPathRepository.GetAll())
+
+                    foreach (var operatorPathObject in _operatorPathRepository.GetAll())
                     {
                         Stand standObject = _standRepository.GetStandByID(operatorPathObject.StandId);
 
-                        destinationFilePath = @"\\" + standObject.IpAdress + operatorPathObject.CPath;      
-                        
+                        destinationFilePath = @"\\" + standObject.IpAdress + operatorPathObject.CPath;
+
                         try
                         {
                             SendSingleFileToStandWithAuth(operatorFilePathInProject, destinationFilePath, operatorPathObject.CLogin, operatorPathObject.CPassword);
-                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, standObject, "Ok", "");                   
+                            AddSendStatusLogInDB(destinationFilePath, operatorFilePathInProject, userId, standObject, "Ok", "");
                         }
 
                         catch (Exception ex)
@@ -316,7 +316,7 @@ namespace HoffmanWebstatistic.Services
                     break;
 
                 case "Translate":
-                    foreach (var translatePathObject in _translatePathRepository.GetAll())                  
+                    foreach (var translatePathObject in _translatePathRepository.GetAll())
                     {
                         Stand standObject = _standRepository.GetStandByID(translatePathObject.StandId);
 
@@ -325,7 +325,7 @@ namespace HoffmanWebstatistic.Services
                         try
                         {
                             SendSingleFileToStandWithAuth(translationFilePathInProject, destinationFilePath, translatePathObject.CLogin, translatePathObject.CPassword);
-                            AddSendStatusLogInDB(destinationFilePath,translationFilePathInProject, userId, standObject, "Ok", "");
+                            AddSendStatusLogInDB(destinationFilePath, translationFilePathInProject, userId, standObject, "Ok", "");
                         }
 
                         catch (Exception ex)
@@ -346,7 +346,7 @@ namespace HoffmanWebstatistic.Services
             SendingStatusLog sendingStatusLog = new SendingStatusLog()
             {
                 FileName = Path.GetFileName(destinationFilePath),
-                FileSize = (int)(new FileInfo(sourceFilePath)).Length / 1024,
+                FileSize = (int)new FileInfo(sourceFilePath).Length / 1024,
                 SourceFilePath = sourceFilePath,
                 TargetFilePath = destinationFilePath,
                 UserId = userId,
@@ -358,7 +358,7 @@ namespace HoffmanWebstatistic.Services
             };
 
             _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
-            
+
         }
 
         public void AddSendStatusLogInDB(string fileName, string destinationFilePath, string sourceFilePath, int userId, Stand stand, string status, string exceptonMessage)
