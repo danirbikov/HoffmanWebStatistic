@@ -5,6 +5,7 @@ namespace HoffmanWebstatistic.Data
 {
     public class ApplicationDbContext : DbContext
     {
+
         public ApplicationDbContext()
         {
         }
@@ -12,10 +13,12 @@ namespace HoffmanWebstatistic.Data
         public override void Dispose()
         {
             base.Dispose();
+
         }
         public override async ValueTask DisposeAsync()
         {
             await base.DisposeAsync();
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

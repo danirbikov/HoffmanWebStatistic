@@ -10,7 +10,7 @@
 
 <div class="container-fluid px-4">
     <h1 class="mt-4 mb-4">Операторы</h1>
-    
+
     <div class="card mb-4">
         <div class="card-header">
             <a asp-action="AddOperator">
@@ -18,7 +18,7 @@
             </a>
         </div>
 
-        
+
         <div class="card-body">
             <table id="datatablesSimple">
                 <thead>
@@ -31,34 +31,34 @@
 
                     </tr>
                 </thead>
-                    @foreach (Operator operatorInfo in Model)
-                    {
-                        <tr>
-                            <td>
-                                @operatorInfo.OLogin
-                            </td>
-                            <td>@operatorInfo.OPassword</td>
+                @foreach (Operator operatorInfo in Model)
+                {
+                    <tr>
+                        <td>
+                            @operatorInfo.OLogin
+                        </td>
+                        <td>@operatorInfo.OPassword</td>
 
-                            <td>
-                                @operatorInfo.ODescription
-                            </td>
+                        <td>
+                            @operatorInfo.ODescription
+                        </td>
 
-                            <td>
-                                <span class="text-success fw-semibold">@operatorInfo.Created</span>
-                            </td>
-                            <td>
+                        <td>
+                            <span class="text-success fw-semibold">@operatorInfo.Created</span>
+                        </td>
+                        <td>
 
-                                <a asp-action="EditOperator" asp-route-operatorID=@operatorInfo.Id>
-                                    <button class="btn btn-primary fa-solid fa-pen"></button>                  
-                                </a>
-                                <a asp-action="UnactiveOperator" asp-route-operatorID=@operatorInfo.Id>
-                                    <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
-                                </a>
-                            </td>
+                            <a asp-action="EditOperator" asp-route-operatorID=@operatorInfo.Id>
+                                <button class="btn btn-primary fa-solid fa-pen"></button>
+                            </a>
+                            <a asp-action="UnactiveOperator" asp-route-operatorID=@operatorInfo.Id>
+                                <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
+                            </a>
+                        </td>
 
-                        </tr>
-                    }
-            </table>          
+                    </tr>
+                }
+            </table>
         </div>
     </div>
 </div>
@@ -71,10 +71,10 @@
                 <h4 class="header-title mb-0">Operators list</h4>
                 <a asp-action="AddOperator">
                     <button type="submit" class="btn btn-primary">Add operator</button>
-                    
+
                 </a>
             </div>
-            
+
             <div class="card-body pt-0">
                 <div class="table-responsive">
                     <table class="table table-centered table-nowrap table-hover mb-0">
@@ -89,7 +89,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                             @await Html.PartialAsync("_OperatorsList", Model)
 
                         </tbody>

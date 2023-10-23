@@ -1,5 +1,4 @@
-﻿
-@model List<User>
+﻿@model List<User>
 
 @{
     string confirmMessage = "Вы уверены, что хотите удалить пользователя?";
@@ -24,127 +23,127 @@
                         <th>Действие</th>
                     </tr>
                 </thead>
-                    @foreach (User userInfo in Model)
-                    {
-                        <tr>
-                            <td>
-                                @userInfo.ULogin
-                            </td>
-                            <td>
+                @foreach (User userInfo in Model)
+                {
+                    <tr>
+                        <td>
+                            @userInfo.ULogin
+                        </td>
+                        <td>
 
-                                    @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
-                                    {
-                                        <a>******</a>
-                                    }
-                                    else
-                                    {
-                                        @userInfo.UPassword
-                                    }
-                            </td>
-                            <td>
-                                @userInfo.Role.RName
-                            </td>
-                            <td>
-                                @userInfo.Created
-                            </td>
-                            <td>
-                                @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
-                                {
-                                    <a>-</a>
-                                }
-                                else
-                                {
+                            @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+                            {
+                                <a>******</a>
+                            }
+                            else
+                            {
+                                @userInfo.UPassword
+                            }
+                        </td>
+                        <td>
+                            @userInfo.Role.RName
+                        </td>
+                        <td>
+                            @userInfo.Created
+                        </td>
+                        <td>
+                            @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+                            {
+                                <a>-</a>
+                            }
+                            else
+                            {
                                 <a asp-action="EditUser" asp-route-userID=@userInfo.Id>
                                     <button class="btn btn-primary fa-solid fa-pen"></button>
                                 </a>
                                 <a asp-action="UnactiveUser" asp-route-userID=@userInfo.Id>
                                     <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
                                 </a>
-                                
-                                }
-                            </td>
-                        </tr>
-                    }
 
-            </table> 
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </table>
             @*
             <table class="table table-centered table-nowrap table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th scope="col">Логин</th>
-                        <th scope="col">Пароль</th>
-                        <th scope="col">Роль</th>
-                        <th scope="col">Создан</th>
-                        <th scope="col" class="text-end">Действие</th>
+            <thead>
+            <tr>
+            <th scope="col">Логин</th>
+            <th scope="col">Пароль</th>
+            <th scope="col">Роль</th>
+            <th scope="col">Создан</th>
+            <th scope="col" class="text-end">Действие</th>
 
-                    </tr>
-                </thead>
-                <tbody>
+            </tr>
+            </thead>
+            <tbody>
 
-                    @foreach (User userInfo in Model)
-                    {
-                        <tr>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                    </div>
-                                    <div class="flex-grow-1 ms-2">
-                                        @userInfo.ULogin
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="flex-shrink-0">
-                                    </div>
+            @foreach (User userInfo in Model)
+            {
+            <tr>
+            <td>
+            <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+            </div>
+            <div class="flex-grow-1 ms-2">
+            @userInfo.ULogin
+            </div>
+            </div>
+            </td>
+            <td>
+            <div class="d-flex align-items-center">
+            <div class="flex-shrink-0">
+            </div>
 
-                                    @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
-                                    {
-                                        <div class="font-18 text-danger">
-                                            ******
-                                        </div>
+            @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+            {
+            <div class="font-18 text-danger">
+            ******
+            </div>
 
-                                    }
-                                    else
-                                    {
-                                        <div class="flex-grow-1 ms-2">
-                                            @userInfo.UPassword
-                                        </div>
-                                    }
+            }
+            else
+            {
+            <div class="flex-grow-1 ms-2">
+            @userInfo.UPassword
+            </div>
+            }
 
-                                </div>
-                            </td>
+            </div>
+            </td>
 
-                            <td>
-                                <span class="badge bg-success-lighten text-success">@userInfo.Role.RName</span>
-                            </td>
-                            <td><i class="uil uil-calender me-1"></i>@userInfo.Created</td>
-                            <td class="text-end">
-                            @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
-                            {
-                                <i class="uil uil-pen">
-                                    
-                                </i>
-                            }
-                            else
-                            {
-                                
-                                    <a asp-action="EditUser" asp-route-userID=@userInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-                                        <i class="btn btn-primary">
-                                            Edit
-                                        </i>
-                                    </a>
-                                    <a onclick="@confirmScript" asp-action="UnactiveUser" asp-route-userID=@userInfo.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
-                                        <i class="btn btn-danger">
-                                            Del
-                                        </i>
-                                    </a>
-                                
-                                }
-                            </td>
-                        </tr>
-                    }
-                </tbody>
+            <td>
+            <span class="badge bg-success-lighten text-success">@userInfo.Role.RName</span>
+            </td>
+            <td><i class="uil uil-calender me-1"></i>@userInfo.Created</td>
+            <td class="text-end">
+            @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
+            {
+            <i class="uil uil-pen">
+
+            </i>
+            }
+            else
+            {
+
+            <a asp-action="EditUser" asp-route-userID=@userInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
+            <i class="btn btn-primary">
+            Edit
+            </i>
+            </a>
+            <a onclick="@confirmScript" asp-action="UnactiveUser" asp-route-userID=@userInfo.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
+            <i class="btn btn-danger">
+            Del
+            </i>
+            </a>
+
+            }
+            </td>
+            </tr>
+            }
+            </tbody>
             </table>
             *@
 
@@ -152,7 +151,7 @@
         </div>
     </div>
 </div>
-@* 
+@*
 <div class="row">
     <div class="col-xxl-6">
         <div class="card">
@@ -172,7 +171,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            
+
                             @foreach (User userInfo in Model)
                             {
                                 <tr>
@@ -180,8 +179,8 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
                                             </div>
-                                            <div class="flex-grow-1 ms-2">                                           
-                                                    @userInfo.ULogin                                        
+                                            <div class="flex-grow-1 ms-2">
+                                                    @userInfo.ULogin
                                             </div>
                                         </div>
                                     </td>
@@ -189,13 +188,13 @@
                                         <div class="d-flex align-items-center">
                                             <div class="flex-shrink-0">
                                             </div>
-                                            
+
                                             @if (ViewData["UserRole"].ToString() == "admin" && userInfo.Role.RName == "sa")
                                             {
                                                 <div class="font-18 text-danger">
                                                     HIDDEN
                                                 </div>
-                                                    
+
                                             }
                                             else
                                             {
@@ -203,10 +202,10 @@
                                                     @userInfo.UPassword
                                                 </div>
                                             }
-                                            
+
                                         </div>
                                     </td>
-                                                                      
+
                                     <td>
                                         <span class="badge bg-success-lighten text-success">@userInfo.Role.RName</span>
                                     </td>
@@ -214,10 +213,10 @@
 
                                     @if (ViewData["UserRole"].ToString()=="admin" && userInfo.Role.RName=="sa")
                                     {
-                                        
+
                                     <i class="uil uil-pen">
-                                        
-                                    </i>                                        
+
+                                    </i>
                                     }
                                     else{
                                         <td class="text-end">
@@ -234,12 +233,11 @@
                                         </td>
                                     }
                                 </tr>
-                            }                          
+                            }
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-    </div> 
+    </div>
 </div> *@
-   

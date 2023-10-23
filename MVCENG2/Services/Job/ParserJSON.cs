@@ -17,11 +17,6 @@ namespace HoffmanWebstatistic.Services.Job
 
     public class ParserJSON
     {
-        //private readonly ILogger<ParserJSON> _logger;
-        // public ParserJSON(ILogger<ParserJSON> logger)
-        // {
-        //      _logger = logger;
-        //  }
 
         public void AddAllJsonFiles(ApplicationDbContext _dbContext)
         {
@@ -46,7 +41,7 @@ namespace HoffmanWebstatistic.Services.Job
 
                 foreach (JsonsPath jsons_path in _dbContext.jsons_paths.ToList())
                 {
-                    Stand stand = _dbContext.stands.Where(k=>k.Id ==jsons_path.StandId).FirstOrDefault();
+                    Stand stand = _dbContext.stands.Where(k => k.Id == jsons_path.StandId).FirstOrDefault();
                     credentials = new NetworkCredential(jsons_path.CLogin, jsons_path.CPassword);
 
                     sourceFilePath = @"\\" + stand.IpAdress + jsons_path.CPath;
