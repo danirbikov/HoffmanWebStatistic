@@ -3,82 +3,126 @@
 @model SendingStatusLogViewModel
 
 @{
-    string color;
+    string badgeClass;
     string onlineCondition;
-    int testsCountLastMonth = 0;
     bool pingResultStand;
+
 }
 
-<div class="content">
-    <!-- Start Content-->
-    <div class="container-fluid">
-       <div class="row">
-            @{
-
-                @foreach (var standName in Model.sendingStatusLog.OrderByDescending(k=>k.ErrorMessage!="").Select(k => k.Stand.StandName).Distinct())
-                        {
-                            
-                            <div class="row">
-
-                                @if (Model.pingerDict != null && Model.pingerDict.TryGetValue(@standName, out pingResultStand))
-                                {
-                                    @if (pingResultStand == true)
-                                    {
-                                        color = "color:rgba(0,255,20,0.52)";
-                                        onlineCondition = "Online";
-                                    }
-                                    else
-                                    {
-                                        color = "color:rgba(255,0,20,0.52)";
-                                        onlineCondition = "Offline";
-                                    }
-                                }
-                                else
-                                {
-                                    color = "color:rgba(255,0,20,0.52)";
-                                    onlineCondition = "Offline";
-                                }
 
 
-                                <h1 class="page-title">
-                                    <span>@standName:</span>
-                                    <span style=@color>@onlineCondition</span>
-                                </h1>
 
-                                @foreach (var statusObject in Model.sendingStatusLog.Where(k => k.Stand.StandName == @standName))
-                                {
-                                    <div class="col-xl-5 col-lg-6">
-                                        <div class="card widget-flat div-hover">
-                                            <div class="card-body">                                           
+@*<div class="list-group">
+    <li class="list-group-item d-flex justify-content-between align-items-center">
 
-                                                <h2 class="mt-3 mb-3">@statusObject.FileName</h2>
-                                                <h5 class="mb-0 text-muted">Date: @statusObject.Date</h5>
-                                                <h5 class="mb-0 text-muted">Source file path: @statusObject.SourceFilePath</h5>
-                                                <h5 class="mb-0 text-muted">Target file path: @statusObject.TargetFilePath</h5>
-                                                <h5 class="mb-0 text-muted">User name: @statusObject.User.ULogin</h5>
-                                                <h5 class="mb-0 text-muted">Status:
-                                                    @if (statusObject.Status.ToUpper()=="OK")
-                                                    {
-                                                        <font style="color:rgba(0,255,20,0.52)">@statusObject.Status</font>                                                       
-                                                    }
-                                                    else
-                                                    {
-                                                        <font style="color:rgba(255,0,20,0.52)">@statusObject.Status</font>                                                        
-                                                    }
-                                                </h5>
-                                                <h5 class="mb-0 text-muted">Error message: @statusObject.ErrorMessage</h5>
-
-                                            </div>
-
-                                        </div>
-                                    </div>
-                                    }
-                            </div>
-                              
-                        }                   
-                }
-               
+        <button class="list-group-item list-group-item-action" id="dropdown" onclick="toggleDropdown()">
+            
+            Dropdown
+            <span class="badge bg-danger badge-pill">1</span>
+        </button>
+        
+    </li>
+        <div class="list-group-item dropdown" id="dropdownMenu" style="display: none;">
+            <a href="#" class="dropdown-item">Item 1</a>
+            <a href="#" class="dropdown-item">Item 2</a>
+            <a href="#" class="dropdown-item">Item 3</a>
         </div>
+    
+</div>*@
+
+
+
+<div class="content">
+    <div class="list-group">
+
+        @foreach (var standName in Model.sendingStatusLog.OrderByDescending(k=>k.ErrorMessage!="").Select(k => k.Stand.StandName).Distinct())
+            {
+                @if (Model.pingerDict != null && Model.pingerDict.TryGetValue(standName, out pingResultStand))
+                {
+                    @if (pingResultStand == true)
+                    {
+                    badgeClass = "badge bg-success badge-pill";
+                        onlineCondition = "Online";
+                    }
+                    else
+                    {
+                    badgeClass = "badge bg-danger badge-pill";
+                        onlineCondition = "Offline";
+                    }
+                }
+                else
+                {
+                    badgeClass = "badge bg-danger badge-pill";
+                    onlineCondition = "Offline";
+                }
+              
+
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+
+                    <button class="list-group-item list-group-item-action" id="dropdown" onclick="toggleDropdown('@standName')">
+                    @standName
+                    <span class="@badgeClass">@onlineCondition</span>
+
+
+                    @if (Model.sendingStatusLog.Where(k => k.Stand.StandName == standName && k.Status != "Ok").Count()==0)
+                    {
+                        <span class="badge bg-success badge-pill">0</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger badge-pill">@Model.sendingStatusLog.Where(k=>k.Stand.StandName==standName && k.Status!="Ok").Count()</span>
+                    }
+                    
+                    </button>
+                </li>
+
+                <div class="list-group-item dropdown" id="dropdownMenu_@standName" style="display: none;">
+                    <div class="row">
+                       
+                        @foreach (var statusObject in Model.sendingStatusLog.Where(k => k.Stand.StandName == @standName))
+                        {
+                            <div class="col-xl-3 col-lg-4">
+                                <div class="card widget-flat div-hover">
+                                    <div class="card-body">                                           
+
+                                        <h2 class="mt-3 mb-3">@statusObject.FileName</h2>
+                                        <h5 class="mb-0 text-muted">Date: @statusObject.Date</h5>
+                                        <h5 class="mb-0 text-muted">Source file path: @statusObject.SourceFilePath</h5>
+                                        <h5 class="mb-0 text-muted">Target file path: @statusObject.TargetFilePath</h5>
+                                        <h5 class="mb-0 text-muted">User name: @statusObject.User.ULogin</h5>
+                                        <h5 class="mb-0 text-muted">Status:
+                                            @if (statusObject.Status.ToUpper()=="OK")
+                                            {
+                                                <font style="color:rgba(0,255,20,0.52)">@statusObject.Status</font>                                                       
+                                            }
+                                            else
+                                            {
+                                                <font style="color:rgba(255,0,20,0.52)">@statusObject.Status</font>                                                        
+                                            }
+                                        </h5>
+                                        <h5 class="mb-0 text-muted">Error message: @statusObject.ErrorMessage</h5>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                            }
+                </div>
+            </div>                            
+            }                                 
     </div>
 </div>
 
+
+<script>
+    function toggleDropdown(standName) {
+        console.log('InFunction');
+        console.log('dropdownMenu_' + standName);
+        var dropdownMenu = document.getElementById('dropdownMenu_' + standName);
+        if (dropdownMenu.style.display === 'none') {
+            dropdownMenu.style.display = 'block';
+        } else {
+            dropdownMenu.style.display = 'none';
+        }
+    }
+</script>
