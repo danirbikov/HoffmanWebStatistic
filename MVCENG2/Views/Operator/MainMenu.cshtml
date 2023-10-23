@@ -3,9 +3,67 @@
 
 @model List<Operator>
 
+@{
+    string confirmMessage = "Вы уверены, что хотите удалить оператора?";
+    string confirmScript = "return confirm('" + confirmMessage + "');";
+}
 
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Операторы</h1>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <a asp-action="AddOperator">
+                <button type="submit" class="btn btn-primary float-end">Добавить оператора</button>
+            </a>
+        </div>
 
+        
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th scope="col">Логин</th>
+                        <th scope="col">Пароль</th>
+                        <th scope="col">Описание</th>
+                        <th scope="col">Дата создания</th>
+                        <th scope="col" class="text-end">Действия</th>
 
+                    </tr>
+                </thead>
+                    @foreach (Operator operatorInfo in Model)
+                    {
+                        <tr>
+                            <td>
+                                @operatorInfo.OLogin
+                            </td>
+                            <td>@operatorInfo.OPassword</td>
+
+                            <td>
+                                @operatorInfo.ODescription
+                            </td>
+
+                            <td>
+                                <span class="text-success fw-semibold">@operatorInfo.Created</span>
+                            </td>
+                            <td>
+
+                                <a asp-action="EditOperator" asp-route-operatorID=@operatorInfo.Id>
+                                    <button class="btn btn-primary fa-solid fa-pen"></button>                  
+                                </a>
+                                <a asp-action="UnactiveOperator" asp-route-operatorID=@operatorInfo.Id>
+                                    <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
+                                </a>
+                            </td>
+
+                        </tr>
+                    }
+            </table>          
+        </div>
+    </div>
+</div>
+
+@*
 <div class="row">
     <div class="col-xxl-6">
         <div class="card" style="width: 800px;">
@@ -41,3 +99,4 @@
         </div>
     </div>
 </div>
+*@

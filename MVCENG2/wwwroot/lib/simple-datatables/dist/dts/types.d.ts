@@ -239,11 +239,11 @@ interface DataTableConfiguration {
      *
      * labels: {
      *
-            placeholder: "Search...",
-            searchTitle: "Search within table",
-            perPage: "entries per page",
+            placeholder: "Поиск...",
+            searchTitle: "Поиск внутри таблицы",
+            perPage: "элементов на странице",
             noRows: "No entries to found",
-            info: "Showing {start} to {end} of {rows} entries",
+            info: "Показан от {start} до {end} из {rows}",
         }
      *
      * Docs : https://fiduswriter.github.io/simple-datatables/documentation/labels

@@ -14,6 +14,7 @@ namespace HoffmanWebstatistic.Repository
         }
         public bool Add(User user)
         {
+            
             _context.Add(user);
             return Save();
 

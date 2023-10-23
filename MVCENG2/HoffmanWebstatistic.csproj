@@ -70,6 +70,7 @@
     <Content Remove="C:\Users\malyutkinbe\.nuget\packages\bootstrap\5.2.2\contentFiles\any\any\wwwroot\js\bootstrap.js.map" />
     <Content Remove="C:\Users\malyutkinbe\.nuget\packages\bootstrap\5.2.2\contentFiles\any\any\wwwroot\js\bootstrap.min.js" />
     <Content Remove="C:\Users\malyutkinbe\.nuget\packages\bootstrap\5.2.2\contentFiles\any\any\wwwroot\js\bootstrap.min.js.map" />
+    <Content Remove="Views\Operator\_OperatorsList.cshtml" />
     <Content Remove="Views\SendingStatusLog\TestReport.cshtml" />
   </ItemGroup>
 
@@ -2201,6 +2202,13 @@
 
   <ItemGroup>
     <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\lib\simple-datatables\dist\style.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>

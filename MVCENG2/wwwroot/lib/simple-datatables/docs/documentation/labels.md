@@ -6,13 +6,13 @@ Customise the displayed labels. (v1.0.6 and above)
 #### Defaults
 ```javascript
 labels: {
-    placeholder: "Search...",
-    searchTitle: "Search within table",
-    pageTitle: "Page {page}",
-    perPage: "entries per page",
-    noRows: "No entries found",
-    info: "Showing {start} to {end} of {rows} entries",
-    noResults: "No results match your search query",
+    placeholder: "Поиск...",
+    searchTitle: "Поиск внутри таблицы",
+    pageTitle: "Страница {page}",
+    perPage: "элементов на странице",
+    noRows: "Записи не найдены",
+    info: "Показан от {start} до {end} из {rows}",
+    noResults: "Нет результатов по запросу",
 }
 ```
 

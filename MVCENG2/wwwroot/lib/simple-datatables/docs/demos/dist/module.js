@@ -2902,7 +2902,7 @@ const defaultConfig$2 = {
     // Pagination
     paging: true,
     perPage: 10,
-    perPageSelect: [5, 10, 15, 20, 25],
+    perPageSelect: [5, 10, 15, 20, 25, 50, 100],
     nextPrev: true,
     firstLast: false,
     prevText: "‹",
@@ -2929,13 +2929,13 @@ const defaultConfig$2 = {
     },
     // Customise the display text
     labels: {
-        placeholder: "Search...",
-        searchTitle: "Search within table",
-        perPage: "entries per page",
-        pageTitle: "Page {page}",
-        noRows: "No entries found",
-        noResults: "No results match your search query",
-        info: "Showing {start} to {end} of {rows} entries" //
+        placeholder: "Поиск...",
+        searchTitle: "Поиск внутри таблицы",
+        perPage: "элементов на странице",
+        pageTitle: "Страница {page}",
+        noRows: "Записи не найдены",
+        noResults: "Нет результатов по запросу",
+        info: "Показан от {start} до {end} из {rows}" //
     },
     // Customise the layout
     template: layoutTemplate,

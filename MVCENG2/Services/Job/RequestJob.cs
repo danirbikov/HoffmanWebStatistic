@@ -1,4 +1,5 @@
 ﻿using HoffmanWebstatistic.Data;
+using Microsoft.EntityFrameworkCore;
 using Quartz;
 using ServicesWebAPI.Services;
 
@@ -16,23 +17,23 @@ namespace HoffmanWebstatistic.Services.Job
 
         public async Task Execute(IJobExecutionContext context)
         {
-            using (ApplicationDbContext dbContext = new ApplicationDbContext())
+            try
             {
-                try
+                using (ApplicationDbContext dbContext = new ApplicationDbContext())
                 {
                     Pinger.PingAllStands(dbContext.stands.Where(k => k.IpAdress != null).ToList());
 
                     ParserJSON parser = new ParserJSON();
 
                     parser.AddAllJsonFiles(dbContext);
-                }
-
-                catch (Exception ex)
-                {
-                    LoggerTXT.LogError(ex.ToString() + "\n\n");
-                }
-
+                }                
             }
+
+            catch (Exception ex)
+            {
+                LoggerTXT.LogError("Job error!" + "\n\n" + ex.ToString());
+            }
+            
         }
     }
 }

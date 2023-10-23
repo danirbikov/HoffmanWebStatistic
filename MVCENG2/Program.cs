@@ -15,6 +15,7 @@ try
     var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddControllersWithViews();
+
     builder.Services.AddScoped<StandRepository>();
     builder.Services.AddScoped<OperatorsRepository>();
     builder.Services.AddScoped<JsonHeadersRepository>();
@@ -30,8 +31,6 @@ try
     builder.Services.AddScoped<OperatorPathRepository>();
     builder.Services.AddScoped<DTCPathRepository>();
     builder.Services.AddScoped<DTCContentRepository>();
-
-
 
 
     builder.Logging.ClearProviders();
@@ -55,11 +54,11 @@ try
     builder.Services.AddQuartz(q =>
     {
         q.UseMicrosoftDependencyInjectionJobFactory();
-        var jobKey = new JobKey("RunParser");
+        var jobKey = new JobKey("RunJobServices");
         q.AddJob<RequestJob>(opts => opts.WithIdentity(jobKey));
         q.AddTrigger(opts => opts
                     .ForJob(jobKey)
-                    .WithIdentity("RunParserJobTrigger")
+                    .WithIdentity("RunJobServicesTrigger")
                     .StartNow()
                     .WithSimpleSchedule(x =>
                             x.WithIntervalInSeconds(5)

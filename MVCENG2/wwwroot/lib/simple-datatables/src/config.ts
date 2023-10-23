@@ -28,7 +28,7 @@ export const defaultConfig: DataTableConfiguration = {
     // Pagination
     paging: true,
     perPage: 10,
-    perPageSelect: [5, 10, 15, 20, 25],
+    perPageSelect: [5, 10, 15, 20, 25, 50, 100],
     nextPrev: true,
     firstLast: false,
     prevText: "‹",
@@ -61,13 +61,13 @@ export const defaultConfig: DataTableConfiguration = {
 
     // Customise the display text
     labels: {
-        placeholder: "Search...", // The search input placeholder
-        searchTitle: "Search within table", // The search input title
-        perPage: "entries per page", // per-page dropdown label
-        pageTitle: "Page {page}", // page label used in Aria-label
-        noRows: "No entries found", // Message shown when there are no records to show
-        noResults: "No results match your search query", // Message shown when there are no search results
-        info: "Showing {start} to {end} of {rows} entries" //
+        placeholder: "Поиск...", // The search input placeholder
+        searchTitle: "Поиск внутри таблицы", // The search input title
+        perPage: "элементов на странице", // per-page dropdown label
+        pageTitle: "Страница {page}", // page label used in Aria-label
+        noRows: "Записи не найдены", // Message shown when there are no records to show
+        noResults: "Нет результатов по запросу", // Message shown when there are no search results
+        info: "Показан от {start} до {end} из {rows}" //
     },
 
     // Customise the layout

@@ -11,10 +11,10 @@
     <div class="card mb-4">
         <div class="card-header">
             <i class="fas fa-table me-1"></i>
-            Пользоватиели
+            Пользователи
         </div>
         <div class="card-body">
-            @* <table id="datatablesSimple">
+            <table id="datatablesSimple">
                 <thead>
                     <tr>
                         <th>Логин</th>
@@ -24,21 +24,6 @@
                         <th>Действие</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                    </tr>
-                    <tr>
-                        <td>Garrett Winters</td>
-                        <td>Accountant</td>
-                        <td>Tokyo</td>
-                        <td>63</td>
-                        <td>2011/07/25</td>
-                    </tr>
                     @foreach (User userInfo in Model)
                     {
                         <tr>
@@ -69,24 +54,20 @@
                                 }
                                 else
                                 {
-                                        <a asp-action="EditUser" asp-route-userID=@userInfo.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-                                            <i class="btn btn-primary">
-                                                Edit
-                                            </i>
-                                        </a>
-                                        <a onclick="@confirmScript" asp-action="UnactiveUser" asp-route-userID=@userInfo.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
-                                            <i class="btn btn-danger">
-                                                Del
-                                            </i>
-                                        </a>
+                                <a asp-action="EditUser" asp-route-userID=@userInfo.Id>
+                                    <button class="btn btn-primary fa-solid fa-pen"></button>
+                                </a>
+                                <a asp-action="UnactiveUser" asp-route-userID=@userInfo.Id>
+                                    <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
+                                </a>
+                                
                                 }
                             </td>
                         </tr>
                     }
 
-                </tbody>
-            </table> *@
-
+            </table> 
+            @*
             <table class="table table-centered table-nowrap table-hover mb-0">
                 <thead>
                     <tr>
@@ -165,6 +146,7 @@
                     }
                 </tbody>
             </table>
+            *@
 
 
         </div>

@@ -44,12 +44,12 @@ namespace HoffmanWebstatistic.Services.Job
 
                 var stands = _dbContext.stands.ToList().Where(k => k.StandName != "UNKNOWN");
 
-                foreach (Stand stand in stands)
+                foreach (JsonsPath jsons_path in _dbContext.jsons_paths.ToList())
                 {
-                    JsonsPath jsonsPath = _dbContext.jsons_paths.Where(k => k.StandId == stand.Id).FirstOrDefault();
-                    credentials = new NetworkCredential(jsonsPath.CLogin, jsonsPath.CPassword);
+                    Stand stand = _dbContext.stands.Where(k=>k.Id ==jsons_path.StandId).FirstOrDefault();
+                    credentials = new NetworkCredential(jsons_path.CLogin, jsons_path.CPassword);
 
-                    sourceFilePath = @"\\" + stand.IpAdress + jsonsPath.CPath;
+                    sourceFilePath = @"\\" + stand.IpAdress + jsons_path.CPath;
 
                     LoggerTXT.LogError("sourceFile " + sourceFilePath);
 

@@ -1,7 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta name="description" content="" />
@@ -10,10 +9,11 @@
     <title>HoffmanWebStatistic</title>
 
     <!--STYLES-->
-    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="~/styles/layout.css" rel="stylesheet" />
+    @*<link href="~/styles/layout.css" rel="stylesheet" />*@
    @*  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" /> *@
-    <link href="~/lib/simple-datatables/dist/style.css" rel="stylesheet">
+    @*<link href="~/lib/simple-datatables/dist/style.css" rel="stylesheet">*@
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="~/styles/myStyle.css" rel="stylesheet" />
     <!--STYLES END-->
 
 @*     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -23,7 +23,7 @@
 
 </head>
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+    <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" asp-controller="Home" asp-action="Index">EOL Hofmann</a>
         <!-- Sidebar Toggle-->
@@ -49,10 +49,14 @@
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">ADMIN PANEL</div>
+                        <a class="nav-link" asp-controller="Stand" asp-action="MainMenu">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-desktop"></i></div>
+                            Стенды
+                        </a>
                         <a class="nav-link" asp-controller="Operator" asp-action="MainMenu">
                             <div class="sb-nav-link-icon"><i class="fas fa-hammer"></i></div>
                             Операторы
@@ -75,7 +79,7 @@
                         </a>                       
                         <a class="nav-link" asp-controller="SendingStatuslog" asp-action="MainMenu">
                             <div class="sb-nav-link-icon"><i class="fas fa-circle-info"></i></div>
-                            Сатусы/логи
+                            Статусы/логи
                         </a>
                     </div>
                 </div>
