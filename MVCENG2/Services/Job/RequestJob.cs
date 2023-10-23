@@ -29,7 +29,7 @@ namespace HoffmanWebstatistic.Services.Job
 
                 catch (Exception ex)
                 {
-                    LoggerTXT.LogError(ex.ToString() + "\n\n");
+                    LoggerTXT.LogError("Job error!" + "\n\n" + ex.ToString());
                 }
 
             }

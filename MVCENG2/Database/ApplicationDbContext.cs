@@ -5,26 +5,20 @@ namespace HoffmanWebstatistic.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        //private readonly StreamWriter logStream = new StreamWriter("C:\\WebStatistic\\Logs\\EFLogs.txt", true);
+
         public ApplicationDbContext()
         {
         }
 
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // {
-        //     optionsBuilder.EnableSensitiveDataLogging();
-        //optionsBuilder.LogTo(_logStream.WriteLine);
-        // }
-
         public override void Dispose()
         {
             base.Dispose();
-            //logStream.Dispose();
+
         }
         public override async ValueTask DisposeAsync()
         {
             await base.DisposeAsync();
-            //await logStream.DisposeAsync();
+
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
