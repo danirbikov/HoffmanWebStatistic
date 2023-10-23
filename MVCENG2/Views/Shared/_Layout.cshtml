@@ -10,7 +10,7 @@
     <title>HoffmanWebStatistic</title>
 
     <!--STYLES-->
-    @*<link href="~/styles/layout.css" rel="stylesheet" />*@
+    <link href="~/styles/layout.css" rel="stylesheet" />
    @*  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" /> *@
     <link href="~/lib/simple-datatables/dist/style.css" rel="stylesheet">
     <link href="~/styles/myStyle.css" rel="stylesheet" />
@@ -23,7 +23,7 @@
 
 </head>
 <body class="sb-nav-fixed">
-    <nav class="sb-topnav navbar navbar-expand navbar-light bg-light">
+    <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
         <!-- Navbar Brand-->
         <a class="navbar-brand ps-3" asp-controller="Home" asp-action="Index">EOL Hofmann</a>
         <!-- Sidebar Toggle-->
@@ -49,7 +49,7 @@
     </nav>
     <div id="layoutSidenav">
         <div id="layoutSidenav_nav">
-            <nav class="sb-sidenav accordion sb-sidenav-light" id="sidenavAccordion">
+            <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
                         <div class="sb-sidenav-menu-heading">ADMIN PANEL</div>
@@ -96,7 +96,7 @@
             <main>
                 @RenderBody()
             </main>
-        <footer class="py-4 bg-light mt-auto">
+        <footer class="py-4 bg-dark mt-auto">
             <div class="container-fluid px-4">
                 <div class="d-flex align-items-center justify-content-between small">
                     <div class="text-muted">Copyright &copy; End of Line</div>
