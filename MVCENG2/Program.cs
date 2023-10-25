@@ -8,7 +8,7 @@ using NLog.Web;
 using HoffmanWebstatistic.Services.Job;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-logger.Debug("init main");
+
 
 try
 {
