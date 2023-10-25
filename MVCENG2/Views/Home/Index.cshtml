@@ -35,7 +35,7 @@
                                                 <h4 class="page-title">@standType.Key</h4>
                                                 @foreach (var standObject in Model.stands.Where(p => p.StandType == standType.Key && p.Project == standProject))
                                                 {
-                                                    <div class="col-xl-5 col-lg-6">
+                                                    <div class="col-xl-4 col-lg-5">
                                                         <div class="card widget-flat div-hover">
                                                             <a asp-controller=@standObject.Project asp-action="VINsReport" asp-route-standsIdentifier=@standObject.StandName>
                                                                 <div class="card-body">
