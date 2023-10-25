@@ -93,11 +93,11 @@
                                         <h5 class="mb-0 text-muted">Status:
                                             @if (statusObject.Status.ToUpper()=="OK")
                                             {
-                                                <font style="color:rgba(0,255,20,0.52)">@statusObject.Status</font>                                                       
+                                                <font class="badge bg-success badge-pill">@statusObject.Status</font>
                                             }
                                             else
                                             {
-                                                <font style="color:rgba(255,0,20,0.52)">@statusObject.Status</font>                                                        
+                                                <font class="badge bg-danger badge-pill">@statusObject.Status</font>
                                             }
                                         </h5>
                                         <h5 class="mb-0 text-muted">Error message: @statusObject.ErrorMessage</h5>
