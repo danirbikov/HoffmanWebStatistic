@@ -1,75 +1,65 @@
 ﻿@model List<Translate>
 
 
-<div class="row">
-    <div class="col-xxl-6">
-        <div class="card" style="width: 800px;" >
-            
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="header-title mb-0">Translation list</h4>
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <form method="post" asp-action="ParseTranslationFile" enctype="multipart/form-data">
-                        <input style="display:none;" id="parseInputFile" type="file" class="btn btn-secondary" onchange="document.getElementById('submitParseFile').click();" accept="application/xml, text/xml" name="file" />
-                        <button style="display:none;" type="submit" id="submitParseFile">Загрузить</button>
 
-                        <button type="button" onclick="document.getElementById('parseInputFile').click();" class="btn btn-secondary">Parse translation file</button>
-                    </form>
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Переводы</h1>     
+    <div class="card mb-4">      
+        <div class="card-header d-flex justify-content-end">
+            <div class="card-header d-flex">
+                <form method="post" asp-action="ParseTranslationFile" enctype="multipart/form-data">
+                    <input style="display:none;" id="parseInputFile" type="file" class="btn btn-secondary" onchange="document.getElementById('submitParseFile').click();" accept="application/xml, text/xml" name="file" />
+                    <button style="display:none;" type="submit" id="submitParseFile">Загрузить</button>
+
+                    <button type="button" onclick="document.getElementById('parseInputFile').click();" class="btn btn-secondary">Спарсить файл переводов</button>
+                </form>
                     
-                    <button onclick="addOrEditInputs()" type="submit" class="btn btn-primary">
-                        Save and send stand
-                    </button>
-                </div>                                                                                    
-                </div>
-
-                <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table id="tableId" class="table table-centered table-hover mb-0" style="max-width: 1400px;">
-                        <thead>
-                            <tr>
-                                <th scope="col">English variant</th>
-                                <th scope="col">Russian variant</th>
-                                <th scope="col">Action</th>
-
-                            </tr>
-                        </thead>
-                        
-                            <form method="post" asp-action="SaveChange">
-                                
-                                    @foreach (var translate in Model)
-                                    {                                    
-                                        <tr>
-                                            <td>
-                                                <span>@translate.EngVariant</span>
-                                            </td>
-                                
-                                            <td id="@(translate.EngVariant)">
-                                                <span id="@("Text "+translate.EngVariant)">@translate.RusVariant</span>
-                                            </td>
-                                            
-                                            <td>
-                                                <a onclick="makeEditable('@(translate.EngVariant)')" class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-                                                    <i class="btn btn-primary btn-md">
-                                                        Edit
-                                                    </i>
-                                                </a>
-                                    <a onclick="confirmAndDelete(this,'@(translate.EngVariant)')" class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
-                                                    <i class="btn btn-danger btn-md">
-                                                        Del
-                                                    </i>
-                                                </a>
-                                            </td>
-                                        </tr>                                   
-                                    }
-                                
-                                <button type="submit" id="confirmButton" style="display: none;">Невидимая кнопка</button>
-                            </form>                          
-                    </table>
-                </div>
-            </div>                        
-            <button class="btn btn-primary" onclick="addRow();">Add translation</button>                        
+                <button onclick="addOrEditInputs()" type="submit" class="btn btn-primary">
+                    Сохранить и отправить на стенды
+                </button>
+            </div>                                                                                    
         </div>
+
+        <div class="card-body">
+            <div class="table-responsive">
+                <table id="tableId" class="table table-centered table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col">Английский вариант</th>
+                            <th scope="col">Русский вариант</th>
+                            <th scope="col">Действия</th>
+
+                        </tr>
+                    </thead>
+                        
+                    <form method="post" asp-action="SaveChange">
+                                
+                            @foreach (var translate in Model)
+                            {                                    
+                                <tr>
+                                    <td>
+                                        <span>@translate.EngVariant</span>
+                                    </td>                               
+                                    <td id="@(translate.EngVariant)">
+                                        <span id="@("Text "+translate.EngVariant)">@translate.RusVariant</span>
+                                    </td>
+                                    <td class="btn-group">
+                                        <button onclick="makeEditable('@(translate.EngVariant)')" class="btn btn-primary fa-solid fa-pen"></button>                                                
+                                        <button onclick="confirmAndDelete(this,'@(translate.EngVariant)')" class="btn btn-danger fa-solid fa-trash"></button>                                                                        
+                                    </td>
+                                </tr>                                   
+                            }
+                                
+                        <button type="submit" id="confirmButton" style="display: none;">Невидимая кнопка</button>
+                    </form>                          
+                </table>
+            </div>
+        </div>
+    
+        <button class="btn btn-primary" onclick="addRow();">Добавить перевод</button>                        
     </div>
 </div>
+
 
 
 
@@ -88,7 +78,7 @@
 
             cell1.innerHTML = '<input style="width: 302px;" type="text" class="form-control-key" name="keys">';
             cell2.innerHTML = '<input style="width: 302px;" type="text" class="form-control-value" name="values">';
-            cell3.innerHTML = '<a class="font-18 text-danger" onclick="deleteRow(this)"><i class="btn btn-danger">Del</i></a>';
+            cell3.innerHTML = '<button onclick="deleteRow(this)" class="btn btn-danger fa-solid fa-trash"></button>';
         }
 
         function deleteRow(element) 
@@ -99,9 +89,6 @@
 
         function confirmAndDelete(element,  translateEngVariant)
         {
-            console.log(element);
-            console.log(translateEngVariant);
-
             var confirmResult = confirm("Вы уверены, что хотите удалить перевод?");
 
             if (confirmResult)
@@ -111,7 +98,6 @@
                 var xhr = new XMLHttpRequest();
                 xhr.open('DELETE', '/Translate/DeleteTranslate', true);
                 xhr.setRequestHeader('Content-Type', 'application/json');
-                console.log(JSON.stringify(translateEngVariant));
                 xhr.send(JSON.stringify(translateEngVariant))
             }
             
@@ -119,38 +105,30 @@
 
         function addOrEditInputs()
         {
-            console.log('click');
             var inputData = {};
 
             var inputsKeys = document.querySelectorAll('.form-control-key');
             var inputsValues = document.querySelectorAll('.form-control-value');
 
-            // поиск по добавленным обьектам
             for (var i = 0; i < inputsKeys.length; i++) 
             {
                 var key = inputsKeys[i].value;
-                console.log("add key " + key);
                 var value = inputsValues[i].value;
-                console.log("add id " + value);
                 inputData[key] = value;
             }
 
             var inputsUpdate = document.querySelectorAll('.form-control');
             
-            // поиск по измененным обьектам
             for (var i = 1; i < inputsUpdate.length; i++) {
                 var value = inputsUpdate[i].value;
                 var id = inputsUpdate[i].id
                 inputData[id] = value;          
             }
-            console.log(inputData);
             
-            // Создаем AJAX запрос
             var xhr = new XMLHttpRequest();
             xhr.open('POST', '/Translate/UpdateAndSave', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.onload = function () {
-                // Код, который будет выполнен после завершения запроса
                 location.reload();
             };
             xhr.send(JSON.stringify(inputData))       
@@ -164,16 +142,14 @@
 
         function changeLabel(cell, translateKey) {
             var text = document.getElementById("Text " + translateKey);
-            // Создаем элемент input и устанавливаем его значение равным тексту
+
             var input = document.createElement("input");
             input.value = text.textContent;
             input.className = 'form-control';
             input.id = translateKey;
 
-            // Заменяем текстовый элемент на поле ввода
             cell.replaceChild(input, text);
 
-            // Фокусируемся на поле ввода
             input.focus();        
     }
 
