@@ -100,8 +100,7 @@ namespace HoffmanWebstatistic.Controllers
         }
         public IActionResult AccessDenied()
         {
-           
-            return View("CustomErrorPage", "Недостаточно прав доступа для просмотра страницы. Обратитесь к администратору сервиса.");
+            return View("CustomErrorPage", "Недостаточно прав доступа для просмотра страницы. Обратитесь к администраторам сервиса:\n\nMalyutkinBE@kamaz.ru\nUmyarovAR@kamaz.ru\nBikovDI@kamaz.ru");
         }
     }
 }
