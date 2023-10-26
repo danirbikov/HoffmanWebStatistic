@@ -84,8 +84,8 @@
                     </div>
                 </div>
                 <div class="sb-sidenav-footer">
-                    <div class="small">Logged in as:</div>
-                    <div class="small">Role:</div>
+                    <div class="small">Logged in as: @await Component.InvokeAsync("Auth", new { method = "Name" })</div>
+                    <div class="small">Role: @await Component.InvokeAsync("Auth", new { method = "Role" })</div>
                     @* Start Bootstrap *@
                 </div>
 
