@@ -9,6 +9,78 @@
 }
 
 
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Стенды</h1>
+
+    <div class="card mb-4">
+        <div class="card-header">
+            <a asp-action="AddStand">
+                <button type="submit" class="btn btn-primary float-end">Добавить стенд</button>
+            </a>
+        </div>
+        <div class="card-body">
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                        <th scope="col">Название стенда</th>
+                        <th scope="col">Дата последнего теста</th>
+                        <th scope="col">Статус подключения</th>
+                        <th scope="col">Количество JSON тестов</th>
+                        <th scope="col">Действие</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (StandsForAdminPanelView standsInfo in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0">
+                                    </div>
+                                    <div class="flex-grow-1 ms-2">
+                                        @standsInfo.stand.StandName
+                                    </div>
+                                </div>
+                            </td>
+                            <td><i class="uil uil-calender me-1"></i>@standsInfo.lastTestDate</td>
+                            @if (standsInfo.pingResult)
+                            {
+                                <td>
+                                    <span class="badge bg-success-lighten text-success">Online</span>
+                                </td>
+                            }
+                            else
+                            {
+                                <td>
+                                    <span class="badge bg-danger-lighten text-danger">Offline</span>
+                                </td>
+                            }
+                            <td>
+                                <span class="text-success fw-semibold">@standsInfo.allTestsCount</span>
+                            </td>
+                            <td>
+                                <a asp-action="EditStand" asp-route-standID=@standsInfo.stand.Id>
+                                    <button class="btn btn-primary fa-solid fa-pen"></button>
+                                </a>
+                                <a onclick="@confirmScript" asp-action="UnactiveStand" asp-route-standID=@standsInfo.stand.Id>
+                                    <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
+                                </a>
+                                
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+
+        </div>
+    </div>
+</div>
+
+@*
 <div class="row">
     <div class="col-xxl-6">
         <div class="card">
@@ -84,4 +156,4 @@
         </div>
     </div> 
 </div>
-   
+   *@
