@@ -11,24 +11,22 @@ using static HoffmanWebstatistic.Models.Enums.SortingEnum;
 using System.Xml.Linq;
 using HoffmanWebstatistic.Repository;
 using HoffmanWebstatistic.Models.ViewModel;
+using Microsoft.VisualBasic;
+using System.Security.Claims;
 
 namespace HoffmanWebstatistic.Controllers
 {
     public class HoffmanController : Controller
     {
         private readonly JsonHeadersRepository _jsonHeadersRepository;
-        private readonly ApplicationDbContext _dbContext;
 
         public HoffmanController(JsonHeadersRepository jsonHeadersRepository, JsonTestsRepository jsonTestsRepository, ApplicationDbContext dbContext)
         {
             _jsonHeadersRepository = jsonHeadersRepository;
-            _dbContext = dbContext;
         }
 
         public IEnumerable<ResultsJsonHeader> InitializePageValue(string standsIdentifier, string searchIdentifier, int pageNumber, SortState sortOrder)
-        {
-            
-
+        {           
             IQueryable<ResultsJsonHeader> resultsJsonHeader;
 
             //Получение всех ResultsJsonHeader моделей по значению standsIdentifier
@@ -38,8 +36,7 @@ namespace HoffmanWebstatistic.Controllers
             }
             else
             {
-                
-
+                ViewData["StandsIdentifier"] = "Search: "+searchIdentifier;
                 resultsJsonHeader = _jsonHeadersRepository.SearchInAllDB(searchIdentifier);
             }
           
@@ -94,52 +91,47 @@ namespace HoffmanWebstatistic.Controllers
             return resultsJsonHeader;
         }
 
-        public async Task<IActionResult> VINsReport(string standsIdentifier = "Hoffman", string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.VINAsc)
+        public async Task<IActionResult> VINsReport(string standsIdentifier = "Hoffman", string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.DateDesc)
         {
             ViewData["StandsIdentifier"] = standsIdentifier;
             ViewData["SearchIdentifier"] = searchIdentifier;
 
             // пагинация
-            int pageSize = 13;
+            int pageSize = 11;
             var jsonHeaderIDs = InitializePageValue(standsIdentifier,searchIdentifier,pageNumber,sortOrder).GroupBy(t => t.VIN).Select(t => t.FirstOrDefault()).Select(k => k.Id).ToList();
             var count = jsonHeaderIDs.Count();
             var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 
-            ViewData["PageCount"] = count/pageSize+1;
-            ViewData["PageCurrent"] = pageNumber;
-            // формируем модель представления
+
             ReportViewModel viewModel = new ReportViewModel(
                 _jsonHeadersRepository.GetJsonHeadersById(itemsId),
-                new PageViewModel(count, pageNumber, pageSize),
+                new PageViewModel(count,pageNumber,pageSize),
                 new SortViewModel(sortOrder)
             );
             
             return View(viewModel);
         }
 
-        public async Task<IActionResult> JSONReport(string standsIdentifier = "Hoffman", string VIN = null, string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.VINAsc)
+        public async Task<IActionResult> JSONReport(string standsIdentifier = "Hoffman", string VIN = null, string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.DateDesc)
         {
             ViewData["StandsIdentifier"] = standsIdentifier;
             ViewData["SearchIdentifier"] = searchIdentifier;
-            // пагинация
-            int pageSize = 13;
+            
+            int pageSize = 11;
             
             var jsonHeaderIDs = InitializePageValue(standsIdentifier, searchIdentifier, pageNumber, sortOrder).Where(k => k.VIN == VIN).Select(k=>k.Id).ToList();
             var count = jsonHeaderIDs.Count();
             var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 
-            // формируем модель представления
 
-           ReportViewModel viewModel = new ReportViewModel(
-                _jsonHeadersRepository.GetJsonHeadersById(itemsId),
-                new PageViewModel(count, pageNumber, pageSize),
-                new SortViewModel(sortOrder)
-            );
+            ReportViewModel viewModel = new ReportViewModel(
+                 _jsonHeadersRepository.GetJsonHeadersById(itemsId),
+                 new PageViewModel(count, pageNumber, pageSize),
+                 new SortViewModel(sortOrder)
+             );
 
             return View(viewModel);
         }
-
-
      
 
         public async Task<IActionResult> TestReport(long jsonHeaderID)

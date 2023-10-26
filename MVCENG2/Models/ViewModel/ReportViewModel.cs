@@ -14,6 +14,7 @@ namespace HoffmanWebstatistic.Models.ViewModel
             this.resultsJsonHeader = resultsJsonHeader;
             PageViewModel = pageViewModel;
             SortViewModel = sortViewModel;
+
         }
     }
 }
