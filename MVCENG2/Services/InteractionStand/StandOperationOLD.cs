@@ -12,7 +12,7 @@ using System.Xml;
 
 namespace HoffmanWebstatistic.Services.InteractionStand
 {
-    public class StandOperation
+    public class StandOperationOLD
     {
 
 
@@ -29,34 +29,38 @@ namespace HoffmanWebstatistic.Services.InteractionStand
         private readonly DTCPathRepository _dtcPathRepository;
 
         #region Constructors
-        public StandOperation()
+        public StandOperationOLD()
         {
         }
 
-        public StandOperation(StandRepository standRepository)
+        public StandOperationOLD(StandRepository standRepository)
         {
             _standRepository = standRepository;
         }
-        public StandOperation(StandRepository standRepository, SendingStatusLogRepository sendingStatusLogRepository, OperatorPathRepository operatorPathRepository)
+        public StandOperationOLD(SendingStatusLogRepository sendingStatusLogRepository)
+        {
+            _sendingStatusLogRepository = sendingStatusLogRepository;
+        }
+        public StandOperationOLD(StandRepository standRepository, SendingStatusLogRepository sendingStatusLogRepository, OperatorPathRepository operatorPathRepository)
         {
             _standRepository = standRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
             _operatorPathRepository = operatorPathRepository;
         }
-        public StandOperation(StandRepository standRepository, TranslatePathRepository translatePathRepository, SendingStatusLogRepository sendingStatusLogRepository)
+        public StandOperationOLD(StandRepository standRepository, TranslatePathRepository translatePathRepository, SendingStatusLogRepository sendingStatusLogRepository)
         {
             _standRepository = standRepository;
             _translatePathRepository = translatePathRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
         }
-        public StandOperation(StandRepository standRepository, PictureRepository pictureRepository, SendingStatusLogRepository sendingStatusLogRepository, PicturePathRepository picturePathRepository)
+        public StandOperationOLD(StandRepository standRepository, PictureRepository pictureRepository, SendingStatusLogRepository sendingStatusLogRepository, PicturePathRepository picturePathRepository)
         {
             _standRepository = standRepository;
             _pictureRepository = pictureRepository;
             _sendingStatusLogRepository = sendingStatusLogRepository;
             _picturePathRepository = picturePathRepository;
         }
-        public StandOperation(StandRepository standRepository, DTCContentRepository dtcContentRepository, SendingStatusLogRepository sendingStatusLogRepository, DTCPathRepository dtcPathRepository)
+        public StandOperationOLD(StandRepository standRepository, DTCContentRepository dtcContentRepository, SendingStatusLogRepository sendingStatusLogRepository, DTCPathRepository dtcPathRepository)
         {
             _standRepository = standRepository;
             _dtcContentRepository = dtcContentRepository;
@@ -278,9 +282,26 @@ namespace HoffmanWebstatistic.Services.InteractionStand
 
             NetworkCredential credentials = new NetworkCredential(username, password);
 
+
             using (new NetworkConnection(folderPath, credentials))
             {
-                File.Copy(sourcePath, destinationPath, true);
+
+                FileStream fileStream = new FileStream(sourcePath, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                var destinationStream = new FileStream(destinationPath, FileMode.Create, FileAccess.Write);
+
+                try
+                {
+                    fileStream.CopyTo(destinationStream);
+                }
+                catch (Exception ex)
+                {
+                    LoggerTXT.LogError(ex.Message);
+                }
+                finally
+                {
+                    destinationStream.Close();
+                    fileStream.Close();
+                }               
             }
         }
 

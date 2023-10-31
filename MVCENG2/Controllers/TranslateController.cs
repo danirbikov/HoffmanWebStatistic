@@ -104,7 +104,7 @@ namespace HoffmanWebstatistic.Controllers
             TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();
             translatesXMLFile.FormationXMLFileForStands(_translateRepository.GetAll());
 
-            StandOperation interactionStand = new StandOperation(_standRepository, _translatePathRepository, _sendingStatusLogRepository);
+            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _translatePathRepository, _sendingStatusLogRepository);
             interactionStand.SendFileOnStands("Translate", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
         }
 

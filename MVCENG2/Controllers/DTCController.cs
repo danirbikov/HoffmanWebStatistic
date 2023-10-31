@@ -60,7 +60,7 @@ namespace HoffmanWebstatistic.Controllers
 
                         int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-                        StandOperation interactionStand = new StandOperation(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
+                        StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
                         interactionStand.AddDTCForStands(dtc, userId);
 
 
@@ -93,7 +93,7 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> EditDTC(string oldDTCName, string newDTCName, IFormFile file)
         {
-            StandOperation interactionStand = new StandOperation(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
+            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
             DtcContent newDTC = new DtcContent();
 
             if (file == null) 
@@ -126,7 +126,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            StandOperation interactionStand = new StandOperation(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
+            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
             interactionStand.DeleteDTCFromStands(dtcName, userId);
 
             _dtcContentRepository.Delete(dtcName);

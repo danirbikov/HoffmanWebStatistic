@@ -90,7 +90,7 @@ namespace HoffmanWebstatistic.Controllers
                     _pictureRepository.Add(picture);
 
                     int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
-                    StandOperation interactionStand = new StandOperation(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
+                    StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
                     interactionStand.AddPictureForStands(picture, userId);                
                                                                                              
                 }
@@ -115,7 +115,7 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPicture(string oldPictureName, string newPictureName, IFormFile file)
         {
-            StandOperation interactionStand = new StandOperation(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
+            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
             Picture newPicture = new Picture();
 
 
@@ -147,7 +147,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            StandOperation interactionStand = new StandOperation(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
+            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
             interactionStand.DeletePictureFromStands(pictureName, userId);
 
             _pictureRepository.Delete(pictureName);

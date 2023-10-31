@@ -6,7 +6,7 @@ using HoffmanWebstatistic.Services.Job;
 
 namespace HoffmanWebstatistic.Controllers
 {
-
+    [Authorize(Roles = "sa, admin")]
     public class SendingStatusLogController : Controller
     {
 

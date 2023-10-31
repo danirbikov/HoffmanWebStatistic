@@ -4,6 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Services.FormationFile;
 using HoffmanWebstatistic.Services.InteractionStand;
+using HoffmanWebstatistic.Models.ViewModel;
+using ServicesWebAPI.Services;
+using static HoffmanWebstatistic.Models.SerializerModels.JSONSerializeModel;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -27,9 +30,10 @@ namespace HoffmanWebstatistic.Controllers
 
 
         public async Task<IActionResult> MainMenu()
-        {                   
-
+        {
+            ViewData["standList"] = _operatorPathRepository.GetAllWithInclude().Select(k => k.Stand.StandName).ToList();
             return View(_operatorsRepository.GetAll().Where(k => k.InactiveMark == "FALSE").ToList());
+                
         }
 
         [HttpGet]
@@ -46,8 +50,6 @@ namespace HoffmanWebstatistic.Controllers
                 operatorModel.Created = DateTime.Now;
                 operatorModel.InactiveMark = "FALSE";               
                 _operatorsRepository.Add(operatorModel);
-
-                FormationAndSendOperatoFileToStand();
 
                 return RedirectToAction("MainMenu");
             }
@@ -68,8 +70,6 @@ namespace HoffmanWebstatistic.Controllers
         {
             _operatorsRepository.EditOperator(operatorObject);
 
-            FormationAndSendOperatoFileToStand();
-
             return RedirectToAction("MainMenu");
             
         }
@@ -78,21 +78,51 @@ namespace HoffmanWebstatistic.Controllers
         {
             _operatorsRepository.UnactiveOperator(operatorID);
 
-            FormationAndSendOperatoFileToStand();
-
             return RedirectToAction("MainMenu");
             
         }
 
-        public void FormationAndSendOperatoFileToStand()
+
+
+        [HttpPost]
+        public ActionResult FormationFile()
         {
-            OperatorsXMLFile.FormationXMLFileForStands(_standRepository, _operatorsRepository.GetAll().ToList());
+            try
+            {
+                OperatorsXMLFile.FormationXMLFileForStands(_standRepository.GetAll(), _operatorsRepository.GetAll());
+                return Ok(new { status = "success"});
+            } 
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = "Error in server!!!! " + ex.Message });
+            }
+           
+        }
 
-            StandOperation interactionStand = new StandOperation(_standRepository, _sendingStatusLogRepository, _operatorPathRepository);
-            interactionStand.SendFileOnStands("Operator", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
+        [HttpPost]
 
+        public ActionResult SendFileOnStand([FromBody] string standName)
+        {
+
+            Stand stand = _standRepository.GetStandbyName(standName);
+
+            OperatorsPath operatorPath = _operatorPathRepository.GetOperatorPathByStandID(stand.Id);
+            int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
+
+            OperatorOperation operatorOperation = new OperatorOperation();
+            SendingStatusLog sendingStatusLog = operatorOperation.SendOperatorFileOnStand(operatorPath, stand, userId);
+
+            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+
+            if (sendingStatusLog.Status.ToUpper()=="OK")
+            {
+                return Ok(new { status = "success", stand = stand.StandName });
+            }
+            else
+            {
+                return BadRequest(new { status = "Error in server!!!! " + sendingStatusLog.ErrorMessage, stand = stand.StandName });
+            }                     
         }
     }
-
 }
 

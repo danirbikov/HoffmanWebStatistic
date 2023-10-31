@@ -12,7 +12,7 @@ namespace HoffmanWebstatistic.Services.FormationFile
     {
 
 
-        public static void FormationXMLFileForStands(StandRepository _standRepository, List<Operator> operators)
+        public static void FormationXMLFileForStands(List<Stand> stands, List<Operator> operators)
         {
 
             XDocument xdoc = new XDocument();
@@ -20,7 +20,7 @@ namespace HoffmanWebstatistic.Services.FormationFile
             XElement operatorsXML = new XElement("STANDPOOL");
             int operatorCount = 0;
 
-            foreach (Stand stand in _standRepository.GetAll())
+            foreach (Stand stand in stands)
             {
                 XElement xmlElement = new XElement("stand");
                 XAttribute standNameAttr = new XAttribute("number", CryptData(stand.StandName));
@@ -42,7 +42,7 @@ namespace HoffmanWebstatistic.Services.FormationFile
                 operatorCount = 0;
             }
 
-            StandOperation interactionStand = new StandOperation();
+            StandOperationOLD interactionStand = new StandOperationOLD();
 
             xdoc.Add(operatorsXML);
             xdoc.Save(interactionStand.operatorFilePathInProject);

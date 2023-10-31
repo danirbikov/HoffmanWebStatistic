@@ -1,11 +1,13 @@
 ﻿@using HoffmanWebstatistic.Models.ViewModel;
 @using HoffmanWebstatistic.ComfortModules
+@await Html.PartialAsync("_ModalWindow")
 
 @model List<Operator>
 
 @{
     string confirmMessage = "Вы уверены, что хотите удалить оператора?";
     string confirmScript = "return confirm('" + confirmMessage + "');";
+    
 }
 
 <div class="container-fluid px-4">
@@ -13,11 +15,14 @@
 
     <div class="card mb-4">
         <div class="card-header">
+            <button onclick="FormationFileAndSendStands();" type="submit" class="btn btn-secondary float-end" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <font>Сохранить и отправить на стенды</font>
+            </button>
+
             <a asp-action="AddOperator">
                 <button type="submit" class="btn btn-primary float-end">Добавить оператора</button>
-            </a>
-        </div>
-
+            </a>            
+        </div>     
 
         <div class="card-body">
             <table id="datatablesSimple">
@@ -63,40 +68,111 @@
     </div>
 </div>
 
-@*
-<div class="row">
-    <div class="col-xxl-6">
-        <div class="card" style="width: 800px;">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title mb-0">Operators list</h4>
-                <a asp-action="AddOperator">
-                    <button type="submit" class="btn btn-primary">Add operator</button>
 
-                </a>
-            </div>
 
-            <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table class="table table-centered table-nowrap table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Login</th>
-                                <th scope="col">Password</th>
-                                <th scope="col">Description</th>
-                                <th scope="col">Created</th>
-                                <th scope="col" class="text-end">Action</th>
+@*@section Scripts
+{
+    <script>
 
-                            </tr>
-                        </thead>
-                        <tbody>
+        function MakeModalWindow()
+        {
+            
 
-                            @await Html.PartialAsync("_OperatorsList", Model)
+            $.ajax({
+                url: '/Operator/FormationFile',
+                type: 'POST',
+                contentType: 'application/json',              
+                //async: false,
+                success: function (response) {
+                    $.each(standNamesList, function (index, item) {
+                        
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-*@
+                        var cardBody = document.getElementById("ModalCardBody");
+                        var standDiv = document.createElement('div');
+                        var standI = document.createElement('i');
+
+                        standDiv.classList.add("card-body");
+                        standDiv.id = item;
+
+                        standI.style.float = 'right';
+
+                        standDiv.textContent = item;
+                        standI.id = 'spinner_' + item;
+                        standI.className = "spinner-border spinner-border-sm spinner-border m-1";
+                        standDiv.appendChild(standI);
+                        cardBody.appendChild(standDiv);
+
+                    });
+                    SendFileInStands(standNamesList)
+                },
+                error: function (response) {
+                    var cardBody = document.getElementById("ModalCardBody");
+                    var standDiv = document.createElement('div');
+                    standDiv.textContent = 'Error in formation XML file';
+                    cardBody.appendChild(standDiv);
+                }
+            
+            });
+        }
+        function SendFileInStands(standNamesList) {
+            var count = 0;
+            $.each(standNamesList, function (index, item) 
+            {
+                var cardBody = document.getElementById("ModalCardBody");
+                $.ajax({                   
+                    url: '/Operator/SendFileOnStand',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(item),
+                    //async: false,
+                    success: function (response) 
+                    {
+                        standSpinner = document.getElementById('spinner_' + item);
+                        standSpinner.hidden = true;
+                        console.log(response);
+                        standDiv = document.getElementById(response.stand);
+                        var standI = document.createElement('i');
+                        standI.className = "fa-solid fa-check fa-xl";
+                        standI.style.color = '#2bff00';
+                        standI.style.float = 'right';
+                        standDiv.appendChild(standI);
+
+                        count++;
+                        if (count == standNamesList.length) {
+                            spinnerElement = document.getElementById("spinner");
+                            spinnerElement.hidden = true;
+
+                            document.getElementsByClassName('modal-title')[0].textContent = "Файлы загружены";
+                            console.log(spinner);
+                        }
+                        
+                    },
+                    error: function (response) {
+                        standSpinner = document.getElementById('spinner_' + item);
+                        standSpinner.hidden = true;
+                        console.log(response);
+                        standDiv = document.getElementById(response.responseJSON.stand);
+                        var standI = document.createElement('i');                       
+                        standI.className = "fa-solid fa-xmark fa-xl";
+                        standI.style.color = '#ff0000';
+                        standI.style.float = 'right';
+                        standDiv.appendChild(standI);
+
+                        count++;
+                        if (count == standNamesList.length) {
+                            spinnerElement = document.getElementById("spinner");
+                            spinnerElement.hidden = true;
+
+                            document.getElementsByClassName('modal-title')[0].textContent = "Файлы загружены";
+                            console.log(spinner);
+                        }
+                    }
+
+                });
+
+                
+            });
+        }
+
+    </script>
+    *@

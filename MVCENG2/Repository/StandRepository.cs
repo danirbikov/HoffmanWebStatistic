@@ -18,7 +18,7 @@ namespace HoffmanWebstatistic.Repository
 
         }
 
-        public IEnumerable<Stand> GetAll()
+        public List<Stand> GetAll()
         {
             return _context.stands.Where(k=>k.InactiveMark=="FALSE").ToList();
             
@@ -75,18 +75,11 @@ namespace HoffmanWebstatistic.Repository
             return await _context.Stand.FirstOrDefaultAsync(i => i.Project == projectName);
         }
         */
-        public int GetStandIDbyName(string standName)
+        public Stand GetStandbyName(string standName)
         {
             var standObject = _context.stands.Where(k => k.StandName == standName).FirstOrDefault();
-            if (standObject!=null)
-            {
-                return standObject.Id;
-            }
-            else
-            {
 
-                return _context.stands.Where(k => k.StandName == "UNKNOWN").FirstOrDefault().Id;
-            }
+            return standObject;
               
         }
 

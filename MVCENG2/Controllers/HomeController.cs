@@ -10,7 +10,7 @@ using HoffmanWebstatistic.Services;
 
 namespace HoffmanWebstatistic.Controllers
 {
-
+    [Authorize(Roles = "sa, admin")]
     public class HomeController : Controller
     {
 
@@ -24,7 +24,7 @@ namespace HoffmanWebstatistic.Controllers
 
 
         }
-        [Authorize(Roles = "sa, admin")]
+        
         public async Task<IActionResult> Index()
         {
 

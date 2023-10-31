@@ -13,9 +13,12 @@ using HoffmanWebstatistic.Repository;
 using HoffmanWebstatistic.Models.ViewModel;
 using Microsoft.VisualBasic;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace HoffmanWebstatistic.Controllers
 {
+    [Authorize(Roles = "sa, admin")]
     public class HoffmanController : Controller
     {
         private readonly JsonHeadersRepository _jsonHeadersRepository;

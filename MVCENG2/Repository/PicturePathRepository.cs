@@ -14,7 +14,7 @@ namespace HoffmanWebstatistic.Repository
         }
        
 
-        public PicturesPath GePicturesPathByStandID(int standId)
+        public PicturesPath GetPicturesPathByStandID(int standId)
         {
 
             return _context.pictures_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
@@ -24,6 +24,12 @@ namespace HoffmanWebstatistic.Repository
         {
 
             return _context.pictures_paths.ToList();
+        }
+
+        public List<PicturesPath> GetAllWithInclude()
+        {
+
+            return _context.pictures_paths.Include(k=>k.Stand).ToList();
         }
     }
 }

@@ -32,7 +32,7 @@ namespace HoffmanWebstatistic.Services.FormationFile
                 TranslateXML.Add(E_Element);
             }
 
-            StandOperation interactionStand = new StandOperation();
+            StandOperationOLD interactionStand = new StandOperationOLD();
 
             xdoc.Add(TranslateXML);
             xdoc.Save(interactionStand.translationFilePathInProject);

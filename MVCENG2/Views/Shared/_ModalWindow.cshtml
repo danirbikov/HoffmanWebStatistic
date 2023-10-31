@@ -1,0 +1,167 @@
+﻿
+@{
+    var controller = ViewContext.RouteData.Values["controller"];
+    var standNamesList = Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["standList"]));
+    var a = 0;
+}
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Загрузка файла на стенды</h5>
+                <div id="spinner" class="spinner-border spinner-border-sm spinner-border m-1" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <button onclick="location.reload()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Закрыть"></button>
+            </div>
+            <div class="modal-body">
+                <div class="container-fluid px-4">
+                    <div class="card mb-4" id="ModalCardBody">
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button onclick="location.reload()" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    
+
+    function SendFileOnStands() {
+        PreliminaryGenerationStandsLabels();
+
+        FileCRUDInStands('/' + '@controller' + '/SendFileOnStand');
+    }
+    function DeleteFileOnStands() {
+        PreliminaryGenerationStandsLabels();
+        FileCRUDInStands('/' + '@controller' + '/DeleteFileOnStand',);
+    }
+    function UpdateFileOnStands() {
+        PreliminaryGenerationStandsLabels();
+        FileCRUDInStands('/' + '@controller' + '/UpdateFileOnStand',);
+    }
+
+    function FormationFileAndSendStands() {
+        FormationFile('/' + '@controller' + '/FormationFile');
+        FileCRUDInStands('/' + '@controller' + '/SendFileOnStand',);      
+    }
+
+    function PreliminaryGenerationStandsLabels() {
+        console.log(@standNamesList)
+        $.each(@standNamesList, function (index, item) {
+            var cardBody = document.getElementById("ModalCardBody");
+            var standDiv = document.createElement('div');
+            var standI = document.createElement('i');
+
+            standDiv.classList.add("card-body");
+            standDiv.id = item;
+
+            standI.style.float = 'right';
+
+            standDiv.textContent = item;
+            standI.id = 'spinner_' + item;
+            standI.className = "spinner-border spinner-border-sm spinner-border m-1";
+            standDiv.appendChild(standI);
+            cardBody.appendChild(standDiv);
+
+        });
+    }
+
+    function ErrorPreliminaryGenerationStandsLabels() {
+        var cardBody = document.getElementById("ModalCardBody");
+        var standDiv = document.createElement('div');
+        standDiv.textContent = 'Error in formation XML file';
+        cardBody.appendChild(standDiv);
+    }
+
+    function FormationFile(route) {
+        console.log(route);
+        $.ajax({
+            url: route,
+            type: 'POST',
+            contentType: 'application/json',
+            async: false,
+            success: function (response) {
+                PreliminaryGenerationStandsLabels();
+            },
+            error: function (response) {
+                ErrorPreliminaryGenerationStandsLabels();
+            }
+        });
+    }
+
+    function FileCRUDInStands(route) {
+
+        var count = 0;
+        var stands = @standNamesList;
+        $.each(@standNamesList, function (index, item) {
+            var cardBody = document.getElementById("ModalCardBody");
+            debugger
+            console.log(item)
+            console.log(formData)
+            console.log('json ' + JSON.stringify(item, formData))
+
+
+            $.ajax({
+                url: route,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(item),
+                //async: false,
+                success: function (response) {
+                    standSpinner = document.getElementById('spinner_' + item);
+                    standSpinner.hidden = true;
+                    console.log(response);
+                    standDiv = document.getElementById(response.stand);
+                    var standI = document.createElement('i');
+                    standI.className = "fa-solid fa-check fa-xl";
+                    standI.style.color = '#2bff00';
+                    standI.style.float = 'right';
+                    standDiv.appendChild(standI);
+
+                    count++;
+                    if (count == stands.length) {
+                        spinnerElement = document.getElementById("spinner");
+                        spinnerElement.hidden = true;
+
+                        document.getElementsByClassName('modal-title')[0].textContent = "Файлы загружены";
+                        console.log(spinner);
+                    }
+
+                },
+                error: function (response) {
+                    standSpinner = document.getElementById('spinner_' + item);
+                    standSpinner.hidden = true;
+                    console.log(response);
+                    standDiv = document.getElementById(response.responseJSON.stand);
+                    var standI = document.createElement('i');
+                    standI.className = "fa-solid fa-xmark fa-xl";
+                    standI.style.color = '#ff0000';
+                    standI.style.float = 'right';
+                    standDiv.appendChild(standI);
+
+                    count++;
+                    if (count == stands.length) {
+                        spinnerElement = document.getElementById("spinner");
+                        spinnerElement.hidden = true;
+
+                        document.getElementsByClassName('modal-title')[0].textContent = "Файлы загружены";
+                        console.log(spinner);
+                    }
+                }
+
+            });
+
+
+        });
+    }
+
+</script>

@@ -24,7 +24,7 @@ namespace HoffmanWebstatistic.Repository
         }
 
 
-        public IEnumerable<Operator> GetAll()
+        public List<Operator> GetAll()
         {
             return _context.operators.Where(k=>k.InactiveMark=="FALSE").ToList();
             
