@@ -9,12 +9,16 @@
   <ItemGroup>
     <Compile Remove="Parser\**" />
     <Compile Remove="Views\Siemens\**" />
+    <Compile Remove="wwwroot\lib\myLib\**" />
     <Content Remove="Parser\**" />
     <Content Remove="Views\Siemens\**" />
+    <Content Remove="wwwroot\lib\myLib\**" />
     <EmbeddedResource Remove="Parser\**" />
     <EmbeddedResource Remove="Views\Siemens\**" />
+    <EmbeddedResource Remove="wwwroot\lib\myLib\**" />
     <None Remove="Parser\**" />
     <None Remove="Views\Siemens\**" />
+    <None Remove="wwwroot\lib\myLib\**" />
   </ItemGroup>
 
   <ItemGroup>

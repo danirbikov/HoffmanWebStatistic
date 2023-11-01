@@ -3,7 +3,7 @@
 }
 
 .datatable-wrapper.no-footer .datatable-container {
-	border-bottom: 1px solid #d9d9d9;
+	/*border-bottom: 1px solid #d9d9d9;*/
 }
 
 .datatable-top,
@@ -109,7 +109,7 @@
 	max-width: 100%;
 	width: 100%;
 	border-spacing: 0;
-	border-collapse: separate;
+	border-collapse: collapse;
 }
 
 .datatable-table > tbody > tr > td,
@@ -125,7 +125,7 @@
 .datatable-table > thead > tr > th {
 	vertical-align: bottom;
 	text-align: left;
-	border-bottom: 1px solid #d9d9d9;
+	/*border-bottom: 1px solid #d9d9d9;*/
 }
 
 .datatable-table > tfoot > tr > th {
