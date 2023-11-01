@@ -18,7 +18,7 @@ using System.Data;
 
 namespace HoffmanWebstatistic.Controllers
 {
-    [Authorize(Roles = "sa, admin")]
+    [Authorize(Roles = "sa, admin, viewer")]
     public class HoffmanController : Controller
     {
         private readonly JsonHeadersRepository _jsonHeadersRepository;
