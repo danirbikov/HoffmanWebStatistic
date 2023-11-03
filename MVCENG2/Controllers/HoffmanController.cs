@@ -15,6 +15,8 @@ using Microsoft.VisualBasic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using System.Data;
+using System.Globalization;
+using Microsoft.AspNetCore.Http;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -25,6 +27,7 @@ namespace HoffmanWebstatistic.Controllers
 
         public HoffmanController(JsonHeadersRepository jsonHeadersRepository, JsonTestsRepository jsonTestsRepository, ApplicationDbContext dbContext)
         {
+            
             _jsonHeadersRepository = jsonHeadersRepository;
         }
 
@@ -94,14 +97,31 @@ namespace HoffmanWebstatistic.Controllers
             return resultsJsonHeader;
         }
 
-        public async Task<IActionResult> VINsReport(string standsIdentifier = "Hoffman", string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.DateDesc)
+        public async Task<IActionResult> VINsReport(string standsIdentifier = "Hoffman", string searchIdentifier = null, int pageNumber = 1, SortState sortOrder = SortState.DateDesc, string startDate = "", string endDate = "", int pageSize = 10)
         {
+            DateTime parsedEndDate = new DateTime();
+            DateTime parsedStartDate = new DateTime();
+
+            CultureInfo russianCulture = new CultureInfo("ru-RU");
+            if (endDate == "" || startDate == "")
+            {
+                parsedEndDate = DateTime.Now;              
+            }
+            else
+            {
+                parsedStartDate = DateTime.Parse(startDate, russianCulture);
+                parsedEndDate = DateTime.Parse(endDate, russianCulture);
+            }          
+
             ViewData["StandsIdentifier"] = standsIdentifier;
             ViewData["SearchIdentifier"] = searchIdentifier;
+            ViewData["PageSize"] = pageSize;
+            ViewData["StartDate"] = parsedStartDate;
+            ViewData["EndDate"] = parsedEndDate; 
 
             // пагинация
-            int pageSize = 11;
-            var jsonHeaderIDs = InitializePageValue(standsIdentifier,searchIdentifier,pageNumber,sortOrder).GroupBy(t => t.VIN).Select(t => t.FirstOrDefault()).Select(k => k.Id).ToList();
+
+            var jsonHeaderIDs = InitializePageValue(standsIdentifier,searchIdentifier,pageNumber,sortOrder).GroupBy(t => t.VIN).Select(t => t.FirstOrDefault()).Where(k=>k.Created>= parsedStartDate && k.Created<= parsedEndDate.AddDays(1)).Select(k => k.Id).ToList();
             var count = jsonHeaderIDs.Count();
             var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
 

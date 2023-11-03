@@ -6,6 +6,7 @@ using Quartz;
 using NLog;
 using NLog.Web;
 using HoffmanWebstatistic.Services.Job;
+using HoffmanWebstatistic;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
