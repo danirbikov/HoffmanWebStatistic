@@ -25,5 +25,10 @@ namespace HoffmanWebstatistic.Repository
             return _context.translates_paths.ToList();
         }
 
+        public List<TranslatesPath> GetAllWithInclude()
+        {
+            return _context.translates_paths.Include(k => k.Stand).ToList();
+        }
+
     }
 }

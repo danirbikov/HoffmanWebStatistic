@@ -14,19 +14,19 @@ namespace HoffmanWebstatistic.Repository
         }
        
 
-        public PicturesPath GetPicturesPathByStandID(int standId)
+        public DTCPaths GetPicturesPathByStandID(int standId)
         {
 
             return _context.pictures_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
         }
 
-        public List<PicturesPath> GetAll()
+        public List<DTCPaths> GetAll()
         {
 
             return _context.pictures_paths.ToList();
         }
 
-        public List<PicturesPath> GetAllWithInclude()
+        public List<DTCPaths> GetAllWithInclude()
         {
 
             return _context.pictures_paths.Include(k=>k.Stand).ToList();

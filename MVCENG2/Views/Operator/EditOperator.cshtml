@@ -1,27 +1,41 @@
 ﻿@model Operator
 
 
-<form method="post" asp-action="EditOperator">
-    <div class="form-group">
-        <label asp-for="OLogin">Login</label>
-        <input asp-for="OLogin" class="form-control" placeholder="login" value=@Model.OLogin>
-        <span asp-validation-for="OLogin" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="OPassword">Password</label>
-        <input asp-for="OPassword" class="form-control" placeholder="password" value=@Model.OPassword>
-        <span asp-validation-for="OPassword" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="ODescription">Description</label>
-        <input asp-for="ODescription" class="form-control" placeholder="Малютка Борис" value=@Model.ODescription>
-        <span asp-validation-for="ODescription" class="text-danger"></span>
-    </div>
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Изменение оператора: @Model.OLogin</h1>
+    <div class="card mb-4">
 
-    <input type="hidden" asp-for="Id" value=@Model.Id>
-    <input type="hidden" asp-for="InactiveMark" value=@Model.InactiveMark>
-    <input type="hidden" asp-for="Created" value=@Model.Created>
+        <div class="card-body">
+            <form method="post" asp-action="EditOperator">
+                <div class="mb-2">
+                    <label asp-for="OLogin">Логин</label>
+                    <input asp-for="OLogin" class="form-control" placeholder="Логин" value=@Model.OLogin>
+                    <span asp-validation-for="OLogin" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label asp-for="OPassword">Пароль</label>
+                    <input asp-for="OPassword" class="form-control" placeholder="Пароль" value=@Model.OPassword>
+                    <span asp-validation-for="OPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label asp-for="ODescription">Описание</label>
+                    <input asp-for="ODescription" class="form-control" placeholder="Малюткин Борис Этибарович" value=@Model.ODescription>
+                    <span asp-validation-for="ODescription" class="text-danger"></span>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Edit</button>
-    
-</form>
+                <input type="hidden" asp-for="Id" value=@Model.Id>
+                <input type="hidden" asp-for="InactiveMark" value=@Model.InactiveMark>
+                <input type="hidden" asp-for="Created" value=@Model.Created>
+
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+

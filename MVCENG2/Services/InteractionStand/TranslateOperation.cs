@@ -31,6 +31,8 @@ namespace HoffmanWebstatistic.Services.InteractionStand
 
             catch (Exception ex)
             {
+                UnsendingFileBackup unsendingFileBackup = new UnsendingFileBackup();
+                unsendingFileBackup.SaveBackupFile(stand.StandName, "Translate", translationFilePathInProject);
                 return loggingStandOperation.FormationSendStatusLog(destinationFilePath, translationFilePathInProject, userId, stand, "Error", ex.Message);
                     
             }

@@ -1,23 +1,32 @@
 ﻿@model Picture
 
-<form method="post" enctype="multipart/form-data" asp-action="EditPicture">
-    
-    <div class="form-group">       
-        <input class="form-control" name="oldPictureName" style="display:none;" placeholder="login" value=@Model.PName>
-    </div>
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Изменение картинки: @Model.PName</h1>
+    <div class="card mb-4">
 
-    <div class="form-group">
-        <label>Picture Name</label>
-        <input class="form-control" name="newPictureName" placeholder="login" value=@Model.PName>
-    </div>
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" asp-action="EditPicture">
 
-    <div class="form-group">
-        <label>@Model.PName</label>
-        <input type="file" name="file" class="form-control-file" />
-    </div>
+                <div class="mb-2">
+                    <input class="form-control" name="oldPictureName" style="display:none;" placeholder="login" value=@Model.PName>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-</form>
+                <div class="mb-2">
+                    <label>Picture Name</label>
+                    <input class="form-control" name="newPictureName" placeholder="login" value=@Model.PName>
+                </div>
+
+                <div class="mb-2">
+
+                    <input type="file" name="file" class="form-control form-control-lg" id="formFileLg" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
 
 
 

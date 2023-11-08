@@ -33,7 +33,6 @@ try
     builder.Services.AddScoped<DTCPathRepository>();
     builder.Services.AddScoped<DTCContentRepository>();
 
-
     builder.Logging.ClearProviders();
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
     builder.Host.UseNLog();
@@ -62,16 +61,16 @@ try
                     .WithIdentity("RunJobServicesTrigger")
                     .StartNow()
                     .WithSimpleSchedule(x =>
-                            x.WithIntervalInSeconds(5)
+                            x.WithIntervalInSeconds(50)
                             .RepeatForever()));
     });
 
     builder.Services.AddQuartzHostedService(
         q => q.WaitForJobsToComplete = true);
 
-
-
     var app = builder.Build();
+
+
     if (!app.Environment.IsDevelopment())
     {
         app.UseExceptionHandler("/Home/Error");
@@ -91,12 +90,10 @@ try
 }
 catch (Exception exception)
 {
-    // NLog: catch setup errors
     logger.Error(exception, "Stopped program because of exception");
     throw;
 }
 finally
 {
-    // Ensure to flush and stop internal timers/threads before application-exit (Avoid segmentation fault on Linux)
     NLog.LogManager.Shutdown();
 }

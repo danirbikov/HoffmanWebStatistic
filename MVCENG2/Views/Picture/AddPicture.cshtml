@@ -1,10 +1,18 @@
-﻿<form method="post" enctype="multipart/form-data" asp-action="AddPicture">
-    <div class="form-group">
-        <label>Выберите файлы</label>
-        <input type="file" multiple name="files" class="form-control-file" />
+﻿
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Добавление картинки</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" asp-action="AddPicture">
+                <div class="mb-2">
+                    <label>Выберите картинку/картинки</label>
+                    <input type="file" multiple name="files" class="form-control form-control-lg" id="formFileLg" />
+                </div>
+                <button type="submit" class="btn btn-primary">Загрузить</button>
+            </form>
+            
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Загрузить</button>
-</form>
-
-
+</div>
 

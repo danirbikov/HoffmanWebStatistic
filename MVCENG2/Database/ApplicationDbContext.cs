@@ -51,7 +51,7 @@ namespace HoffmanWebstatistic.Data
         public DbSet<Translate> translates { get; set; }
         public DbSet<TranslatesPath> translates_paths { get; set; }
         public DbSet<SendingStatusLog> sending_status_log { get; set; }
-        public DbSet<PicturesPath> pictures_paths { get; set; }
+        public DbSet<DTCPaths> pictures_paths { get; set; }
         public DbSet<JsonsPath> jsons_paths { get; set; }
         public DbSet<OperatorsPath> operators_paths { get; set; }
         public DbSet<DtcsPath> dtcs_paths { get; set; }

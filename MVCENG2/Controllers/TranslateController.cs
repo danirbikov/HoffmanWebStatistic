@@ -33,6 +33,7 @@ namespace HoffmanWebstatistic.Controllers
 
         public async Task<IActionResult> MainMenu()
         {
+            ViewData["standList"] = _translatePathRepository.GetAllWithInclude().Select(k => k.Stand.StandName).ToList();
             var allTranslates = _translateRepository.GetAll();
 
             return View(allTranslates);
@@ -56,10 +57,7 @@ namespace HoffmanWebstatistic.Controllers
                     {
                         _translateRepository.Add(new Translate() { EngVariant = translate.key, RusVariant = translate.value });
                     }
-
                 }
-
-                formationAndSendTranslateFile();
             }
 
             catch (Exception ex)
@@ -78,34 +76,60 @@ namespace HoffmanWebstatistic.Controllers
 
             _translateRepository.Delete(translateEngName);
 
-            formationAndSendTranslateFile();
-
             return RedirectToAction("MainMenu");
             
         }
 
         [HttpPost]
         public IActionResult UpdateAndSave([FromBody] Dictionary<string, string> inputData)
-        {
-
-            
+        {           
             foreach (var dictionaryElement in inputData)
             {
                 _translateRepository.AddOrEdit(new Translate() { EngVariant = dictionaryElement.Key, RusVariant = dictionaryElement.Value });
             }
 
-            formationAndSendTranslateFile();
-
             return Ok();
         }
 
-        public void formationAndSendTranslateFile()
-        {
-            TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();
-            translatesXMLFile.FormationXMLFileForStands(_translateRepository.GetAll());
 
-            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _translatePathRepository, _sendingStatusLogRepository);
-            interactionStand.SendFileOnStands("Translate", _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id);
+        [HttpPost]
+        public ActionResult SendFileOnStand([FromBody] string standName)
+        {
+
+            Stand stand = _standRepository.GetStandbyName(standName);
+
+            TranslatesPath translatePath = _translatePathRepository.GetTranslatePathByStandID(stand.Id);
+            int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
+
+            TranslateOperation translateOperation = new TranslateOperation();
+            SendingStatusLog sendingStatusLog = translateOperation.SendTranslateFileOnStands(stand, translatePath, userId);
+
+            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+
+            if (sendingStatusLog.Status.ToUpper() == "OK")
+            {
+                return Ok(new { status = "success", stand = stand.StandName });
+            }
+            else
+            {
+                return BadRequest(new { status = "Error in server!!!! " + sendingStatusLog.ErrorMessage, stand = stand.StandName });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult FormationFile()
+        {
+            try
+            {
+                TranslatesXMLFile translatesXMLFile = new TranslatesXMLFile();
+                translatesXMLFile.FormationXMLFileForStands(_translateRepository.GetAll());
+                return Ok(new { status = "success" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { status = "Error in server!!!! " + ex.Message });
+            }
+
         }
 
     }

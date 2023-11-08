@@ -22,6 +22,10 @@ namespace HoffmanWebstatistic.Repository
         {
             return _context.dtcs_paths.ToList();
         }
+        public List<DtcsPath> GetAllWithInclude()
+        {
+            return _context.dtcs_paths.Include(k=>k.Stand).ToList();
+        }
 
     }
 }

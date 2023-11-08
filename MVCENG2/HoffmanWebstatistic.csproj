@@ -76,6 +76,8 @@
     <Content Remove="C:\Users\malyutkinbe\.nuget\packages\bootstrap\5.2.2\contentFiles\any\any\wwwroot\js\bootstrap.min.js.map" />
     <Content Remove="Views\Operator\_OperatorsList.cshtml" />
     <Content Remove="Views\SendingStatusLog\TestReport.cshtml" />
+    <Content Remove="Views\Translate\AddPicture.cshtml" />
+    <Content Remove="Views\Translate\EditPicture.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

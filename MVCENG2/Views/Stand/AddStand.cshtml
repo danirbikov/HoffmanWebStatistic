@@ -3,83 +3,95 @@
 @model StandAddViewModel
 
 
-<form method="post" asp-action="AddStand">
-    <div asp-validation-summary="ModelOnly"> </div>
-    <div class="form-group">
-        <label asp-for="@Model.stand.StandName">Stand name</label>
-        <input asp-for="@Model.stand.StandName" class="form-control" placeholder="bts6">
-        <span asp-validation-for="@Model.stand.StandName" class="text-danger"></span>
-    </div>
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Добавление стенда</h1>
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="post" asp-action="AddStand">
+                <div asp-validation-summary="ModelOnly"> </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.StandName">Название стенда</label>
+                    <input asp-for="@Model.stand.StandName" class="form-control" placeholder="bts6">
+                    <span asp-validation-for="@Model.stand.StandName" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="@Model.stand.StandNameDescription">Stand name description</label>
-        <input asp-for="@Model.stand.StandNameDescription" class="form-control" placeholder="Тормозной стенд">
-        <span asp-validation-for="@Model.stand.StandNameDescription" class="text-danger"></span>
-    </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.StandNameDescription">Описание стенда</label>
+                    <input asp-for="@Model.stand.StandNameDescription" class="form-control" placeholder="Тормозной стенд">
+                    <span asp-validation-for="@Model.stand.StandNameDescription" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="@Model.stand.WorkplaceMes">Work place Mes</label>
-        <input asp-for="@Model.stand.WorkplaceMes" class="form-control" placeholder="Mes">
-        <span asp-validation-for="@Model.stand.WorkplaceMes" class="text-danger"></span>
-    </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.WorkplaceMes">Расположение по MES</label>
+                    <input asp-for="@Model.stand.WorkplaceMes" class="form-control" placeholder="Mes">
+                    <span asp-validation-for="@Model.stand.WorkplaceMes" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="@Model.stand.IpAdress">Ip adress</label>
-        <input asp-for="@Model.stand.IpAdress" class="form-control" placeholder="10.194.100.18">
-        <span asp-validation-for="@Model.stand.IpAdress" class="text-danger"></span>
-    </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.IpAdress">IP адрес</label>
+                    <input asp-for="@Model.stand.IpAdress" class="form-control" placeholder="10.194.100.18">
+                    <span asp-validation-for="@Model.stand.IpAdress" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="@Model.stand.DnsName">Dns name</label>
-        <input asp-for="@Model.stand.DnsName" class="form-control" placeholder="DNS">
-        <span asp-validation-for="@Model.stand.DnsName" class="text-danger"></span>
-    </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.DnsName">Имя DNS</label>
+                    <input asp-for="@Model.stand.DnsName" class="form-control" placeholder="DNS">
+                    <span asp-validation-for="@Model.stand.DnsName" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label asp-for="@Model.stand.Placement">Placement</label>
-        <input asp-for="@Model.stand.Placement" class="form-control" placeholder="Placement">
-        <span asp-validation-for="@Model.stand.Placement" class="text-danger"></span>
-    </div>    
-    
-    <div class="form-group">
-        <label asp-for="@Model.stand.StandType">Stand type</label>
-        <select asp-for="@Model.stand.StandType">
-            @foreach (string standType in ViewBag.StandTypeList)
-            {
-                <option>@standType</option>
-            }
-            
-        </select>
-        <span asp-validation-for="@Model.stand.StandType" class="text-danger"></span>
-    </div>
-    
-    <div class="form-group">
-        <label asp-for="@Model.stand.Project">Project</label>
-        <select asp-for="@Model.stand.Project">
-            <option>HOFFMAN</option>
-        </select>
-        <span asp-validation-for="@Model.stand.Project" class="text-danger"></span>
-    </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.Placement">Расположение</label>
+                    <input asp-for="@Model.stand.Placement" class="form-control" placeholder="Placement">
+                    <span asp-validation-for="@Model.stand.Placement" class="text-danger"></span>
+                </div>
 
-    <div class="form-group">
-        <label>Добавить QNX версию?</label>
-        <input type="checkbox" id="myCheckbox" , onclick="showInputField()" />
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.QNX.IpAdress" id="labelID" style="display:none;">QNX IP</label>
-        <input asp-for="@Model.QNX.IpAdress" id="inputID" style="display:none;" value="0.0.0.0" class="form-control" placeholder="QNX IP">
-        <span asp-validation-for="@Model.QNX.IpAdress" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="@Model.QNX.DnsName" id="label2ID"  style="display:none;">DnsName</label>
-        <input asp-for="@Model.QNX.DnsName" id="input2ID" style="display:none;" value="none" class="form-control" placeholder="QNX DnsName">
-        <span asp-validation-for="@Model.QNX.DnsName" class="text-danger"></span>
-    </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.StandType">Тип стенда</label>
+                    <select class="form-select" multiple aria-label="multiple select example" asp-for="@Model.stand.StandType">
+                        @foreach (string standType in ViewBag.StandTypeList)
+                        {
+                            <option>@standType</option>
+                        }
+
+                    </select>
+                    <span asp-validation-for="@Model.stand.StandType" class="text-danger"></span>
+                </div>
+
+                <div class="mb-2">
+                    <label asp-for="@Model.stand.Project">Проект</label>
+                    <select class="form-select" asp-for="@Model.stand.Project">
+                        <option>HOFFMAN</option>
+                    </select>
+                    <span asp-validation-for="@Model.stand.Project" class="text-danger"></span>
+                </div>
+
+                <div class="mb-2">
+                    <label>Добавить QNX версию?</label>
+                    <input type="checkbox" id="myCheckbox" onclick="showInputField()" />
+                </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.QNX.IpAdress" id="labelID" style="display:none;">IP адрес QNX стенда</label>
+                    <input asp-for="@Model.QNX.IpAdress" id="inputID" style="display:none;" value="0.0.0.0" class="form-control" placeholder="QNX IP">
+                    <span asp-validation-for="@Model.QNX.IpAdress" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label asp-for="@Model.QNX.DnsName" id="label2ID" style="display:none;">Имя DNS QNX стенда</label>
+                    <input asp-for="@Model.QNX.DnsName" id="input2ID" style="display:none;" value="none" class="form-control" placeholder="QNX DnsName">
+                    <span asp-validation-for="@Model.QNX.DnsName" class="text-danger"></span>
+                </div>
 
 
-    <button type="submit" class="btn btn-primary">Add</button>
-    
-</form>
+                <button type="submit" class="btn btn-primary">Добавить стенд</button>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+
+
 
 
 @section Scripts {

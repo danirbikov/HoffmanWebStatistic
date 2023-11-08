@@ -90,8 +90,12 @@ namespace HoffmanWebstatistic.Controllers
                     _pictureRepository.Add(picture);
 
                     int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
-                    StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
-                    interactionStand.AddPictureForStands(picture, userId);                
+                    PictureOperation pictureOperation = new PictureOperation();
+
+                    foreach (DTCPaths picturesPath in _picturePathRepository.GetAllWithInclude())
+                    {
+                        pictureOperation.AddPictureForStand(picture, picturesPath.Stand, picturesPath, userId);
+                    }                              
                                                                                              
                 }
                 
@@ -115,7 +119,6 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> EditPicture(string oldPictureName, string newPictureName, IFormFile file)
         {
-            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
             Picture newPicture = new Picture();
 
 
@@ -136,8 +139,13 @@ namespace HoffmanWebstatistic.Controllers
 
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            interactionStand.DeletePictureFromStands(oldPictureName, userId);
-            interactionStand.EditPictureFromStands(newPicture, userId);
+            PictureOperation pictureOperation = new PictureOperation();
+
+            foreach (DTCPaths picturesPath in _picturePathRepository.GetAllWithInclude())
+            {
+                pictureOperation.DeletePictureFromStand(oldPictureName, picturesPath.Stand, picturesPath, userId);
+                pictureOperation.EditPictureFromStand(newPicture,picturesPath.Stand, picturesPath, userId);
+            }
                        
             return RedirectToAction("MainMenu");            
         }
@@ -147,8 +155,13 @@ namespace HoffmanWebstatistic.Controllers
         {
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _pictureRepository, _sendingStatusLogRepository, _picturePathRepository);
-            interactionStand.DeletePictureFromStands(pictureName, userId);
+            PictureOperation pictureOperation = new PictureOperation();
+
+            foreach (DTCPaths picturesPath in _picturePathRepository.GetAllWithInclude())
+            {
+
+                pictureOperation.DeletePictureFromStand(pictureName, picturesPath.Stand, picturesPath, userId);
+            }
 
             _pictureRepository.Delete(pictureName);
 

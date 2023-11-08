@@ -1,23 +1,32 @@
 ﻿@model Operator
 
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Добавление оператора</h1>
+    <div class="card mb-4">
 
-<form method="post" asp-action="AddOperator">
-    <div class="form-group">
-        <label asp-for="OLogin">Login</label>
-        <input asp-for="OLogin" class="form-control" placeholder="login">
-        <span asp-validation-for="OLogin" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="OPassword">Password</label>
-        <input asp-for="OPassword" class="form-control" placeholder="password">
-        <span asp-validation-for="OPassword" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="ODescription">Description</label>
-        <input asp-for="ODescription" class="form-control" placeholder="Малютка Борис">
-        <span asp-validation-for="ODescription" class="text-danger"></span>
-    </div>
+        <div class="card-body">
+            <form method="post" asp-action="AddOperator">
+                <div class="mb-2">
+                    <label asp-for="OLogin">Логин</label>
+                    <input asp-for="OLogin" class="form-control" placeholder="Логин">
+                    <span asp-validation-for="OLogin" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label asp-for="OPassword">Пароль</label>
+                    <input asp-for="OPassword" class="form-control" placeholder="Пароль">
+                    <span asp-validation-for="OPassword" class="text-danger"></span>
+                </div>
+                <div class="mb-2">
+                    <label asp-for="ODescription">ФИО</label>
+                    <input asp-for="ODescription" class="form-control" placeholder="Малюткин Борис Эибарович">
+                    <span asp-validation-for="ODescription" class="text-danger"></span>
+                </div>
 
-    <button type="submit" class="btn btn-primary">Add</button>
-    
-</form>
+                <button type="submit" class="btn btn-primary">Добавить</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+

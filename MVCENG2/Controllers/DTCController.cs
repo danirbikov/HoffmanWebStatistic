@@ -60,17 +60,16 @@ namespace HoffmanWebstatistic.Controllers
 
                         int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-                        StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
-                        interactionStand.AddDTCForStands(dtc, userId);
-
-
-
+                        DTCOperation dTCOperation = new DTCOperation();
+                        foreach (DtcsPath dtcPath in _dtcPathRepository.GetAllWithInclude())
+                        {
+                            dTCOperation.AddDTCForStand(dtc, dtcPath.Stand, dtcPath, userId);
+                        }
                     }
                 }
                 catch (Exception ex)
                 {
-                    LoggerTXT.LogError("Log Error LOL "+ex.Message);
-                    LoggerTXT.LogError("Log Error LOL 2 " + ex.InnerException);
+                    LoggerTXT.LogError("Log Error "+ex.Message);
                 }
 
             }
@@ -92,8 +91,7 @@ namespace HoffmanWebstatistic.Controllers
 
         [HttpPost]
         public async Task<IActionResult> EditDTC(string oldDTCName, string newDTCName, IFormFile file)
-        {
-            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
+        {           
             DtcContent newDTC = new DtcContent();
 
             if (file == null) 
@@ -112,11 +110,13 @@ namespace HoffmanWebstatistic.Controllers
             }
 
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
-
-            interactionStand.DeleteDTCFromStands(oldDTCName, userId);
-
-            interactionStand.EditDTCFromStands(newDTC, userId);
-                       
+            DTCOperation dTCOperation = new DTCOperation();
+            foreach (DtcsPath dtcPath in _dtcPathRepository.GetAllWithInclude())
+            {
+                dTCOperation.DeleteDTCFromStand(oldDTCName, dtcPath.Stand, dtcPath, userId);
+                dTCOperation.EditDTCFromStands(newDTC, dtcPath.Stand, dtcPath,  userId);
+            }            
+            
             return RedirectToAction("MainMenu");            
         }
         
@@ -126,8 +126,11 @@ namespace HoffmanWebstatistic.Controllers
         {
             int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
 
-            StandOperationOLD interactionStand = new StandOperationOLD(_standRepository, _dtcContentRepository, _sendingStatusLogRepository, _dtcPathRepository);
-            interactionStand.DeleteDTCFromStands(dtcName, userId);
+            DTCOperation dTCOperation = new DTCOperation();
+            foreach (DtcsPath dtcPath in _dtcPathRepository.GetAllWithInclude())
+            {
+                dTCOperation.DeleteDTCFromStand(dtcName, dtcPath.Stand, dtcPath, userId) ;
+            }
 
             _dtcContentRepository.Delete(dtcName);
 

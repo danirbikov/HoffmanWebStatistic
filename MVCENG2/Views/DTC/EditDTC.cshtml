@@ -1,23 +1,34 @@
 ﻿@model DtcContent
 
-<form method="post" enctype="multipart/form-data" asp-action="EditDTC">
-    
-    <div class="form-group">       
-        <input class="form-control" name="oldDTCName" style="display:none;" placeholder="login" value=@Model.Fname>
-    </div>
 
-    <div class="form-group">
-        <label>DTC Name</label>
-        <input class="form-control" name="newDTCName" placeholder="login" value=@Model.Fname>
-    </div>
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Изменение файла DTC: @Model.Fname</h1>
+    <div class="card mb-4">
+        <div class="card-body">
 
-    <div class="form-group">
-        <label>@Model.Fname</label>
-        <input type="file" name="file" class="form-control-file" />
-    </div>
+            <form method="post" enctype="multipart/form-data" asp-action="EditDTC">
 
-    <button type="submit" class="btn btn-primary">Сохранить</button>
-</form>
+                <div class="form-group">
+                    <input class="form-control" name="oldDTCName" style="display:none;" placeholder="login" value=@Model.Fname>
+                </div>
+
+                <div class="mb-2">
+                    <label>DTC Name</label>
+                    <input class="form-control" name="newDTCName" placeholder="login" value=@Model.Fname>
+                </div>
+
+                <div class="mb-2">
+                    <input type="file" name="file" class="form-control form-control-lg" id="formFileLg" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
 
 
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace HoffmanWebstatistic.Models.Hoffman
 {
-    public partial class PicturesPath
+    public partial class DTCPaths
     {
         public int Id { get; set; }
         public int StandId { get; set; }

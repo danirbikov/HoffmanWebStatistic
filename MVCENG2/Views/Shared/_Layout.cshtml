@@ -51,14 +51,25 @@
             <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
                 <div class="sb-sidenav-menu">
                     <div class="nav">
-                        <div class="sb-sidenav-menu-heading">ADMIN PANEL</div>
-                        <a class="nav-link" asp-controller="Stand" asp-action="MainMenu">
-                            <div class="sb-nav-link-icon"><i class="fa-solid fa-desktop"></i></div>
-                            Стенды
+                        <div class="sb-sidenav-menu-heading">ПАНЕЛЬ ПОЛЬЗОВАТЕЛЯ</div>
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-layer-group"></i></div>
+                            Отчеты по стендам
                         </a>
+
+                        <div class="sb-sidenav-menu-heading">АДМИН МЕНЮ</div>
                         <a class="nav-link" asp-controller="Operator" asp-action="MainMenu">
                             <div class="sb-nav-link-icon"><i class="fas fa-hammer"></i></div>
                             Операторы
+                        </a>
+                        <a class="nav-link" asp-controller="Translate" asp-action="MainMenu">
+                            <div class="sb-nav-link-icon"><i class="fas fa-language"></i></div>
+                            Переводы
+                        </a>                                              
+                        <div class="sb-sidenav-menu-heading">СУПЕР АДМИН МЕНЮ</div>
+                        <a class="nav-link" asp-controller="Stand" asp-action="MainMenu">
+                            <div class="sb-nav-link-icon"><i class="fa-solid fa-desktop"></i></div>
+                            Стенды
                         </a>
                         <a class="nav-link" asp-controller="User" asp-action="MainMenu">
                             <div class="sb-nav-link-icon"><i class="fas fa-users"></i></div>
@@ -68,14 +79,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-images"></i></div>
                             Картинки
                         </a>
-                        <a class="nav-link" asp-controller="Translate" asp-action="MainMenu">
-                            <div class="sb-nav-link-icon"><i class="fas fa-language"></i></div>
-                            Переводы
-                        </a>                        
                         <a class="nav-link" asp-controller="DTC" asp-action="MainMenu">
                             <div class="sb-nav-link-icon"><i class="fas fa-archive"></i></div>
                             Загрузка DTC
-                        </a>                       
+                        </a>
                         <a class="nav-link" asp-controller="SendingStatuslog" asp-action="MainMenu">
                             <div class="sb-nav-link-icon"><i class="fas fa-circle-info"></i></div>
                             Статусы/логи

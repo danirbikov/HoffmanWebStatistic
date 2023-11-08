@@ -32,10 +32,10 @@ namespace HoffmanWebstatistic.Services.FormationFile
                 TranslateXML.Add(E_Element);
             }
 
-            StandOperationOLD interactionStand = new StandOperationOLD();
+            TranslateOperation translateOperation = new TranslateOperation();
 
             xdoc.Add(TranslateXML);
-            xdoc.Save(interactionStand.translationFilePathInProject);
+            xdoc.Save(translateOperation.translationFilePathInProject);
 
         }
     }

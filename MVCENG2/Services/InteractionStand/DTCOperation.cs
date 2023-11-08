@@ -15,32 +15,31 @@ namespace HoffmanWebstatistic.Services.InteractionStand
     public class DTCOperation
     {
 
-        public SendingStatusLog AddDTCForStands(DtcContent dtc, Stand stand, DtcsPath dtcsPath,  int userId = 15)
+        public SendingStatusLog AddDTCForStand(DtcContent dtc, Stand stand, DtcsPath dtcsPath,  int userId = 15)
         {
             LoggingStandOperation loggingStandOperation = new LoggingStandOperation();
 
             string destinationFilePath = @"\\" + stand.IpAdress + dtcsPath.CPath + "\\" + dtc.Fname;
             string fileDirectory = Path.GetDirectoryName(destinationFilePath);
+            XmlDocument xmlDoc = new XmlDocument();
 
             try
             {
                 CmdOperations cmdOperations = new CmdOperations();
                 cmdOperations.DeleteCredentialForFolder(fileDirectory);
 
-                NetworkCredential credentials = new NetworkCredential(dtcsPath.CLogin, dtcsPath.CPassword);
+                string xmlString = dtc.Fdata;
 
-                using (new NetworkConnection(fileDirectory, credentials))
+                if (xmlString.Contains("encoding=\"UTF-16\"?"))
                 {
-                    string xmlString = dtc.Fdata;
+                    xmlString = xmlString.Replace("encoding=\"UTF-16\"?", "encoding=\"UTF-8\"?");
+                }
 
-                    if (xmlString.Contains("encoding=\"UTF-16\"?"))
-                    {
-                        xmlString = xmlString.Replace("encoding=\"UTF-16\"?", "encoding=\"UTF-8\"?");
-                    }
+                xmlDoc.LoadXml(xmlString);
 
-                    XmlDocument xmlDoc = new XmlDocument();
-                    xmlDoc.LoadXml(xmlString);
-
+                NetworkCredential credentials = new NetworkCredential(dtcsPath.CLogin, dtcsPath.CPassword);
+                using (new NetworkConnection(fileDirectory, credentials))
+                {                  
                     SendDeleteFileOnStand sendDeleteFileOnStand = new SendDeleteFileOnStand();
                     sendDeleteFileOnStand.SaveXMLOnStand(xmlDoc, destinationFilePath);                
 
@@ -50,12 +49,14 @@ namespace HoffmanWebstatistic.Services.InteractionStand
             }
             catch (Exception ex)
             {
+                UnsendingFileBackup unsendingFileBackup = new UnsendingFileBackup();
+                unsendingFileBackup.SaveBackupFile(stand.StandName, "DTC", xmlDoc, dtc.Fname);
                 return loggingStandOperation.FormationSendStatusLog("Add DTC in stand", destinationFilePath, "DATABASE", userId, stand, "Error", ex.Message);
             }
             
         }
 
-        public SendingStatusLog DeleteDTCFromStands(string dtcName, Stand stand, DtcsPath dtcsPath, int userId = 15)
+        public SendingStatusLog DeleteDTCFromStand(string dtcName, Stand stand, DtcsPath dtcsPath, int userId = 15)
         {
             LoggingStandOperation loggingStandOperation = new LoggingStandOperation();
 
@@ -85,8 +86,8 @@ namespace HoffmanWebstatistic.Services.InteractionStand
 
         public void EditDTCFromStands(DtcContent dtc, Stand stand, DtcsPath dtcsPath, int userId = 15)
         {
-            DeleteDTCFromStands(dtc.Fname, stand, dtcsPath, userId);
-            AddDTCForStands(dtc, stand, dtcsPath, userId);
+            DeleteDTCFromStand(dtc.Fname, stand, dtcsPath, userId);
+            AddDTCForStand(dtc, stand, dtcsPath, userId);
         }
 
     }

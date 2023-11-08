@@ -32,7 +32,7 @@ namespace HoffmanWebstatistic.Controllers
         public async Task<IActionResult> MainMenu()
         {
             ViewData["standList"] = _operatorPathRepository.GetAllWithInclude().Select(k => k.Stand.StandName).ToList();
-            return View(_operatorsRepository.GetAll().Where(k => k.InactiveMark == "FALSE").ToList());
+            return View(_operatorsRepository.GetAll());
                 
         }
 
@@ -100,7 +100,6 @@ namespace HoffmanWebstatistic.Controllers
         }
 
         [HttpPost]
-
         public ActionResult SendFileOnStand([FromBody] string standName)
         {
 

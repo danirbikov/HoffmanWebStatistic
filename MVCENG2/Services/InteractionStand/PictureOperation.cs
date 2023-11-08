@@ -14,43 +14,45 @@ namespace HoffmanWebstatistic.Services.InteractionStand
 {
     public class PictureOperation
     {
-        public SendingStatusLog AddPictureForStand(Picture picture, Stand stand, PicturesPath picturesPath, int userId = 15)
+        public SendingStatusLog AddPictureForStand(Picture picture, Stand stand, DTCPaths picturesPath, int userId = 15)
         {
             LoggingStandOperation loggingStandOperation = new LoggingStandOperation();
 
             string destinationFilePath = @"\\" + stand.IpAdress + picturesPath.CPath + "\\" + picture.PName;
             string fileDirectory = Path.GetDirectoryName(destinationFilePath);
-
-            try
+            using (MemoryStream stream = new MemoryStream(picture.PictureBytes))
             {
-                CmdOperations cmdOperations = new CmdOperations();
-                cmdOperations.DeleteCredentialForFolder(fileDirectory);
-
-                NetworkCredential credentials = new NetworkCredential(picturesPath.CLogin, picturesPath.CPassword);
-
-                using (new NetworkConnection(fileDirectory, credentials))
+                using (System.Drawing.Image image = System.Drawing.Image.FromStream(stream))
                 {
-                    using (MemoryStream stream = new MemoryStream(picture.PictureBytes))
+                    try
                     {
-                        using (System.Drawing.Image image = System.Drawing.Image.FromStream(stream))
+                        CmdOperations cmdOperations = new CmdOperations();
+                        cmdOperations.DeleteCredentialForFolder(fileDirectory);
+
+                        NetworkCredential credentials = new NetworkCredential(picturesPath.CLogin, picturesPath.CPassword);
+
+                        using (new NetworkConnection(fileDirectory, credentials))
                         {
+
                             SendDeleteFileOnStand sendDeleteFileOnStand = new SendDeleteFileOnStand();
                             sendDeleteFileOnStand.SendImageOnStand(image, destinationFilePath);
 
                             return loggingStandOperation.FormationSendStatusLog("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Ok", "");
+
                         }
                     }
-                }
-            }
-            catch (Exception ex)
-            {
-                return loggingStandOperation.FormationSendStatusLog("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Error", ex.Message);
-            }
-                    
+                    catch (Exception ex)
+                    {
+                        UnsendingFileBackup unsendingFileBackup = new UnsendingFileBackup();
+                        unsendingFileBackup.SaveBackupFile(stand.StandName, "Picture", image, picture.PName);
+                        return loggingStandOperation.FormationSendStatusLog("Add all images in stand", destinationFilePath, "DATABASE", userId, stand, "Error", ex.Message);
+                    }
+                }               
+            }                                
         }
                   
 
-        public SendingStatusLog DeletePictureFromStand(string pictureName, Stand stand, PicturesPath picturesPath, int userId = 15)
+        public SendingStatusLog DeletePictureFromStand(string pictureName, Stand stand, DTCPaths picturesPath, int userId = 15)
         {
             LoggingStandOperation loggingStandOperation = new LoggingStandOperation();
             string destinationFilePath = @"\\" + stand.IpAdress + picturesPath.CPath + "\\" + pictureName;
@@ -78,7 +80,7 @@ namespace HoffmanWebstatistic.Services.InteractionStand
         }
 
 
-        public void EditPictureFromStands(Picture picture, Stand stand, PicturesPath picturesPath, int userId = 15)
+        public void EditPictureFromStand(Picture picture, Stand stand, DTCPaths picturesPath, int userId = 15)
         {
             DeletePictureFromStand(picture.PName, stand, picturesPath, userId);
             AddPictureForStand(picture, stand, picturesPath, userId);

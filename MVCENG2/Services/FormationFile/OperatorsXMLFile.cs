@@ -42,10 +42,9 @@ namespace HoffmanWebstatistic.Services.FormationFile
                 operatorCount = 0;
             }
 
-            StandOperationOLD interactionStand = new StandOperationOLD();
-
+            OperatorOperation operatorOperation = new OperatorOperation();
             xdoc.Add(operatorsXML);
-            xdoc.Save(interactionStand.operatorFilePathInProject);
+            xdoc.Save(operatorOperation.operatorFilePathInProject);
 
 
         }
