@@ -29,7 +29,7 @@ namespace HoffmanWebstatistic
         public virtual DbSet<OperatorsStand> OperatorsStands { get; set; } = null!;
         public virtual DbSet<OsVersions> OsVersions { get; set; } = null!;
         public virtual DbSet<Picture> Pictures { get; set; } = null!;
-        public virtual DbSet<DTCPaths> PicturesPaths { get; set; } = null!;
+        public virtual DbSet<PicturesPath> PicturesPaths { get; set; } = null!;
         public virtual DbSet<ResultsJsonHeader> ResultsJsonHeaders { get; set; } = null!;
         public virtual DbSet<ResultsJsonTest> ResultsJsonTests { get; set; } = null!;
         public virtual DbSet<ResultsJsonValue> ResultsJsonValues { get; set; } = null!;
@@ -308,7 +308,7 @@ namespace HoffmanWebstatistic
                     .HasColumnName("PName");
             });
 
-            modelBuilder.Entity<DTCPaths>(entity =>
+            modelBuilder.Entity<PicturesPath>(entity =>
             {
                 entity.ToTable("pictures_paths");
 
@@ -620,7 +620,7 @@ namespace HoffmanWebstatistic
 
                 entity.Property(e => e.XsdDescription).HasMaxLength(255);
 
-                entity.Property(e => e.XsdSchema1).HasColumnName("XsdSchema");
+                entity.Property(e => e.XsdSchemaFile).HasColumnName("XsdSchemaFile");
 
                 entity.HasOne(d => d.Purpose)
                     .WithMany(p => p.XsdSchemas)

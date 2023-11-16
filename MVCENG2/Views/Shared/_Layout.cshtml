@@ -83,6 +83,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-archive"></i></div>
                             Загрузка DTC
                         </a>
+                        <a class="nav-link" asp-controller="MES" asp-action="MainMenu">
+                            <div class="sb-nav-link-icon"><i class="fas fa-circle-info"></i></div>
+                            Взаимодействие с MES
+                        </a>
                         <a class="nav-link" asp-controller="SendingStatuslog" asp-action="MainMenu">
                             <div class="sb-nav-link-icon"><i class="fas fa-circle-info"></i></div>
                             Статусы/логи
@@ -124,12 +128,12 @@
     @*<script src="~/lib/Chart.js/chart.min.js"></script> *@
     <script src="~/lib/simple-datatables/dist/umd/simple-datatables.js"></script>
     <script src="~/lib/jquery/jquery.js"></script>
-
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
     <script src="~/js/datatables-simple-demo.js"></script>
      <!--SCRIPTS END-->
 
-@*     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+@* <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery-2.1.1.js"></script>
     <script src="~/lib/jquery.unobtrusive-ajax.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

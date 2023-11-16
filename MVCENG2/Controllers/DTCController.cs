@@ -13,7 +13,7 @@ using HoffmanWebstatistic.Services.InteractionStand;
 
 namespace HoffmanWebstatistic.Controllers
 {
-    [Authorize(Roles = "sa, admin")]
+    [Authorize(Roles = "sa")]
     public class DTCController : Controller
     {
         private readonly DTCContentRepository _dtcContentRepository;

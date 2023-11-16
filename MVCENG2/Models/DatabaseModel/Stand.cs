@@ -11,7 +11,7 @@ namespace HoffmanWebstatistic.Models.Hoffman
             Mes2supPaths = new HashSet<Mes2supPath>();
             Mes2supTelegramsStands = new HashSet<Mes2supTelegramsStand>();
             OperatorsStands = new HashSet<OperatorsStand>();
-            PicturesPaths = new HashSet<DTCPaths>();
+            PicturesPaths = new HashSet<PicturesPath>();
             ResultsJsonHeaders = new HashSet<ResultsJsonHeader>();
             Sup2mesPaths = new HashSet<Sup2mesPath>();
             Sup2mesTelegrams = new HashSet<Sup2mesTelegram>();
@@ -54,7 +54,7 @@ namespace HoffmanWebstatistic.Models.Hoffman
         public virtual ICollection<Mes2supPath> Mes2supPaths { get; set; }
         public virtual ICollection<Mes2supTelegramsStand> Mes2supTelegramsStands { get; set; }
         public virtual ICollection<OperatorsStand> OperatorsStands { get; set; }
-        public virtual ICollection<DTCPaths> PicturesPaths { get; set; }
+        public virtual ICollection<PicturesPath> PicturesPaths { get; set; }
         public virtual ICollection<ResultsJsonHeader> ResultsJsonHeaders { get; set; }
         public virtual ICollection<Sup2mesPath> Sup2mesPaths { get; set; }
         public virtual ICollection<Sup2mesTelegram> Sup2mesTelegrams { get; set; }

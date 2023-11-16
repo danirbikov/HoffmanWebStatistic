@@ -21,11 +21,21 @@ namespace HoffmanWebstatistic.Services.Job
             {
                 using (ApplicationDbContext dbContext = new ApplicationDbContext())
                 {
+                    ParserSup2Mes parserSup2Mes = new ParserSup2Mes(dbContext);
+                    parserSup2Mes.CheckSup2MesFolder();
+
+                    ParserMes2Sup parserXMLMes = new ParserMes2Sup(dbContext);
+                    parserXMLMes.CheckMes2SupFolder();
+
                     Pinger.PingAllStands(dbContext.stands.Where(k => k.IpAdress != null).ToList());
 
                     ParserJSON parser = new ParserJSON();
-
                     parser.AddAllJsonFiles(dbContext);
+
+                    
+
+                    ActualizeFilesInStand actualizeFilesInStand = new ActualizeFilesInStand();
+                    actualizeFilesInStand.CheckFolderWithUnsendingFiles(dbContext);
                 }                
             }
 

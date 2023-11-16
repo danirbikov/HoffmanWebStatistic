@@ -6,7 +6,7 @@ using HoffmanWebstatistic.Services.Job;
 
 namespace HoffmanWebstatistic.Controllers
 {
-    [Authorize(Roles = "sa, admin")]
+    [Authorize(Roles = "sa")]
     public class SendingStatusLogController : Controller
     {
 
@@ -17,7 +17,7 @@ namespace HoffmanWebstatistic.Controllers
             _sendingStatusLog = sendingStatusLog;
         }
 
-        [Authorize(Roles = "sa, admin")]
+        [Authorize(Roles = "sa")]
         public async Task<IActionResult> MainMenu()
         {            
             IEnumerable<SendingStatusLog> sendingStatusLogs = _sendingStatusLog.GetAllWithInclude();

@@ -13,9 +13,9 @@ namespace HoffmanWebstatistic.Controllers
         private UsersRepository _usersRepository;
         public RolesRepository _rolesRepository; 
 
-        public AccountController(UsersRepository context, RolesRepository rolesRepository)
+        public AccountController(UsersRepository usersRepository, RolesRepository rolesRepository)
         {
-            _usersRepository = context;
+            _usersRepository = usersRepository;
             _rolesRepository = rolesRepository;
         }
         [HttpGet]
@@ -53,8 +53,7 @@ namespace HoffmanWebstatistic.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = _usersRepository.GetUserByAuthModel(new LoginModel { Email = model.Email, Password = model.Password });
-                if (user == null)
+                if (!_usersRepository.AnyUserByName(model.Email))
                 {
                     
                     // добавляем пользователя в бд
@@ -66,6 +65,7 @@ namespace HoffmanWebstatistic.Controllers
                         Created = DateTime.Now,
                         InactiveMark = "FALSE"
                     };
+
                     _usersRepository.Add(addNewUser);
 
                     await Authenticate(addNewUser); // аутентификация
@@ -73,7 +73,7 @@ namespace HoffmanWebstatistic.Controllers
                     return RedirectToAction("Index", "Home");
                 }
                 else
-                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                    ModelState.AddModelError("Email", "Пользователь с таким логином уже существует");
             }
             return View(model);
         }

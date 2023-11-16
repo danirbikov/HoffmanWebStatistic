@@ -20,10 +20,8 @@ namespace HoffmanWebstatistic.Services.Job
 
         public void AddAllJsonFiles(ApplicationDbContext _dbContext)
         {
-
             try
             {
-
                 string sourceFilePath;
                 string destFilePath = @"C:\\WebStatistic\\ReportsBackup\\";
                 string fileName;
@@ -82,9 +80,8 @@ namespace HoffmanWebstatistic.Services.Job
                                         LoggerTXT.LogWarning(destFilePath + fileName + " (" + reportException + "" + ex.InnerException + ")");
                                         File.Delete(fileInStand);
                                     }
-
-
                                 }
+
                                 else
                                 {
                                     File.Delete(fileInStand);

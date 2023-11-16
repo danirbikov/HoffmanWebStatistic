@@ -3,15 +3,12 @@ using HoffmanWebstatistic.Models.Hoffman;
 using System.Text;
 using HoffmanWebstatistic.Repository;
 using System.Text.RegularExpressions;
-using HoffmanWebstatistic.Services.FormationFile;
 using HoffmanWebstatistic.Services.InteractionStand;
 
 namespace HoffmanWebstatistic.Services.FormationFile
 {
     public static class OperatorsXMLFile
     {
-
-
         public static void FormationXMLFileForStands(List<Stand> stands, List<Operator> operators)
         {
 

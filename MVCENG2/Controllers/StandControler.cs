@@ -8,7 +8,7 @@ using HoffmanWebstatistic.Services;
 
 namespace HoffmanWebstatistic.Controllers
 {
-    [Authorize(Roles = "sa, admin")]
+    [Authorize(Roles = "sa")]
     public class StandController : Controller
     {
         private readonly StandRepository _standRepository;

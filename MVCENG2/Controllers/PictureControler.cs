@@ -7,7 +7,7 @@ using HoffmanWebstatistic.Services.InteractionStand;
 
 namespace HoffmanWebstatistic.Controllers
 {
-    [Authorize(Roles = "sa, admin")]
+    [Authorize(Roles = "sa")]
     public class PictureController : Controller
     {
         private readonly PictureRepository _pictureRepository;
@@ -92,7 +92,7 @@ namespace HoffmanWebstatistic.Controllers
                     int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
                     PictureOperation pictureOperation = new PictureOperation();
 
-                    foreach (DTCPaths picturesPath in _picturePathRepository.GetAllWithInclude())
+                    foreach (PicturesPath picturesPath in _picturePathRepository.GetAllWithInclude())
                     {
                         pictureOperation.AddPictureForStand(picture, picturesPath.Stand, picturesPath, userId);
                     }                              
@@ -141,7 +141,7 @@ namespace HoffmanWebstatistic.Controllers
 
             PictureOperation pictureOperation = new PictureOperation();
 
-            foreach (DTCPaths picturesPath in _picturePathRepository.GetAllWithInclude())
+            foreach (PicturesPath picturesPath in _picturePathRepository.GetAllWithInclude())
             {
                 pictureOperation.DeletePictureFromStand(oldPictureName, picturesPath.Stand, picturesPath, userId);
                 pictureOperation.EditPictureFromStand(newPicture,picturesPath.Stand, picturesPath, userId);
@@ -157,7 +157,7 @@ namespace HoffmanWebstatistic.Controllers
 
             PictureOperation pictureOperation = new PictureOperation();
 
-            foreach (DTCPaths picturesPath in _picturePathRepository.GetAllWithInclude())
+            foreach (PicturesPath picturesPath in _picturePathRepository.GetAllWithInclude())
             {
 
                 pictureOperation.DeletePictureFromStand(pictureName, picturesPath.Stand, picturesPath, userId);

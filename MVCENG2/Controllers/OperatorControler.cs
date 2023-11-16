@@ -2,11 +2,12 @@
 using HoffmanWebstatistic.Repository;
 using Microsoft.AspNetCore.Authorization;
 using HoffmanWebstatistic.Models.Hoffman;
-using HoffmanWebstatistic.Services.FormationFile;
 using HoffmanWebstatistic.Services.InteractionStand;
 using HoffmanWebstatistic.Models.ViewModel;
 using ServicesWebAPI.Services;
 using static HoffmanWebstatistic.Models.SerializerModels.JSONSerializeModel;
+using HoffmanWebstatistic.Services.FormationFile;
+using Microsoft.EntityFrameworkCore;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -45,6 +46,12 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> AddOperator(Operator operatorModel)
         {
+            if (_operatorsRepository.OperatorAnyByLogin(operatorModel.OLogin))
+            {
+                ModelState.AddModelError("OLogin", "Оператор с таким логином уже существует");
+                return View(operatorModel);
+            }
+
             if (ModelState.ErrorCount <= 1)
             {
                 operatorModel.Created = DateTime.Now;
@@ -68,6 +75,7 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> EditOperator(Operator operatorObject)
         {
+
             _operatorsRepository.EditOperator(operatorObject);
 
             return RedirectToAction("MainMenu");

@@ -1,0 +1,48 @@
+﻿@model XsdSchema
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Изменение XSD схемы: @Model.Purpose.XsdPurpose</h1>
+    <div class="card mb-4">
+
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" asp-action="EditXsdSchema">
+                <div class="mb-2">
+                    <input class="form-control" name="xsdSchemaId" style="display:none;" placeholder="login" value=@Model.Id>
+                </div>
+
+                <div class="mb-2">
+                    <label>Выберите Xsd схему</label>
+                    <input name="xsdSchemaFile" type="file" class="form-control form-control-lg" value=@Model.XsdSchemaFile />
+                </div>
+                <div class="mb-2">
+                    <label name="XsdDescription">Описание Xsd схемы</label>
+                    <input name="XsdDescription" class="form-control" placeholder="Описание Xsd схемы" value=@Model.XsdDescription>
+                    <span name="XsdDescription" class="text-danger"></span>
+                </div>
+
+                <div class="mb-2">
+                    <label name="PurposeId">Роль</label>
+                    <select class="form-select" multiple aria-label="multiple select example" name="PurposeId">
+                        @foreach (XsdSchemasPurpose purpose in ViewData["XSDPurposes"] as List<XsdSchemasPurpose>)
+                        {
+                            <option value=@purpose.Id>@purpose.XsdPurpose</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    var a = $(document).ready(function () {
+        $('.form-select');
+    });
+        $(document).ready(function () {
+            $('.form-select').val(@Model.PurposeId);
+        });
+</script>
+

@@ -14,7 +14,7 @@ namespace HoffmanWebstatistic.Services.InteractionStand
 {
     public class PictureOperation
     {
-        public SendingStatusLog AddPictureForStand(Picture picture, Stand stand, DTCPaths picturesPath, int userId = 15)
+        public SendingStatusLog AddPictureForStand(Picture picture, Stand stand, PicturesPath picturesPath, int userId = 15)
         {
             LoggingStandOperation loggingStandOperation = new LoggingStandOperation();
 
@@ -52,7 +52,7 @@ namespace HoffmanWebstatistic.Services.InteractionStand
         }
                   
 
-        public SendingStatusLog DeletePictureFromStand(string pictureName, Stand stand, DTCPaths picturesPath, int userId = 15)
+        public SendingStatusLog DeletePictureFromStand(string pictureName, Stand stand, PicturesPath picturesPath, int userId = 15)
         {
             LoggingStandOperation loggingStandOperation = new LoggingStandOperation();
             string destinationFilePath = @"\\" + stand.IpAdress + picturesPath.CPath + "\\" + pictureName;
@@ -80,7 +80,7 @@ namespace HoffmanWebstatistic.Services.InteractionStand
         }
 
 
-        public void EditPictureFromStand(Picture picture, Stand stand, DTCPaths picturesPath, int userId = 15)
+        public void EditPictureFromStand(Picture picture, Stand stand, PicturesPath picturesPath, int userId = 15)
         {
             DeletePictureFromStand(picture.PName, stand, picturesPath, userId);
             AddPictureForStand(picture, stand, picturesPath, userId);

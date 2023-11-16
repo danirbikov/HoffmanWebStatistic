@@ -8,7 +8,7 @@ namespace HoffmanWebstatistic.Services.Job
 {
     public static class Pinger
     {
-        public static Dictionary<string, bool> standsPingResult { get; set; } = new Dictionary<string, bool>() { { "test", false } };
+        public static Dictionary<string, bool> standsPingResult { get; set; } = new Dictionary<string, bool>() { { "test", true } };
 
 
         public static Task PingAllStands(IEnumerable<Stand> allStands)

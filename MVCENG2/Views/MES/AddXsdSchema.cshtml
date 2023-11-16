@@ -1,0 +1,64 @@
+﻿
+
+<div class="container-fluid px-4">
+    <h1 class="mt-4 mb-4">Добавление Xsd схемы</h1>
+    <div class="card mb-4">
+        <div class="card-body">                                                    
+            <form method="post" enctype="multipart/form-data" asp-action="AddXsdSchema" id="formId">
+                <div class="mb-2">
+                    <label>Выберите Xsd схему</label>
+                    <input name="xsdSchemaFile" type="file" class="form-control form-control-lg"  />
+                </div>
+                <div class="mb-2">
+                    <label name="XsdDescription">Описание Xsd схемы</label>
+                    <input name="XsdDescription" class="form-control" placeholder="Описание Xsd схемы">
+                    <span name="XsdDescription" class="text-danger"></span>
+                </div>
+               
+                <div class="mb-2">
+                    <label name="PurposeId">Роль</label>
+                    <select class="form-select" multiple aria-label="multiple select example" name="PurposeId">
+                        @foreach (XsdSchemasPurpose purpose in ViewData["XSDPurposes"] as List<XsdSchemasPurpose>)
+                        {
+                            <option value=@purpose.Id>@purpose.XsdPurpose</option>
+                        }
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Добавить</button>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@*
+<script>
+    document.getElementById("formId").addEventListener("submit", function (event) {
+        event.preventDefault(); // Предотвращаем отправку формы по умолчанию
+        debugger;
+
+        var form = event.target;
+        var formData = new FormData(form);
+        console.log(formData);
+
+        // Получаем файл из input элемента
+        var fileInput = document.getElementById("xsdSchemaFileInput");
+        var file = fileInput.files[0];
+        console.log(file);
+
+        // Преобразуем файл в массив байт и добавляем его к formData
+        var reader = new FileReader();
+        reader.onloadend = function () {
+            var fileByteArray = Array.from(new Uint8Array(this.result));
+            formData.append("XsdSchemaFile", new Blob([new Uint8Array(fileByteArray)], { type: file.type }), file.name);
+
+            console.log(formData);
+            // Отправляем форму со всеми данными, включая файл, на сервер
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", form.action, true);
+            xhr.send(formData);
+        };
+        reader.readAsArrayBuffer(file);
+    });
+</script>*@

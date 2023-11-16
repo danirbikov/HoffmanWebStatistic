@@ -33,6 +33,15 @@ try
     builder.Services.AddScoped<DTCPathRepository>();
     builder.Services.AddScoped<DTCContentRepository>();
 
+    builder.Services.AddScoped<Mes2SupPathRepository>();
+    builder.Services.AddScoped<Mes2SupTelegramsRepository>();
+    builder.Services.AddScoped<Mes2SupTelegramsStandRepository>();
+    builder.Services.AddScoped<MesPathRepository>();
+    builder.Services.AddScoped<Sup2MesPathRepository>();
+    builder.Services.AddScoped<Sup2MesTelegramsRepository>();
+    builder.Services.AddScoped<XSDSchemasPurposeRepository>();
+    builder.Services.AddScoped<XSDSchemasRepository>();
+
     builder.Logging.ClearProviders();
     builder.Logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
     builder.Host.UseNLog();

@@ -10,16 +10,16 @@ namespace HoffmanWebstatistic.Repository
         {
             _context = context;
         }
-        public bool Add(Operator stand)
+        public bool Add(Operator @operator)
         {
-            _context.Add(stand);
+            _context.Add(@operator);
             return Save();
 
         }
 
-        public bool Delete(Operator stand)
+        public bool Delete(Operator @operator)
         {
-            _context.Remove(stand);
+            _context.Remove(@operator);
             return Save();
         }
 
@@ -68,6 +68,12 @@ namespace HoffmanWebstatistic.Repository
             var operatorObject = _context.operators.Where(k => k.Id == operatorID).FirstOrDefault();
             return operatorObject;
             
+        }
+
+        public bool OperatorAnyByLogin(string operatorLogin)
+        {
+            return _context.operators.Any(k => k.OLogin == operatorLogin);
+
         }
 
         public bool Save()

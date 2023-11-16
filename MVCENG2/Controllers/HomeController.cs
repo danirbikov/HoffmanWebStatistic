@@ -27,6 +27,9 @@ namespace HoffmanWebstatistic.Controllers
         
         public async Task<IActionResult> Index()
         {
+
+     
+
             IEnumerable<Stand> stands = _standRepository.GetAll().Where(k => k.StandType != "QNX"); ;
 
             Dictionary<string, int> carsLastMonth = new Dictionary<string, int>();

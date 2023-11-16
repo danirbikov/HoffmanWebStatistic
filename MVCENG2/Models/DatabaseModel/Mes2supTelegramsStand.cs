@@ -9,6 +9,8 @@ namespace HoffmanWebstatistic.Models.Hoffman
         public long TgId { get; set; }
         public int StandId { get; set; }
         public DateTime Transfered { get; set; }
+        public string? TransferStatus { get; set; }
+
 
         public virtual Stand Stand { get; set; } = null!;
         public virtual Mes2supTelegram Tg { get; set; } = null!;

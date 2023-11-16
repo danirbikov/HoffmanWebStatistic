@@ -26,6 +26,7 @@
     <Compile Remove="Interfaces\IDateFunctions.cs" />
     <Compile Remove="Interfaces\IParser.cs" />
     <Compile Remove="Models\Dashboard.cs" />
+    <Compile Remove="Models\DatabaseModel\XsdSchema2.cs" />
     <Compile Remove="Services\ParserJSON_backup.cs" />
   </ItemGroup>
 

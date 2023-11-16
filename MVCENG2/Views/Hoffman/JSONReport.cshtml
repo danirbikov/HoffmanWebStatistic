@@ -88,6 +88,7 @@
                                         <a class="page-link" asp-action="JSONReport"
                                             asp-route-standsIdentifier=@ViewData["StandsIdentifier"]
                                             asp-route-searchIdentifier=@ViewData["SearchIdentifier"]
+                                            asp-route-VIN=@Model.resultsJsonHeader.FirstOrDefault().VIN
                                             asp-route-pageNumber=@pageNumber
                                             asp-route-sortorder="@(Model.SortViewModel.Current)">
                                                 <font style="color:white">

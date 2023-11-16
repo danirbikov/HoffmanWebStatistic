@@ -9,7 +9,7 @@ using System.Security.Claims;
 
 namespace HoffmanWebstatistic.Controllers
 {
-    [Authorize(Roles = "sa, admin")]
+    [Authorize(Roles = "sa")]
     public class UserController : Controller
     {
         private readonly UsersRepository _usersRepository;
