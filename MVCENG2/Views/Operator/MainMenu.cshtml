@@ -40,7 +40,16 @@
                 {
                     <tr>
                         <td>
-                            @operatorInfo.OLogin
+                            @if (operatorInfo.InactiveMark == "TRUE")
+                            {
+                                @operatorInfo.OLogin
+                                <font style="color:red"> (INACTIVE)</font>
+                            }
+                            else
+                            {
+                                @operatorInfo.OLogin
+                            }
+                            
                         </td>
                         <td>@operatorInfo.OPassword</td>
 
@@ -59,6 +68,13 @@
                             <a asp-action="UnactiveOperator" asp-route-operatorID=@operatorInfo.Id>
                                 <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
                             </a>
+                            @if (operatorInfo.InactiveMark == "TRUE")
+                            {
+                                <a asp-action="InactiveOperator" asp-route-operatorID=@operatorInfo.Id>
+                                    <button class="btn btn-success fa-solid fa-rotate-left"></button>
+                                </a>
+                            }
+
                         </td>
 
                     </tr>

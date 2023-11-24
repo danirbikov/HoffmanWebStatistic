@@ -6,6 +6,7 @@
 @{
     string confirmMessage = "Вы уверены, что хотите удалить стенд?";
     string confirmScript = "return confirm('" + confirmMessage + "');";
+    string trClassName = "";
 }
 
 
@@ -34,13 +35,22 @@
 
                     @foreach (StandsForAdminPanelView standsInfo in Model)
                     {
-                        <tr>
+
+                        <tr class=@trClassName>
                             <td>
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
                                     </div>
                                     <div class="flex-grow-1 ms-2">
-                                        @standsInfo.stand.StandName
+                                        @if (standsInfo.stand.InactiveMark == "TRUE")
+                                        {
+                                            @standsInfo.stand.StandName
+                                            <font style="color:red"> (INACTIVE)</font>
+                                        }
+                                        else
+                                        {
+                                            @standsInfo.stand.StandName
+                                        }                                      
                                     </div>
                                 </div>
                             </td>
@@ -65,8 +75,15 @@
                                     <button class="btn btn-primary fa-solid fa-pen"></button>
                                 </a>
                                 <a onclick="@confirmScript" asp-action="UnactiveStand" asp-route-standID=@standsInfo.stand.Id>
-                                    <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
+                                    <button class="btn btn-danger fa-solid fa-trash" ></button>
                                 </a>
+                                @if (standsInfo.stand.InactiveMark == "TRUE")
+                                {
+                                    <a asp-action="InactiveStand" asp-route-standID=@standsInfo.stand.Id>
+                                        <button class="btn btn-success fa-solid fa-rotate-left"></button>
+                                    </a>
+                                }
+
                                 
                             </td>
 
@@ -80,80 +97,3 @@
     </div>
 </div>
 
-@*
-<div class="row">
-    <div class="col-xxl-6">
-        <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h4 class="header-title mb-0">Stands list</h4>
-                <a asp-action="AddStand">
-                    <button type="submit" class="btn btn-primary">Add stand</button>
-                </a>
-
-            </div>
-            <div class="card-body pt-0">
-                <div class="table-responsive">
-                    <table class="table table-centered table-nowrap table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">Stand name</th>
-                                <th scope="col">Last test date</th>
-                                <th scope="col">Status</th>
-                                <th scope="col">JSON count</th>
-                                <th scope="col" class="text-end">Action</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            
-                            @foreach (StandsForAdminPanelView standsInfo in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="flex-shrink-0">
-                                            </div>
-                                            <div class="flex-grow-1 ms-2">                                           
-                                                    @standsInfo.stand.StandName                                           
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td><i class="uil uil-calender me-1"></i>@standsInfo.lastTestDate</td>
-                                    @if (standsInfo.pingResult)
-                                    {
-                                        <td>
-                                            <span class="badge bg-success-lighten text-success">Online</span>
-                                        </td>
-                                    }
-                                    else
-                                    {
-                                        <td>
-                                            <span class="badge bg-danger-lighten text-danger">Offline</span>
-                                        </td>
-                                    }                                                                      
-                                    <td>
-                                        <span class="text-success fw-semibold">@standsInfo.allTestsCount</span>
-                                    </td>
-                                    <td class="text-end">
-                                        <a asp-action="EditStand" asp-route-standID=@standsInfo.stand.Id class="font-18 text-info me-2" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Edit" data-bs-original-title="Edit">
-                                            <i class="btn btn-primary">
-                                                Edit
-                                            </i>
-                                        </a>
-                                        <a onclick="@confirmScript" asp-action="UnactiveStand" asp-route-standID=@standsInfo.stand.Id class="font-18 text-danger" data-bs-toggle="tooltip" data-bs-placement="top" aria-label="Delete" data-bs-original-title="Delete">
-                                            <i class="btn btn-danger">
-                                                Del
-                                            </i>
-                                        </a>
-                                    </td>
-
-                                </tr> 
-                            }                          
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div> 
-</div>
-   *@

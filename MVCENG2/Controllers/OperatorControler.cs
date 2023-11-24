@@ -33,7 +33,18 @@ namespace HoffmanWebstatistic.Controllers
         public async Task<IActionResult> MainMenu()
         {
             ViewData["standList"] = _operatorPathRepository.GetAllWithInclude().Select(k => k.Stand.StandName).ToList();
-            return View(_operatorsRepository.GetAll());
+
+            List<Operator> operators = new List<Operator>();
+            if (User.IsInRole("sa"))
+            {
+                operators = _operatorsRepository.GetAllWithInactive();
+            }
+            else
+            {
+                operators = _operatorsRepository.GetAll();
+            }
+
+            return View(operators);
                 
         }
 
@@ -86,8 +97,14 @@ namespace HoffmanWebstatistic.Controllers
         {
             _operatorsRepository.UnactiveOperator(operatorID);
 
+            return RedirectToAction("MainMenu");           
+        }
+        [HttpGet]
+        public async Task<IActionResult> InactiveOperator(int operatorID)
+        {
+            _operatorsRepository.InactiveOperator(operatorID);
+
             return RedirectToAction("MainMenu");
-            
         }
 
 

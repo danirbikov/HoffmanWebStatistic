@@ -29,6 +29,17 @@ namespace HoffmanWebstatistic.Repository
         {
             return _context.translates_paths.Include(k => k.Stand).ToList();
         }
+        public bool Add(TranslatesPath addObject)
+        {
+            _context.Add(addObject);
+            return Save();
+
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
 
     }
 }

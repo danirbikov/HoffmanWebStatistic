@@ -35,7 +35,7 @@ namespace HoffmanWebstatistic.Services.Job
             foreach (Sup2mesPath sup2MesPath in _sup2MesPathRepository.GetAllWithInclude())
             {
                 destinationFolderPath = @"\\" + sup2MesPath.Stand.IpAdress + sup2MesPath.CPath;
-                destinationFolderPath = "C:\\WebStatistic\\Test";
+
                 CmdOperations cmdOperations = new CmdOperations();
                 cmdOperations.DeleteCredentialForFolder(destinationFolderPath);
 
@@ -43,8 +43,8 @@ namespace HoffmanWebstatistic.Services.Job
 
                 try
                 {
-                    //using (new NetworkConnection(destinationFolderPath, credentials))
-                    //{
+                    using (new NetworkConnection(destinationFolderPath, credentials))
+                    {
                         foreach (string filePath in Directory.GetFiles(destinationFolderPath, "*", SearchOption.AllDirectories))
                         {
                             XSDValidator xsdValidator = new XSDValidator();
@@ -73,7 +73,7 @@ namespace HoffmanWebstatistic.Services.Job
                                 File.Copy(filePath, "C:\\WebStatistic\\Telegrams\\Sup2Mes\\Errors\\" + Path.GetFileName(filePath), true);
                                 File.Delete(filePath);
                             }
-                      //  }
+                        }
                     }
                 } 
                 catch (Exception ex) 

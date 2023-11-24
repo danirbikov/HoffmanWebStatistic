@@ -18,7 +18,7 @@ namespace HoffmanWebstatistic.Services.Job
 
             foreach (string filePath in Directory.GetFiles(unsendingFilesFolderPath, "*", SearchOption.AllDirectories))
             {
-                string fileName = Path.GetFileNameWithoutExtension(filePath);
+                string fileName = Path.GetFileName(filePath);
                 string fileType = Path.GetFileName(Path.GetDirectoryName(filePath));
                 string standName = Path.GetFileName(Path.GetDirectoryName(Path.GetDirectoryName(filePath)));
 

@@ -5,28 +5,31 @@ using HoffmanWebstatistic.Models.Hoffman;
 
 namespace HoffmanWebstatistic.Repository
 {
-    public class DTCPathRepository
+    public class JsonPathRepository
     {
         private readonly ApplicationDbContext _context;
-        public DTCPathRepository(ApplicationDbContext context)
+        public JsonPathRepository(ApplicationDbContext context)
         {
             _context = context;
         }
-       
 
-        public DtcsPath GetDtcsPathByStandID(int standId)
+
+        public JsonsPath GetJsonpPathByStandID(int standId)
         {
-            return _context.dtcs_paths.Where(k => k.StandId == standId).FirstOrDefault() ;
+
+            return _context.jsons_paths.Where(k => k.StandId == standId).FirstOrDefault();
         }
-        public List<DtcsPath> GetAll()
+        public List<JsonsPath> GetAll()
         {
-            return _context.dtcs_paths.ToList();
+
+            return _context.jsons_paths.ToList();
         }
-        public List<DtcsPath> GetAllWithInclude()
+
+        public List<JsonsPath> GetAllWithInclude()
         {
-            return _context.dtcs_paths.Include(k=>k.Stand).ToList();
+            return _context.jsons_paths.Include(k => k.Stand).ToList();
         }
-        public bool Add(DtcsPath addObject)
+        public bool Add(JsonsPath addObject)
         {
             _context.Add(addObject);
             return Save();

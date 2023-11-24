@@ -1,0 +1,61 @@
+﻿@model SHOP_FLOOR_DATA
+
+
+<div class="container-fluid px-4">
+    @if (@Model.PRODUCTIONORDER.Any())
+    {
+        <h1 class="mt-4 mb-4">@Model.PRODUCTIONORDER</h1>
+    }
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                @*<table class="table table-striped table-sm">*@
+                <table id="myTable" class="table table-centered table-nowrap table-hover mb-0">                    
+                    <thead class="table-light">
+                        <tr>
+                            <th>Telegram child node</th>
+                            <th>Child node value</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>Production number</td>
+                        <td>@Model.PRODUCTIONORDER</td>
+                    </tr>
+                    <tr>
+                        <td>Op code</td>
+                        <td>@Model.ELT_SECTION.ELT_DATA.OPCODE</td>
+                    </tr>
+                    <tr>
+                        <td>Workplace</td>
+                        <td>@Model.ELT_SECTION.ELT_DATA.WORKPLACE</td>
+                    </tr>
+                    <tr>
+                        <td>Operator</td>
+                        <td>@Model.ELT_SECTION.ELT_DATA.OPERATOR</td>
+                    </tr>
+                    @if (Model.ELT_SECTION.ELT_DATA.Value.ToUpper() == "OK")
+                    {
+                        <td>Result</td>
+                        <td>
+                            <font class="badge bg-success badge-pill">@Model.ELT_SECTION.ELT_DATA.Value</font>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>Result</td>
+                        <td>
+                            <font class="badge bg-danger badge-pill">@Model.ELT_SECTION.ELT_DATA.Value</font>
+                        </td>
+                    }
+
+                    <tr>
+                        <td>Opdate</td>
+                        <td>@Model.ELT_SECTION.ELT_DATA.OPDATE</td>
+                    </tr>                    
+                                                                                         
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

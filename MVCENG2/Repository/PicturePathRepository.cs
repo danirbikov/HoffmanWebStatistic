@@ -31,5 +31,17 @@ namespace HoffmanWebstatistic.Repository
 
             return _context.pictures_paths.Include(k=>k.Stand).ToList();
         }
+
+        public bool Add(PicturesPath addObject)
+        {
+            _context.Add(addObject);
+            return Save();
+
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
+        }
     }
 }

@@ -24,13 +24,29 @@ namespace HoffmanWebstatistic.Controllers
         {
             _usersRepository.UnactiveUser(userID);          
             return RedirectToAction("MainMenu");
-
+        }
+        [HttpGet]
+        public async Task<IActionResult> InactiveUser(int userID)
+        {
+            _usersRepository.InactiveUser(userID);
+            return RedirectToAction("MainMenu");
         }
 
         public async Task<IActionResult> MainMenu()
         {
             ViewData["UserRole"] = HttpContext.User.Claims.Select(k => k.Value).ToList()[1];
-            return View(_usersRepository.GetAll().Where(k => k.InactiveMark == "FALSE").ToList());
+
+            List<User> users = new List<User>();
+            if (User.IsInRole("sa"))
+            {
+                users = _usersRepository.GetAllWitInactive().ToList();
+            }
+            else
+            {
+                users = _usersRepository.GetAll().ToList();
+            }
+
+            return View(users);
         }
 
         [HttpGet]

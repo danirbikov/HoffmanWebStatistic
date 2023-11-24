@@ -1,0 +1,179 @@
+﻿@model Sup2MesViewModel
+
+@{
+    string controllerName = ViewContext.RouteData.Values["controller"].ToString();
+    string pageNumberString="";
+}
+
+<div class="container-fluid px-4">
+    <div class="row justify-content-between">
+        <div class="col-4">
+            <h1 class="mt-4 mb-4">@ViewData["MesSchemaTypeIdentifier"]</h1>
+        </div>
+        <div class="col-5 pull-right mt-4 mb-4">
+            
+            @using (Html.BeginForm("MesTelegrams", "MES", FormMethod.Get, new { id = "myForm" }))
+            {
+                <select class="form-select float-end" aria-label="Default select example" name="pageSize" style="width:30%" onchange="submitForm()">
+                    @foreach (int pageSizevalue in new List<int>(){10, 20, 30, 50, 100})
+                    {
+                        if (pageSizevalue == Convert.ToInt32(ViewData["PageSize"]))
+                        {
+                            <option selected value=@pageSizevalue>@pageSizevalue элементов</option>
+                        }
+                        else
+                        {
+                            <option value=@pageSizevalue>@pageSizevalue</option>
+                        }
+                    }
+                </select>
+
+                @Html.Hidden("mesSchemaTypeIdentifier", ViewData["MesSchemaTypeIdentifier"])
+                @Html.Hidden("startDate", ViewData["StartDate"])
+                @Html.Hidden("endDate", ViewData["EndDate"])
+            }
+        </div>
+        <div class="col-3">
+            <div id="reportrange" class="pull-right mt-4 mb-4">
+                <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;
+                <span></span>
+                <b class="caret"></b>
+            </div>
+        </div>
+    </div>
+   
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap table-hover mb-0">
+                    <thead>
+                        <tr>
+                            @{
+                                <td><a asp-controller=@controllerName asp-action="MesTelegrams" asp-route-standsIdentifier=@ViewData["MesSchemaTypeIdentifier"] asp-route-sortOrder=@Model.SortViewModel.VINSort asp-route-startDate=@ViewData["StartDate"] asp-route-endDate=@ViewData["EndDate"] asp-route-pageSize=@ViewData["PageSize"]>VIN</a></td>
+                                <td><a asp-controller=@controllerName asp-action="MesTelegrams" asp-route-standsIdentifier=@ViewData["MesSchemaTypeIdentifier"] asp-route-sortOrder=@Model.SortViewModel.OrderNumberSort asp-route-startDate=@ViewData["StartDate"] asp-route-endDate=@ViewData["EndDate"] asp-route-pageSize=@ViewData["PageSize"]>Order number</a></td>
+                                <td><a asp-controller=@controllerName asp-action="MesTelegrams" asp-route-standsIdentifier=@ViewData["MesSchemaTypeIdentifier"] asp-route-sortOrder=@Model.SortViewModel.StandNameSort asp-route-startDate=@ViewData["StartDate"] asp-route-endDate=@ViewData["EndDate"] asp-route-pageSize=@ViewData["PageSize"]>Имя стенда</a></td>
+                                <td><a asp-controller=@controllerName asp-action="MesTelegrams" asp-route-standsIdentifier=@ViewData["MesSchemaTypeIdentifier"] asp-route-sortOrder=@Model.SortViewModel.DateSort asp-route-startDate=@ViewData["StartDate"] asp-route-endDate=@ViewData["EndDate"] asp-route-pageSize=@ViewData["PageSize"]>Дата телеграммы</a></td>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @{
+        
+                            @foreach (var sup2MesObject in Model.sup2MesTelegrams)
+                            {
+                                <tr onClick="document.location='@Url.Action("Sup2MesTelegram", @controllerName, new {sup2MesTelegramId = sup2MesObject.Id}, null)'">
+                                    
+                                        <td>@sup2MesObject.Vin</td>
+                                        <td>@sup2MesObject.Ordernum</td>
+                                        <td>@sup2MesObject.Stand.StandName</td>
+                                        @if (sup2MesObject.Created != null)
+                                        {
+                                            <td>@sup2MesObject.Created</td>
+                                        }
+                                        else
+                                        {
+                                            <td>Date not recognized</td>
+                                        }                       
+                                    </tr>
+                                
+                            }
+                        }     
+                    </tbody>
+                </table>
+
+                <nav aria-label="...">
+                    <ul class="pagination">
+                                               
+                        @foreach (int pageNumber in Model.PageViewModel.PagesList)
+                        {
+                            pageNumberString = pageNumber.ToString();
+                            if (pageNumber == 1)
+                                pageNumberString = "«" + pageNumberString;
+                            if (pageNumber == Model.PageViewModel.TotalPages)
+                                pageNumberString = pageNumberString + "»";
+                            if (pageNumber == Model.PageViewModel.PageNumber)
+                                {
+                                    <li class="page-item active">
+                                    <a class="page-link" asp-action="MesTelegrams"
+                                asp-route-standsIdentifier=@ViewData["MesSchemaTypeIdentifier"]
+                                           asp-route-pageNumber=@pageNumber
+                                           asp-route-sortorder="@(Model.SortViewModel.Current)"
+                                           asp-route-startDate=@ViewData["StartDate"]
+                                           asp-route-endDate=@ViewData["EndDate"]
+                                           asp-route-pageSize=@ViewData["PageSize"]>
+                                            <font style="color:white">
+                                                @pageNumberString
+                                            </font>
+                                        </a>
+                                    </li>
+                                }
+                                else
+                                {
+                                
+                                    <li class="page-item">
+                                    <a class="page-link" asp-action="MesTelegrams"
+                                asp-route-standsIdentifier=@ViewData["MesSchemaTypeIdentifier"]
+                                        asp-route-pageNumber=@pageNumber
+                                        asp-route-sortorder="@(Model.SortViewModel.Current)"
+                                        asp-route-startDate=@ViewData["StartDate"]
+                                        asp-route-endDate=@ViewData["EndDate"],
+                                        asp-route-pageSize=@ViewData["PageSize"]>                                     
+                                            @pageNumberString
+                                        </a>
+                                    </li>
+                                }
+                            
+                        }
+                        
+                    </ul>
+                </nav>                                   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js" defer></script>
+<script src="~/lib/moment/moment.js"></script>
+<script src="~/lib/moment/moment-with-locales.js"></script>
+
+<script type="text/javascript">
+
+    function submitForm() {
+        document.getElementById("myForm").submit();
+    }
+
+    $(function () {
+        moment.locale('ru');       
+        var start = moment('@ViewData["StartDate"]', 'DD.MM.YYYY');
+        var end = moment('@ViewData["EndDate"]','DD.MM.YYYY');
+        
+        console.log(start);
+
+        if ('@ViewData["StartDate"]' == '01.01.0001 0:00:00')
+            $('#reportrange span').html(moment().subtract(1, 'month').format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+        else
+            $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+
+        function cb(start, end) {
+            $('#reportrange span').html(start.format('DD.MM.YYYY') + ' - ' + end.format('DD.MM.YYYY'));
+            location.href = window.location.pathname + '?mesSchemaTypeIdentifier=' + '@ViewData["MesSchemaTypeIdentifier"]' + '&startDate=' + start.format('DD.MM.YYYY') + '&endDate=' + end.format('DD.MM.YYYY') + '&pageSize=' + @ViewData["PageSize"];
+        }
+
+        $('#reportrange').daterangepicker({
+            startDate: start,
+            endDate: end,
+            ranges: {
+                'Сегодня': [moment(), moment()],
+                'Вчера': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                'Последние 7 дней': [moment().subtract(6, 'days'), moment()],
+                'Последние 30 дней': [moment().subtract(29, 'days'), moment()],
+                'На этом месяце': [moment().startOf('month'), moment().endOf('month')],
+                'В предыдущем месяце': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+            }
+        }, cb);       
+    });
+</script>

@@ -23,7 +23,15 @@
                 {
                     <tr>
                         <td>
-                            @userInfo.ULogin
+                            @if (userInfo.InactiveMark == "TRUE")
+                            {
+                                @userInfo.ULogin
+                                <font style="color:red"> (INACTIVE)</font>
+                            }
+                            else
+                            {
+                                @userInfo.ULogin
+                            }                            
                         </td>
                         <td>
 
@@ -55,8 +63,14 @@
                                 <a asp-action="UnactiveUser" asp-route-userID=@userInfo.Id>
                                     <button class="btn btn-danger fa-solid fa-trash" onclick="@confirmScript"></button>
                                 </a>
+                                @if (userInfo.InactiveMark == "TRUE")
+                                {
+                                    <a asp-action="InactiveUser" asp-route-userID=@userInfo.Id>
+                                        <button class="btn btn-success fa-solid fa-rotate-left"></button>
+                                    </a>
+                                }
 
-                            }
+                        }
                         </td>
                     </tr>
                 }

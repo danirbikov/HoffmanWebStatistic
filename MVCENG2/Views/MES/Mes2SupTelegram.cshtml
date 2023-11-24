@@ -1,0 +1,51 @@
+﻿@model MES_VEHICLE_STATUS_DESCRIPTOR
+
+
+<div class="container-fluid px-4">
+    @if (@Model.POSECTION.VIN.Any())
+    {
+        <h1 class="mt-4 mb-4">@Model.POSECTION.VIN</h1>
+    }
+
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                @*<table class="table table-striped table-sm">*@
+                <table id="myTable" class="table table-centered table-nowrap table-hover mb-0">
+
+                    <thead class="table-light">
+                        <tr>
+                            <th>Telegram child node</th>
+                            <th>Child node value</th>
+                        </tr>
+                    </thead>
+                    <tr>
+                        <td>Production number</td>
+                        <td>@Model.PRODUCTIONORDER</td>
+                    </tr>
+                    <tr>
+                        <td>Model</td>
+                        <td>@Model.POSECTION.MODEL</td>
+                    </tr>
+                </table>
+                <table id="myTable" class="table table-centered table-nowrap table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>ELT OP code</th>
+                            <th>ELT workplace</th>
+                            <th>ELT testing program</th>
+                        </tr>
+                    </thead>
+                    @foreach (var eltSection in Model.ELTSECTION)
+                    {
+                        <tr>
+                            <td>@eltSection.ELT_OP_CODE</td>
+                            <td>@eltSection.ELT_OP_SAP_WORKPLACE</td>
+                            <td>@eltSection.ELT_TESTING_PROGRAM</td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

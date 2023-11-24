@@ -35,15 +35,26 @@ namespace HoffmanWebstatistic.Repository
         public IEnumerable<User> GetAll()
         {
             return _context.users.Where(k=>k.InactiveMark=="FALSE").Include(k=>k.Role).ToList();
-
         }
+        public IEnumerable<User> GetAllWitInactive()
+        {
+            return _context.users.Include(k => k.Role).ToList();
+        }
+
         public bool UnactiveUser(int userId)
         {
             User user = _context.users.Where(k => k.Id == userId).FirstOrDefault();
             user.InactiveMark = "TRUE";
 
             return Save();
+        }
 
+        public bool InactiveUser(int userId)
+        {
+            User user = _context.users.Where(k => k.Id == userId).FirstOrDefault();
+            user.InactiveMark = "FALSE";
+
+            return Save();
         }
 
         public bool EditUser(User userObject)

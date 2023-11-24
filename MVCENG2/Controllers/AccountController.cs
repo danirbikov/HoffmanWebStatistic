@@ -5,6 +5,7 @@ using HoffmanWebstatistic.Models.ViewModel;
 using System.Security.Claims;
 using HoffmanWebstatistic.Repository;
 using HoffmanWebstatistic.Models.Hoffman;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -40,6 +41,8 @@ namespace HoffmanWebstatistic.Controllers
             }
             return View(model);
         }
+
+   
 
         [HttpGet]
         public IActionResult Register()

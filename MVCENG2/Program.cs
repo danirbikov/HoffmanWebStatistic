@@ -6,10 +6,8 @@ using Quartz;
 using NLog;
 using NLog.Web;
 using HoffmanWebstatistic.Services.Job;
-using HoffmanWebstatistic;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
-
 
 try
 {
@@ -32,7 +30,7 @@ try
     builder.Services.AddScoped<OperatorPathRepository>();
     builder.Services.AddScoped<DTCPathRepository>();
     builder.Services.AddScoped<DTCContentRepository>();
-
+    builder.Services.AddScoped<JsonPathRepository>();
     builder.Services.AddScoped<Mes2SupPathRepository>();
     builder.Services.AddScoped<Mes2SupTelegramsRepository>();
     builder.Services.AddScoped<Mes2SupTelegramsStandRepository>();
@@ -52,13 +50,16 @@ try
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
     });
 
+
+
+
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
         .AddCookie(options => //CookieAuthenticationOptions
         {
             options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
         });
 
-   
+
 
     builder.Services.AddQuartz(q =>
     {

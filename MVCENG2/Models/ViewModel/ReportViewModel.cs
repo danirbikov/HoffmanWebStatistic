@@ -12,8 +12,8 @@ namespace HoffmanWebstatistic.Models.ViewModel
         public ReportViewModel(IEnumerable<ResultsJsonHeader> resultsJsonHeader, PageViewModel pageViewModel, SortViewModel sortViewModel)
         {
             this.resultsJsonHeader = resultsJsonHeader;
-            PageViewModel = pageViewModel;
-            SortViewModel = sortViewModel;
+            this.PageViewModel = pageViewModel;
+            this.SortViewModel = sortViewModel;
 
         }
     }

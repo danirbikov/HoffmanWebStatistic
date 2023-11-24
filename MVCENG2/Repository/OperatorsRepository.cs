@@ -26,8 +26,11 @@ namespace HoffmanWebstatistic.Repository
 
         public List<Operator> GetAll()
         {
-            return _context.operators.Where(k=>k.InactiveMark=="FALSE").ToList();
-            
+            return _context.operators.Where(k=>k.InactiveMark=="FALSE").ToList();        
+        }
+        public List<Operator> GetAllWithInactive()
+        {
+            return _context.operators.ToList();
         }
 
         public bool UnactiveOperator(int operatorID)
@@ -36,8 +39,16 @@ namespace HoffmanWebstatistic.Repository
             @operator.InactiveMark = "TRUE";
 
             return Save();
-
         }
+
+        public bool InactiveOperator(int operatorID)
+        {
+            Operator @operator = _context.operators.Where(k => k.Id == operatorID).FirstOrDefault();
+            @operator.InactiveMark = "FALSE";
+
+            return Save();
+        }
+
         public bool EditOperator(Operator operatorObject)
         {
             Operator @operator = _context.operators.Where(k => k.Id == operatorObject.Id).FirstOrDefault();

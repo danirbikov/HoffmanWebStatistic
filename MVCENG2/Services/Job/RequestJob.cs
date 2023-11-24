@@ -29,8 +29,8 @@ namespace HoffmanWebstatistic.Services.Job
                     ParserSup2Mes parserSup2Mes = new ParserSup2Mes(dbContext);
                     parserSup2Mes.CheckSup2MesFolder();
 
-                    ParserMes2Sup parserXMLMes = new ParserMes2Sup(dbContext);
-                    parserXMLMes.CheckMes2SupFolder();
+                    ParserMes2Sup parserMes2Sup = new ParserMes2Sup(dbContext);
+                    parserMes2Sup.CheckMes2SupFolder();
 
                     ActualizeFilesInStand actualizeFilesInStand = new ActualizeFilesInStand();
                     actualizeFilesInStand.CheckFolderWithUnsendingFiles(dbContext);

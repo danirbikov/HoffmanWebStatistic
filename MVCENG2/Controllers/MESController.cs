@@ -5,6 +5,12 @@ using HoffmanWebstatistic.Models.ViewModel;
 using HoffmanWebstatistic.Services.Job;
 using HoffmanWebstatistic.Models.Hoffman;
 using HoffmanWebstatistic.Services.InteractionStand;
+using static HoffmanWebstatistic.Models.Enums.SortingEnum;
+using System.Globalization;
+using System.Xml.Linq;
+using HoffmanWebstatistic.Models.SerializerModels;
+using System.Xml.Serialization;
+using System.Xml;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -34,6 +40,171 @@ namespace HoffmanWebstatistic.Controllers
                 mes2SupCount = _mes2SupTelegramsRepository.GetTelegramsCount(),
                 xsdSchemas = _xsdSchemasRepository.GetAllWithInclude()
             });
+        }
+
+        public async Task<IActionResult> MesTelegrams(string mesSchemaTypeIdentifier = "sup2mes", int pageNumber = 1, SortState sortOrder = SortState.DateDesc, string startDate = "", string endDate = "", int pageSize = 10)
+        {
+            if (mesSchemaTypeIdentifier== "sup2mes")
+            {
+                return View("Sup2Mes", Sup2MesTelegrams(mesSchemaTypeIdentifier, pageNumber, sortOrder, startDate, endDate, pageSize));
+            }
+            else
+            {
+                return View("Mes2Sup", Mes2SupTelegrams(mesSchemaTypeIdentifier, pageNumber, sortOrder, startDate, endDate, pageSize));
+            }
+            
+        }
+
+
+        public IEnumerable<Mes2supTelegram> Mes2SupInitializePageValue(int pageNumber, SortState sortOrder)
+        {
+
+            var resultsMes2SupTelegrmas = _mes2SupTelegramsRepository.GetAllQuery();
+
+            // сортировка
+            switch (sortOrder)
+            {
+                case SortState.VINDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Vin);
+                    break;
+                case SortState.OrderNumberAsc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Ordernum);
+                    break;
+                case SortState.OrderNumberDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Ordernum);
+                    break;
+                case SortState.StandNameAsc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Mes2supTelegramsStands.FirstOrDefault().Stand.StandName);
+                    break;
+                case SortState.StandNameDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Mes2supTelegramsStands.FirstOrDefault().Stand.StandName);
+                    break;
+                case SortState.DateAsc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Created);
+                    break;
+                case SortState.DateDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Created);
+                    break;
+
+                default:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Vin);
+                    break;
+            }
+
+            return resultsMes2SupTelegrmas;
+        }
+
+        public Mes2SupViewModel Mes2SupTelegrams(string mesSchemaTypeIdentifier = "sup2mes", int pageNumber = 1, SortState sortOrder = SortState.DateDesc, string startDate = "", string endDate = "", int pageSize = 10)
+        {
+            DateTime parsedEndDate = new DateTime();
+            DateTime parsedStartDate = new DateTime();
+
+            CultureInfo russianCulture = new CultureInfo("ru-RU");
+            if (endDate == "" || startDate == "")
+            {
+                parsedEndDate = DateTime.Now;
+            }
+            else
+            {
+                parsedStartDate = DateTime.Parse(startDate, russianCulture);
+                parsedEndDate = DateTime.Parse(endDate, russianCulture);
+            }
+
+            ViewData["MesSchemaTypeIdentifier"] = mesSchemaTypeIdentifier;
+            ViewData["PageSize"] = pageSize;
+            ViewData["StartDate"] = parsedStartDate;
+            ViewData["EndDate"] = parsedEndDate;
+
+            // пагинация
+
+            var jsonHeaderIDs = Mes2SupInitializePageValue(pageNumber, sortOrder).Where(k => k.Created >= parsedStartDate && k.Created <= parsedEndDate.AddDays(1)).Select(k => k.Id).ToList();
+            var count = jsonHeaderIDs.Count();
+            var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+
+            Mes2SupViewModel viewModel = new Mes2SupViewModel(
+                _mes2SupTelegramsRepository.GetMes2SupTelegramById(itemsId),
+                new PageViewModel(count, pageNumber, pageSize),
+                new SortViewModel(sortOrder)
+            );
+
+            return viewModel;
+        }
+
+
+        public IEnumerable<Sup2mesTelegram> Sup2MesInitializePageValue( int pageNumber, SortState sortOrder)
+        {
+
+             var resultsMes2SupTelegrmas = _sup2MesTelegramsRepository.GetAllQuery();
+
+            // сортировка
+            switch (sortOrder)
+            {
+                case SortState.VINDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Vin);
+                    break;
+                case SortState.OrderNumberAsc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Ordernum);
+                    break;
+                case SortState.OrderNumberDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Ordernum);
+                    break;
+                case SortState.StandNameAsc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Stand.StandName);
+                    break;
+                case SortState.StandNameDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Stand.StandName);
+                    break;
+                case SortState.DateAsc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Created);
+                    break;
+                case SortState.DateDesc:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderByDescending(s => s.Created);
+                    break;
+
+                default:
+                    resultsMes2SupTelegrmas = resultsMes2SupTelegrmas.OrderBy(s => s.Vin);
+                    break;
+            }
+
+            return resultsMes2SupTelegrmas;
+        }
+
+        public Sup2MesViewModel Sup2MesTelegrams(string mesSchemaTypeIdentifier = "sup2mes",  int pageNumber = 1, SortState sortOrder = SortState.DateDesc, string startDate = "", string endDate = "", int pageSize = 10)
+        {
+            DateTime parsedEndDate = new DateTime();
+            DateTime parsedStartDate = new DateTime();
+
+            CultureInfo russianCulture = new CultureInfo("ru-RU");
+            if (endDate == "" || startDate == "")
+            {
+                parsedEndDate = DateTime.Now;
+            }
+            else
+            {
+                parsedStartDate = DateTime.Parse(startDate, russianCulture);
+                parsedEndDate = DateTime.Parse(endDate, russianCulture);
+            }
+
+            ViewData["MesSchemaTypeIdentifier"] = mesSchemaTypeIdentifier;
+            ViewData["PageSize"] = pageSize;
+            ViewData["StartDate"] = parsedStartDate;
+            ViewData["EndDate"] = parsedEndDate;
+
+            // пагинация
+
+            var jsonHeaderIDs = Sup2MesInitializePageValue(pageNumber, sortOrder).Where(k => k.Created >= parsedStartDate && k.Created <= parsedEndDate.AddDays(1)).Select(k => k.Id).ToList();
+            var count = jsonHeaderIDs.Count();
+            var itemsId = jsonHeaderIDs.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+
+
+            Sup2MesViewModel viewModel = new Sup2MesViewModel(
+                _sup2MesTelegramsRepository.GetSup2mesTelegramById(itemsId),
+                new PageViewModel(count, pageNumber, pageSize),
+                new SortViewModel(sortOrder)
+            );
+
+            return viewModel;
         }
 
         [HttpGet]
@@ -96,6 +267,41 @@ namespace HoffmanWebstatistic.Controllers
             return RedirectToAction("MainMenu");
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Mes2SupTelegram(int mes2SupTelegramId)
+        {
+            var mes2SupTelegramObject = _mes2SupTelegramsRepository.GetMes2SupTelegramById(mes2SupTelegramId);
+
+            using (TextReader xmlTextReadert = new StringReader(mes2SupTelegramObject.TgContent))
+            {
+                using (XmlReader reader = XmlReader.Create(xmlTextReadert))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(MES_VEHICLE_STATUS_DESCRIPTOR));
+                    MES_VEHICLE_STATUS_DESCRIPTOR deserializeMesObject = (MES_VEHICLE_STATUS_DESCRIPTOR)xmlSerializer.Deserialize(reader);
+                    
+                    return View(deserializeMesObject);
+                }
+            }           
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Sup2MesTelegram(int sup2MesTelegramId)
+        {
+            var sup2MesTelegramObject = _sup2MesTelegramsRepository.GetSup2MesTelegramById(sup2MesTelegramId);
+
+            using (TextReader xmlTextReadert = new StringReader(sup2MesTelegramObject.TgContent))
+            {
+                using (XmlReader reader = XmlReader.Create(xmlTextReadert))
+                {
+                    XmlSerializer xmlSerializer = new XmlSerializer(typeof(SHOP_FLOOR_DATA));
+                    SHOP_FLOOR_DATA deserializeMesObject = (SHOP_FLOOR_DATA)xmlSerializer.Deserialize(reader);
+
+                    return View(deserializeMesObject);
+                }
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> DeleteXSDSchema(int xsdSchemaId)
         {

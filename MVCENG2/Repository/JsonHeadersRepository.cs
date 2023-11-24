@@ -137,14 +137,14 @@ namespace HoffmanWebstatistic.Repository
         {
 
 
-            var headersIdList = _context.results_json_headers.Where(k => k.VIN == searchIdentifier || k.Ordernum == searchIdentifier || k.Created.ToString() == searchIdentifier).Select(k => k.Id).ToList();
+            var headersIdList = _context.results_json_headers.Where(k => k.VIN.Contains(searchIdentifier) || k.Ordernum.Contains(searchIdentifier) || k.Created.ToString().Contains(searchIdentifier)).Select(k => k.Id).ToList();
 
-            var standsId = _context.stands.Where(k => k.StandName == searchIdentifier || k.Project == searchIdentifier || k.StandType == searchIdentifier).Select(k => k.Id).ToList();
-            var operatorsId = _context.operators.Where(k => k.OLogin == searchIdentifier).Select(k => k.Id).ToList(); ;
+            var standsId = _context.stands.Where(k => k.StandName.Contains(searchIdentifier)  || k.Project.Contains(searchIdentifier) || k.StandType.Contains(searchIdentifier)).Select(k => k.Id).ToList();
+            var operatorsId = _context.operators.Where(k => k.OLogin.Contains(searchIdentifier)).Select(k => k.Id).ToList(); ;
 
-            var tests = _context.results_json_tests.Where(k => k.TName == searchIdentifier || k.TSpecname == searchIdentifier || k.Created.ToString() == searchIdentifier);
-            var testIdInValues = _context.results_json_values.Where(k => k.VName == searchIdentifier || k.VValue == searchIdentifier).Select(k => k.TestId).ToList();
-            var okNokValsId = _context.ok_nok_val.Where(k => k.Val == searchIdentifier).Select(k => k.Id).ToList();
+            var tests = _context.results_json_tests.Where(k => k.TName.Contains(searchIdentifier) || k.TSpecname.Contains(searchIdentifier) || k.Created.ToString().Contains(searchIdentifier));
+            var testIdInValues = _context.results_json_values.Where(k => k.VName.Contains(searchIdentifier) || k.VValue.Contains(searchIdentifier)).Select(k => k.TestId).ToList();
+            var okNokValsId = _context.ok_nok_val.Where(k => k.Val.Contains(searchIdentifier)).Select(k => k.Id).ToList();
 
             if (standsId != null)
             {

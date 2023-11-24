@@ -44,7 +44,6 @@
                     <input asp-for="@Model.stand.Placement" class="form-control" placeholder="Placement">
                     <span asp-validation-for="@Model.stand.Placement" class="text-danger"></span>
                 </div>
-
                 <div class="mb-2">
                     <label asp-for="@Model.stand.StandType">Тип стенда</label>
                     <select class="form-select" multiple aria-label="multiple select example" asp-for="@Model.stand.StandType">
@@ -65,23 +64,83 @@
                     <span asp-validation-for="@Model.stand.Project" class="text-danger"></span>
                 </div>
 
-                <div class="mb-2">
-                    <label>Добавить QNX версию?</label>
-                    <input type="checkbox" id="myCheckbox" onclick="showInputField()" />
-                </div>
-                <div class="mb-2">
-                    <label asp-for="@Model.QNX.IpAdress" id="labelID" style="display:none;">IP адрес QNX стенда</label>
-                    <input asp-for="@Model.QNX.IpAdress" id="inputID" style="display:none;" value="0.0.0.0" class="form-control" placeholder="QNX IP">
-                    <span asp-validation-for="@Model.QNX.IpAdress" class="text-danger"></span>
-                </div>
-                <div class="mb-2">
-                    <label asp-for="@Model.QNX.DnsName" id="label2ID" style="display:none;">Имя DNS QNX стенда</label>
-                    <input asp-for="@Model.QNX.DnsName" id="input2ID" style="display:none;" value="none" class="form-control" placeholder="QNX DnsName">
-                    <span asp-validation-for="@Model.QNX.DnsName" class="text-danger"></span>
+                <div class="input-group mb-2">
+                    <span class="input-group-text">Путь к переводам</span>
+                    <input asp-for="@Model.translatesPath.CPath" type="text" class="form-control" value="\c\ProgramData\Kratzer Automation AG\PAtools TX\Helix\translations.xml">
+                    <span class="input-group-text">Логин</span>
+                    <input asp-for="@Model.translatesPath.CLogin" type="text" class="form-control" placeholder="Placement">
+                    <span class="input-group-text">Пароль</span>
+                    <input asp-for="@Model.translatesPath.CPassword" type="text" class="form-control" placeholder="Placement">
                 </div>
 
 
-                <button type="submit" class="btn btn-primary">Добавить стенд</button>
+                <div class="mb-2">
+                    <label asp-for="@Model.checkbox">Добавить QNX версию?</label>
+                    <input asp-for="@Model.checkbox" type="checkbox" id="myCheckbox" onclick="showInputField()" />
+                </div>
+
+                <div id="toggleId" style="display:none">
+                    <div class="mb-2">
+                        <label asp-for="@Model.QNX.IpAdress" >IP адрес QNX стенда</label>
+                        <input asp-for="@Model.QNX.IpAdress" value="0.0.0.0" class="form-control" placeholder="QNX IP">
+                        <span asp-validation-for="@Model.QNX.IpAdress" class="text-danger"></span>
+                    </div>
+                    <div class="mb-2">
+                        <label asp-for="@Model.QNX.DnsName" >Имя DNS QNX стенда</label>
+                        <input asp-for="@Model.QNX.DnsName"  class="form-control" placeholder="QNX DnsName">
+                        <span asp-validation-for="@Model.QNX.DnsName" class="text-danger"></span>
+                    </div>
+                    <div class="input-group mb-2" >
+                        <span class="input-group-text">Путь к Json файлам</span>
+                        <input asp-for="@Model.jsonsPath.CPath"  type="text" class="form-control" value="\PAtools\vsp0\data\log_data">
+                        <span class="input-group-text">Логин</span>
+                        <input asp-for="@Model.jsonsPath.CLogin"  type="text" class="form-control" placeholder="Логин">
+                        <span class="input-group-text">Пароль</span>
+                        <input asp-for="@Model.jsonsPath.CPassword" type="text" class="form-control" placeholder="Пароль">
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Путь к DTC</span>
+                        <input asp-for="@Model.dtcPath.CPath"  type="text" class="form-control" value="\PAtools\vsp0\data">
+                        <span class="input-group-text">Логин</span>
+                        <input asp-for="@Model.dtcPath.CLogin"  type="text" class="form-control" placeholder="Логин">
+                        <span class="input-group-text">Пароль</span>
+                        <input asp-for="@Model.dtcPath.CPassword"  type="text" class="form-control" placeholder="Пароль">
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Путь Mes2Sup</span>
+                        <input asp-for="@Model.mes2SupPath.CPath"  type="text" class="form-control" value="\patools\mes\mesin">
+                        <span class="input-group-text">Логин</span>
+                        <input asp-for="@Model.mes2SupPath.CLogin"  type="text" class="form-control" placeholder="Логин">
+                        <span class="input-group-text">Пароль</span>
+                        <input asp-for="@Model.mes2SupPath.CPassword"  type="text" class="form-control" placeholder="Пароль">
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Путь к Sup2Mes</span>
+                        <input asp-for="@Model.sup2mesPath.CPath" type="text" class="form-control" value="\patools\mes\mesout">
+                        <span class="input-group-text">Логин</span>
+                        <input asp-for="@Model.sup2mesPath.CLogin"  type="text" class="form-control" placeholder="Логин">
+                        <span class="input-group-text">Пароль</span>
+                        <input asp-for="@Model.sup2mesPath.CPassword"  type="text" class="form-control" placeholder="Пароль">
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Путь к файле с операторами</span>
+                        <input asp-for="@Model.operatorsPath.CPath"  type="text" class="form-control" value="\PAtools\vsp0\data\lp.xml">
+                        <span class="input-group-text">Логин</span>
+                        <input asp-for="@Model.operatorsPath.CLogin"  type="text" class="form-control" placeholder="Логин">
+                        <span class="input-group-text">Пароль</span>
+                        <input asp-for="@Model.operatorsPath.CPassword"  type="text" class="form-control" placeholder="Пароль">
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Путь к папке с картинками</span>
+                        <input asp-for="@Model.picturesPath.CPath"  type="text" class="form-control" value="\PAtools\pictures">
+                        <span class="input-group-text">Логин</span>
+                        <input asp-for="@Model.picturesPath.CLogin"  type="text" class="form-control" placeholder="Логин">
+                        <span class="input-group-text">Пароль</span>
+                        <input asp-for="@Model.picturesPath.CPassword"  type="text" class="form-control" placeholder="Пароль">
+                    </div>
+                </div>
+
+                <button onclick="setInputParametres()" type="submit" class="btn btn-primary">Добавить стенд</button>
 
             </form>
 
@@ -95,30 +154,24 @@
 
 
 @section Scripts {
+
     <script>
+
+        $(document).ready(function () {
+            $("form").submit(function (event) {
+                $(this).find("input").each(function () {
+                    if ($(this).val() == "") {
+                        $(this).val("none");
+                    }
+                });
+                console.log($(this).serialize());
+            });
+        });
+
         function showInputField() {
-            var checkbox = document.getElementById("myCheckbox");
-            var labelID = document.getElementById("labelID");
-            var inputID = document.getElementById("inputID");
-            var label2ID = document.getElementById("label2ID");
-            var input2ID = document.getElementById("input2ID");
 
-            if (checkbox.checked) {
-                labelID.style.display = "block";
-                label2ID.style.display = "block";
-                inputID.style.display = "block";
-                input2ID.style.display = "block";
-            } 
-            else {
-                labelID.style.display = "none";
-                label2ID.style.display = "none";
-                inputID.style.display = "none";
-                input2ID.style.display = "none";
-                inputID.value = "0.0.0.0";
-                input2ID.value = "none";
-            }
+            $("div#toggleId").toggle('slow');
         }
-
     </script>
 }
 

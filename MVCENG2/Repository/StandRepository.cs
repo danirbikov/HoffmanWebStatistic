@@ -24,10 +24,25 @@ namespace HoffmanWebstatistic.Repository
             
         }
 
+        public List<Stand> GetAllWithInactive()
+        {
+            return _context.stands.ToList();
+
+        }
+
         public bool UnactiveStand(int standID)
         {
             Stand stand = _context.stands.Where(k => k.Id == standID).FirstOrDefault();
             stand.InactiveMark = "TRUE";
+
+            return Save();
+
+        }
+
+        public bool InactiveStand(int standID)
+        {
+            Stand stand = _context.stands.Where(k => k.Id == standID).FirstOrDefault();
+            stand.InactiveMark = "FALSE";
 
             return Save();
 

@@ -17,6 +17,27 @@ namespace HoffmanWebstatistic.Repository
         {
             return _context.sup2mes_telegrams.ToList();
         }
+        public IQueryable<Sup2mesTelegram> GetAllQuery()
+        {
+            return _context.sup2mes_telegrams;
+        }
+
+        public IEnumerable<Sup2mesTelegram> GetSup2mesTelegramById(List<long> id)
+        {
+            var returnObject = GetAllQuery().Where(k => id.Contains(k.Id))
+                .Include(k => k.Stand)
+                .AsNoTracking()
+                .ToList().OrderBy(x => id.IndexOf(x.Id)).AsEnumerable();
+
+            return (returnObject);
+        }
+
+        public Sup2mesTelegram GetSup2MesTelegramById(long id)
+        {
+            var returnObject = GetAllQuery().Where(k => k.Id == id).FirstOrDefault();
+
+            return (returnObject);
+        }
 
         public int GetTelegramsCount()
         {
