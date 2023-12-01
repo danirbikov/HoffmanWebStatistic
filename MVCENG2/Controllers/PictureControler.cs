@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using HoffmanWebstatistic.Models.Hoffman;
 using System.Drawing;
 using HoffmanWebstatistic.Services.InteractionStand;
+using ServicesWebAPI.Services;
 
 namespace HoffmanWebstatistic.Controllers
 {
@@ -72,34 +73,42 @@ namespace HoffmanWebstatistic.Controllers
         [HttpPost]
         public async Task<IActionResult> AddPicture(List<IFormFile> files)
         {
-            foreach (var file in files)
+            try
             {
-                using (var memoryStream = new MemoryStream())
+                foreach (var file in files)
                 {
-                    await file.CopyToAsync(memoryStream);
-                    byte[] fileBytes = memoryStream.ToArray();
-
-                    string prefix = "ppd_";
-                    string fileName = file.FileName;
-                    if (!fileName.StartsWith(prefix))
+                    using (var memoryStream = new MemoryStream())
                     {
-                        fileName = prefix + fileName;
+                        await file.CopyToAsync(memoryStream);
+                        byte[] fileBytes = memoryStream.ToArray();
+
+                        string prefix = "ppd_";
+                        string fileName = file.FileName;
+                        if (!fileName.StartsWith(prefix))
+                        {
+                            fileName = prefix + fileName;
+                        }
+                        Picture picture = new Picture { PName = fileName, PictureBytes = fileBytes };
+
+                        _pictureRepository.Add(picture);
+
+                        int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
+                        PictureOperation pictureOperation = new PictureOperation();
+
+                        foreach (PicturesPath picturesPath in _picturePathRepository.GetAllWithInclude())
+                        {
+                            SendingStatusLog sendingStatusLog = pictureOperation.AddPictureForStand(picture, picturesPath.Stand, picturesPath, userId);
+                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
+                        }
+
                     }
-                    Picture picture = new Picture { PName = fileName, PictureBytes = fileBytes };
-                    
-                    _pictureRepository.Add(picture);
-
-                    int userId = _usersRepository.GetUserByName(HttpContext.User.Identity.Name).Id;
-                    PictureOperation pictureOperation = new PictureOperation();
-
-                    foreach (PicturesPath picturesPath in _picturePathRepository.GetAllWithInclude())
-                    {
-                        pictureOperation.AddPictureForStand(picture, picturesPath.Stand, picturesPath, userId);
-                    }                              
-                                                                                             
                 }
-                
             }
+            catch (Exception ex)
+            {
+                LoggerNLOG.LogWarning("Erorr in add picture "+ex.ToString());
+            }
+            
 
             return RedirectToAction("MainMenu");
           

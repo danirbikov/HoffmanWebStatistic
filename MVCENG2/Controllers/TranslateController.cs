@@ -62,7 +62,7 @@ namespace HoffmanWebstatistic.Controllers
 
             catch (Exception ex)
             {
-                LoggerTXT.LogError(ex.Message);
+                LoggerNLOG.LogWarning("Error in parse translation file: "+ex.Message);
             }            
 
             return RedirectToAction("MainMenu");

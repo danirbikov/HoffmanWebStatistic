@@ -6,6 +6,7 @@ using Quartz;
 using NLog;
 using NLog.Web;
 using HoffmanWebstatistic.Services.Job;
+using HoffmanWebstatistic.Services;
 
 var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
 
@@ -75,6 +76,7 @@ try
                             .RepeatForever()));
     });
 
+
     builder.Services.AddQuartzHostedService(
         q => q.WaitForJobsToComplete = true);
 
@@ -100,7 +102,9 @@ try
 }
 catch (Exception exception)
 {
-    logger.Error(exception, "Stopped program because of exception");
+    EmailService emailService = new EmailService();
+    emailService.SendEmail("BikovDI@kamaz.ru", "Webstatistic killed", "Вебстатистика сдохла. Error:\n"+exception.ToString());
+    logger.Error(exception, "Stopped program because of exception: " + exception.ToString()) ;
     throw;
 }
 finally

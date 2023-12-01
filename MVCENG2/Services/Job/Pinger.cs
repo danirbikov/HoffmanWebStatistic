@@ -42,7 +42,7 @@ namespace HoffmanWebstatistic.Services.Job
             }
             catch (PingException ex)
             {
-                LoggerTXT.LogError("Exception in pinging stand: \n" + stand.StandName + "\n" + stand.IpAdress + "\n" + ex);
+                LoggerNLOG.LogWarning("Exception in pinging stand: \n" + stand.StandName + "\n" + stand.IpAdress + "\n" + ex);
             }
             finally
             {

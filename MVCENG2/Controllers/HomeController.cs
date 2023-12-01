@@ -26,11 +26,7 @@ namespace HoffmanWebstatistic.Controllers
         }
         
         public async Task<IActionResult> Index()
-        {
-
-            EmailService emailService = new EmailService();
-            //await emailService.SendEmailAsync("BikovDI@kamaz.ru", "Тема письма", "Тест письма: тест!");
-
+        {          
 
             IEnumerable<Stand> stands = _standRepository.GetAll().Where(k => k.StandType != "QNX"); ;
 

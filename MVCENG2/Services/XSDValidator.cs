@@ -28,7 +28,7 @@ namespace HoffmanWebstatistic.Services
             settings.ValidationEventHandler += (sender, e) =>
             {
                 validationResult = false;
-                LoggerTXT.LogError("XML ФАЙЛ НЕКОРРЕКТЕН!!!ААААААААААААААААА!!!!");
+                LoggerNLOG.LogWarning("Структура XML файла некорреткна при валидации ХМЛ (MES): " + xmlFilePath + "\n");
             };
 
             using (XmlReader reader = XmlReader.Create(xmlFilePath, settings))
@@ -39,7 +39,7 @@ namespace HoffmanWebstatistic.Services
                 }
                 catch (XmlException ex)
                 {
-                    LoggerTXT.LogError("Структура XML файла НЕКОРРЕКТЕН!!!ААААААААААААААААА!!!! "+ex.Message+xmlFilePath);
+                    LoggerNLOG.LogWarning("Структура XML файла некорреткна при валидации ХМЛ (MES): " + xmlFilePath + "\n" + ex.ToString());
                     return false;
                 }
             }

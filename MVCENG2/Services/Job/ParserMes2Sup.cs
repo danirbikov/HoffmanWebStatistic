@@ -75,9 +75,9 @@ namespace HoffmanWebstatistic.Services.Job
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                LoggerTXT.LogError("Error in connection: "+ mesCredential.CPath);
+                LoggerNLOG.LogWarning("Error in connection: "+ mesCredential.CPath+"\n"+ex.Message);
             }
         }
 
@@ -102,7 +102,6 @@ namespace HoffmanWebstatistic.Services.Job
                     destinationFilePath = @"\\" + mes2SupPath.Stand.IpAdress + mes2SupPath.CPath + "\\" + telegramName;
                     sendDeleteFileOnStand.SendFileToStandWithAuth(fileDumpPath, destinationFilePath, mes2SupPath.CLogin, mes2SupPath.CPassword);
                     _mes2SupTelegramsStandRepository.Add(mes2SupStandStatus);
-                    LoggerTXT.LogError("Telegram sended in mes! " + fileDumpPath);
                 }
 
                 catch (Exception ex)
@@ -110,7 +109,6 @@ namespace HoffmanWebstatistic.Services.Job
                     mes2SupStandStatus.TransferStatus="NOK";
                     _mes2SupTelegramsStandRepository.Add(mes2SupStandStatus);
                     File.Copy(fileDumpPath, "C:\\WebStatistic\\Telegrams\\Mes2Sup\\Unsending\\" + Path.GetFileName(fileDumpPath), true);
-                    LoggerTXT.LogError("Telegram not sending!!!! " + fileDumpPath+"\n"+ex.Message);
                 }
             }                             
         }

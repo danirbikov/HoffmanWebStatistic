@@ -52,9 +52,6 @@ namespace HoffmanWebstatistic.Services.Job
 
                             Sup2mesTelegram sup2MesTelegram = FormationTelegramObject(filePath, sup2MesPath.StandId);
 
-                            LoggerTXT.LogError("validateResult: " + validateResult);
-                            LoggerTXT.LogError("sup2mesTelegran " + sup2MesTelegram);
-                            LoggerTXT.LogError("filePath: " + filePath);
                             if (validateResult && sup2MesTelegram!=null)
                             {
                                 bool addedResult = _sup2MesTelegramsRepository.Add(sup2MesTelegram);
@@ -78,7 +75,7 @@ namespace HoffmanWebstatistic.Services.Job
                 } 
                 catch (Exception ex) 
                 {
-                    LoggerTXT.LogError("Error in connection "+ destinationFolderPath+" "+ex.Message+" inner: "+ex.InnerException);
+                    LoggerNLOG.LogWarning("Error in connection "+ destinationFolderPath+" "+ex.Message+" innerException: "+ex.InnerException);
                 }
             }
         }
@@ -98,13 +95,11 @@ namespace HoffmanWebstatistic.Services.Job
                 using (new NetworkConnection(mesCredential.CPath, credentials))
                 {                  
                     File.Copy(fileDumpPath, destinationFilePath, true);
-                    LoggerTXT.LogError("Telegram sended in mes! " + fileDumpPath);
                 }
             }
             catch (Exception ex)
             {
                 File.Copy(fileDumpPath, "C:\\WebStatistic\\Telegrams\\Sup2Mes\\Unsending\\" + Path.GetFileName(fileDumpPath), true);
-                LoggerTXT.LogError("Telegram dont sended in mes!!!! " + fileDumpPath + destinationFilePath + "\n" + ex.Message);
             }
         }
     
@@ -152,7 +147,7 @@ namespace HoffmanWebstatistic.Services.Job
             }
             catch (Exception ex) 
             {
-                LoggerTXT.LogError("Error in formation TelegramObject "+ex.Message+" "+filePath);
+                LoggerNLOG.LogWarning("Error in formation TelegramObject: "+filePath+"\n"+ex.Message);
                 return null;
             }
             

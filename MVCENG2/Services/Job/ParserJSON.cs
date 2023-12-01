@@ -44,8 +44,6 @@ namespace HoffmanWebstatistic.Services.Job
 
                     sourceFilePath = @"\\" + stand.IpAdress + jsons_path.CPath;
 
-                    LoggerTXT.LogError("sourceFile " + sourceFilePath);
-
                     CmdOperations cmdOperations = new CmdOperations();
                     cmdOperations.DeleteCredentialForFolder(sourceFilePath);
 
@@ -70,14 +68,12 @@ namespace HoffmanWebstatistic.Services.Job
                                         if (reportException != "")
                                         {
                                             File.Copy(fileInStand, "C:\\WebStatistic\\ErrorBackups\\" + fileName, true);
-                                            LoggerTXT.LogWarning(destFilePath + fileName + " (" + reportException + ")");
                                             File.Delete(fileInStand);
                                         }
                                     }
                                     catch (Exception ex)
                                     {
                                         File.Copy(fileInStand, "C:\\WebStatistic\\ErrorBackups\\" + fileName, true);
-                                        LoggerTXT.LogWarning(destFilePath + fileName + " (" + reportException + "" + ex.InnerException + ")");
                                         File.Delete(fileInStand);
                                     }
                                 }
@@ -92,13 +88,13 @@ namespace HoffmanWebstatistic.Services.Job
 
                     catch (Exception ex)
                     {
-                        LoggerTXT.LogError("ERROR! Stand's IP " + stand.IpAdress + " " + sourceFilePath + "\n" + ex.Message);
+                        LoggerNLOG.LogWarning("ERROR in connection/parsing stand " + stand.IpAdress + " " + sourceFilePath + " " + ex.Message);
                     }
                 }
             }
             catch (Exception ex)
             {
-                LoggerTXT.LogError("Error in parser \n" + ex);
+                LoggerNLOG.LogFatalError("Parser","Error in parser \n" + ex);
 
             }
 

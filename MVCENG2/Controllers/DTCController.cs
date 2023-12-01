@@ -63,13 +63,14 @@ namespace HoffmanWebstatistic.Controllers
                         DTCOperation dTCOperation = new DTCOperation();
                         foreach (DtcsPath dtcPath in _dtcPathRepository.GetAllWithInclude())
                         {
-                            dTCOperation.AddDTCForStand(dtc, dtcPath.Stand, dtcPath, userId);
+                            SendingStatusLog sendingStatusLog = dTCOperation.AddDTCForStand(dtc, dtcPath.Stand, dtcPath, userId);
+                            _sendingStatusLogRepository.AddOrUpdate(sendingStatusLog);
                         }
                     }
                 }
                 catch (Exception ex)
                 {
-                    LoggerTXT.LogError("Log Error "+ex.Message);
+                    LoggerNLOG.LogWarning("Log in Add DTC:"+file.Name+" "+ex.Message);
                 }
 
             }
