@@ -363,3 +363,4 @@ MigrationBackup/
 #FodyWeavers.xsd
 #/MVCENG2/HoffmanWebstatistic.csproj
 /MVCENG2/Services/ParserJSON_backup.cs
+/MVCENG2/Services/EmailService.cs
