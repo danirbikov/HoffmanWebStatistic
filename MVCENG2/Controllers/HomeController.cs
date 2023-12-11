@@ -18,19 +18,16 @@ namespace HoffmanWebstatistic.Controllers
 
         private readonly StandRepository _standRepository;
         private readonly JsonHeadersRepository _jsonHeadersRepository;
-        private readonly ApplicationDbContext dbContext;
 
-        public HomeController(ILogger<HomeController> logger,StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository, ApplicationDbContext dbContext)
+        public HomeController(ILogger<HomeController> logger,StandRepository standRepository, JsonHeadersRepository jsonHeadersRepository)
         {
             _standRepository = standRepository;
             _jsonHeadersRepository = jsonHeadersRepository;
-            this.dbContext = dbContext;
+
         }
         
         public async Task<IActionResult> Index()
         {
-            List<string> superAdminEmails = dbContext.users.Include(k => k.Role).Where(k => k.Role.RName == "sa").Select(k => k.ULogin).ToList();
-            LoggerNLOG.LogFatalError("Parser", "Error in parser \n" + "TestError", superAdminEmails);
 
             IEnumerable<Stand> stands = _standRepository.GetAll().Where(k => k.StandType != "QNX"); ;
 
