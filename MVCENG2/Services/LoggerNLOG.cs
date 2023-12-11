@@ -16,11 +16,11 @@ namespace ServicesWebAPI.Services
         {
             logger.Warn(logText);
         }
-        public static void LogFatalError(string errorTarget,string logText)
+        public static void LogFatalError(string errorTarget,string logText, List<string> superAdminEmails)
         {
             logger.Fatal(logText);
             EmailService emailService = new EmailService();
-            emailService.SendEmail("BikovDI@kamaz.ru", errorTarget, logText);
+            emailService.SendEmail(errorTarget, logText, superAdminEmails);
         }
     }
 }

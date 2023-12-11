@@ -94,7 +94,8 @@ namespace HoffmanWebstatistic.Services.Job
             }
             catch (Exception ex)
             {
-                LoggerNLOG.LogFatalError("Parser","Error in parser \n" + ex);
+                List<string> superAdminEmails = _dbContext.users.Include(k => k.Role).Where(k => k.Role.RName == "sa").Select(k => k.ULogin).ToList();
+                LoggerNLOG.LogFatalError("Parser","Error in parser \n" + ex, superAdminEmails);
 
             }
 

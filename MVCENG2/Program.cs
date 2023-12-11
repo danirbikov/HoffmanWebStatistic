@@ -103,7 +103,7 @@ try
 catch (Exception exception)
 {
     EmailService emailService = new EmailService();
-    emailService.SendEmail("BikovDI@kamaz.ru", "Webstatistic killed", "Вебстатистика сдохла. Error:\n"+exception.ToString());
+    //emailService.SendEmail("BikovDI@kamaz.ru", "Webstatistic killed", "Вебстатистика сдохла. Error:\n"+exception.ToString());
     logger.Error(exception, "Stopped program because of exception: " + exception.ToString()) ;
     throw;
 }

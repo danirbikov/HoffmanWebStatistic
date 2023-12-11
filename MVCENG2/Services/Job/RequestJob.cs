@@ -1,4 +1,5 @@
 ﻿using HoffmanWebstatistic.Data;
+using HoffmanWebstatistic.Repository;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using ServicesWebAPI.Services;
@@ -20,7 +21,8 @@ namespace HoffmanWebstatistic.Services.Job
             try
             {
                 using (ApplicationDbContext dbContext = new ApplicationDbContext())
-                {                   
+                {      
+                    
                     Pinger.PingAllStands(dbContext.stands.Where(k => k.IpAdress != null).ToList());
 
                     ParserJSON parser = new ParserJSON();
@@ -39,7 +41,8 @@ namespace HoffmanWebstatistic.Services.Job
 
             catch (Exception ex)
             {
-                LoggerNLOG.LogFatalError("Job error","Job error!" + "\n" + ex.ToString());
+
+                LoggerNLOG.LogFatalError("Job error","Job error!" + "\n" + ex.ToString(),null);
             }
             
         }
